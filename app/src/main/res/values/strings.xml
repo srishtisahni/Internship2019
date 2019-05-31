@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">PolicyFolio</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="facebook_app_id">368523337101447</string>
+    <string name="fb_login_protocol_scheme">fb368523337101447</string>
+</resources>
