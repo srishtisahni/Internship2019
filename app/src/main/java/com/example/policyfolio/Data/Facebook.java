@@ -1,6 +1,12 @@
 package com.example.policyfolio.Data;
 
 
+import com.example.policyfolio.Constants;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Facebook {
     private long id;
     private String email;
@@ -68,8 +74,13 @@ public class Facebook {
         this.email = email;
     }
 
-    public String getGender() {
-        return gender;
+    public int getGender() {
+        if(gender.equalsIgnoreCase("male"))
+            return Constants.User.Gender.GENDER_MALE;
+        else if(gender.equalsIgnoreCase("female"))
+            return Constants.User.Gender.GENDER_FEMALE;
+        else
+            return Constants.User.Gender.GENDER_NOT_DISCLOSE;
     }
 
     public void setGender(String gender) {

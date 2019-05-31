@@ -7,10 +7,10 @@ public class Constants {
         public static final String BUNDLE = "user";
 
         public static class Gender{
-            public static final int GENDER_NONE = -1;
-            public static final int GENDER_MALE = 0;
-            public static final int GENDER_FEMALE = 1;
-            public static final int GENDER_NOT_DISCLOSE = 2;
+            public static final int GENDER_NOT_DISCLOSE = 0;
+            public static final int GENDER_MALE = 1;
+            public static final int GENDER_FEMALE = 2;
+            public static final int GENDER_OTHER = 3;
         }
     }
     public static class Login {
@@ -35,5 +35,16 @@ public class Constants {
         public static final String GENDER = "user_gender";
         public static final String LOCATION = "user_location";
         public static final String ID = "id";
+
+        public static class Login{
+            public static final int LOGGED_IN = 1;
+            public static final int LOGIN_FAILED = 2;
+            public static final int LOGIN_CANCELLED = 3;
+            public static final int LOGIN_ERROR = 4;
+        }
+    }
+
+    public static class Google{
+        public static final int SIGN_IN_RC = 9001;
     }
 }

@@ -4,7 +4,6 @@ package com.example.policyfolio.UI.Fragments;
 import android.annotation.SuppressLint;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,15 +16,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.policyfolio.Constants;
+import com.example.policyfolio.Data.Facebook;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.CallBackListeners.LoginFragmentCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
@@ -38,7 +32,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class LoginFragment extends Fragment {
 
     private View rootView;
-    private Context context;
     private LoginSignUpViewModel viewModel;
     private LoginFragmentCallback callback;
 
@@ -49,17 +42,15 @@ public class LoginFragment extends Fragment {
     private CircleImageView google;
     private CircleImageView facebook;
     private CircleImageView phone;
-
     private LoginButton facebookLogin;
-    private CallbackManager facebookCallbackManager;
+
 
     public LoginFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public LoginFragment(Context context, LoginFragmentCallback callback) {
-        this.context = context;
+    public LoginFragment(LoginFragmentCallback callback) {
         this.callback = callback;
     }
 
@@ -92,41 +83,39 @@ public class LoginFragment extends Fragment {
     }
 
     private void facebookCallback() {
-        facebookCallbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(facebookCallbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-                        if(isLoggedIn){
-                            viewModel.fetchFacebookData(accessToken).observe(LoginFragment.this, new Observer<com.example.policyfolio.Data.Facebook>() {
-                                @Override
-                                public void onChanged(@Nullable com.example.policyfolio.Data.Facebook facebook) {
-                                    if(facebook!=null){
-                                        callback.SignUp(facebook);
-                                    }
-                                    else {
-                                        Toast.makeText(context,"Login Error Occurred", Toast.LENGTH_LONG).show();
-                                    }
+        viewModel.facebookLogin().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(@Nullable Integer integer) {
+                if(integer!=null){
+                    switch (integer){
+                        case Constants.Facebook.Login.LOGGED_IN: viewModel.getFacebookFetch().observe(LoginFragment.this, new Observer<Facebook>() {
+                            @Override
+                            public void onChanged(@Nullable Facebook facebook) {
+                                if(facebook!=null) {
+                                    viewModel.setType(Constants.Login.Type.FACEBOOK);
+                                    callback.FacebookSignUp(facebook);
                                 }
-                            });
-                        }
-                    }
+                                else
+                                    Toast.makeText(getContext(),"Login Error Occurred",Toast.LENGTH_LONG).show();
+                            }
+                        });
+                            break;
 
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(context,"Access Denied",Toast.LENGTH_LONG).show();
-                    }
+                        case Constants.Facebook.Login.LOGIN_CANCELLED: Toast.makeText(getContext(),"Login Cancelled",Toast.LENGTH_LONG).show();
+                            break;
 
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(context,"Login Error Occurred", Toast.LENGTH_LONG).show();
-                        exception.printStackTrace();
-                    }
-                });
+                        case Constants.Facebook.Login.LOGIN_FAILED: Toast.makeText(getContext(),"Login Failed",Toast.LENGTH_LONG).show();
+                            break;
 
+                        case Constants.Facebook.Login.LOGIN_ERROR: Toast.makeText(getContext(),"Login Error Occurred",Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                }
+
+                else
+                    Toast.makeText(getContext(),"Login Error Occurred",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void setListeners() {
@@ -140,7 +129,8 @@ public class LoginFragment extends Fragment {
         google.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String id = getString(R.string.default_web_client_id);
+                viewModel.initiateGoogleLogin(id, getContext());
             }
         });
 
@@ -154,7 +144,7 @@ public class LoginFragment extends Fragment {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                callback.enterEmail();
             }
         });
 
@@ -163,6 +153,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        facebookCallbackManager.onActivityResult(requestCode,resultCode,data);
+        viewModel.onActivityResult(requestCode,resultCode,data);
     }
 }
