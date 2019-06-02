@@ -1,13 +1,14 @@
 package com.example.policyfolio.Data;
 
-
 public class LoggedIn {
     private boolean login;
     private int type;
+    private String firebseToken;
 
-    public LoggedIn(boolean login,int type){
+    public LoggedIn(boolean login,int type,String firebseToken){
         this.login = login;
         this.type = type;
+        this.firebseToken = firebseToken;
     }
 
     public boolean isLogin() {
@@ -24,5 +25,13 @@ public class LoggedIn {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getFirebseToken() {
+        return firebseToken;
+    }
+
+    public void setFirebseToken(String firebseToken) {
+        this.firebseToken = firebseToken;
     }
 }

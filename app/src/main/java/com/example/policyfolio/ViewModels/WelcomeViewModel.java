@@ -18,7 +18,7 @@ public class WelcomeViewModel extends ViewModel {
 
     private void fetchSharedPreference(SharedPreferences sharedPreferences){
         LoggedIn loggedIn = new LoggedIn(sharedPreferences.getBoolean(Constants.Login.LOGGED_IN,false),
-                sharedPreferences.getInt(Constants.Login.TYPE,-1));
+                sharedPreferences.getInt(Constants.Login.TYPE,-1),sharedPreferences.getString(Constants.Login.FIREBASE_TOKEN,null));
         if(loggedIn.isLogin()){
             this.userLoggedIn.setValue(loggedIn);
         }

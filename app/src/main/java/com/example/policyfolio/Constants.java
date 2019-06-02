@@ -4,7 +4,6 @@ public class Constants {
     public static final String LOGIN_SHARED_PREFERENCE_KEY = "user_logged_in";
 
     public static class User {
-        public static final String BUNDLE = "user";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;
@@ -14,10 +13,10 @@ public class Constants {
         }
     }
     public static class Login {
-        public static final String BUNDLE = "logged_in";
 
         public static final String LOGGED_IN = "log_in";
         public static final String TYPE = "type";
+        public static final String FIREBASE_TOKEN = "firebase_token";
 
         public static class Type{
             public static final int GOOGLE = 0;
@@ -27,7 +26,6 @@ public class Constants {
         }
     }
     public static class Facebook{
-        public static final String BUNDLE = "facebook";
 
         public static final String EMAIL = "email";
         public static final String PROFILE = "public_profile";

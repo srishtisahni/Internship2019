@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,7 @@ public class LoginFragment extends Fragment {
                             public void onChanged(@Nullable Facebook facebook) {
                                 if(facebook!=null) {
                                     viewModel.setType(Constants.Login.Type.FACEBOOK);
+                                    viewModel.UpdateRepoFacebook(facebook);
                                     callback.FacebookSignUp(facebook);
                                 }
                                 else
@@ -131,6 +133,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
                 String id = getString(R.string.default_web_client_id);
                 viewModel.initiateGoogleLogin(id, getContext());
+                callback.GoogleSignUp();
             }
         });
 

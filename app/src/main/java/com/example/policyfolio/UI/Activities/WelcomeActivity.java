@@ -18,8 +18,9 @@ import com.example.policyfolio.ViewModels.WelcomeViewModel;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    WelcomeViewModel viewModel;
-    Intent intent;
+    private WelcomeViewModel viewModel;
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +42,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     Bundle bundle = new Bundle();
                     bundle.putBoolean(Constants.Login.LOGGED_IN,loggedIn.isLogin());
                     bundle.putInt(Constants.Login.TYPE,loggedIn.getType());
+                    bundle.putString(Constants.Login.FIREBASE_TOKEN,loggedIn.getFirebseToken());
                     intent.putExtras(bundle);
                 }
             }

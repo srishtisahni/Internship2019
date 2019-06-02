@@ -41,12 +41,6 @@ public class User {
         this.city = city;
     }
 
-    public User(String email, long phone, String password){
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }

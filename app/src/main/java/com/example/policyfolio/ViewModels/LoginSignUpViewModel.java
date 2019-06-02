@@ -1,5 +1,6 @@
 package com.example.policyfolio.ViewModels;
 
+import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
@@ -28,9 +29,10 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
 
     private MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();
     private MutableLiveData<Integer> facebookLoginStatus = new MutableLiveData<>();
-    private MutableLiveData<String> email = new MutableLiveData<>();
-    private MutableLiveData<Long> phone =new MutableLiveData<>();
-    private MutableLiveData<Integer> type = new MutableLiveData<>();
+
+    private String email;
+    private Long phone;
+    private Integer type;
 
 
     public void fetchFacebookData(AccessToken accessToken) {
@@ -85,27 +87,25 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         repository.initiateGoogleLogin(id, context);
     }
 
-    public MutableLiveData<Integer> emailPhoneUpdate(String text) {
+    public Integer emailPhoneUpdate(String text) {
         try{
             Long phone = Long.parseLong(text);
-            this.phone.setValue(phone);
-            this.email.setValue(null);
-            this.type.setValue(Constants.Login.Type.PHONE);
+            this.phone =phone;
+            this.type = Constants.Login.Type.PHONE;
         }
         catch (Exception e){
             e.printStackTrace();
-            this.email.setValue(text);
-            this.phone.setValue(null);
-            this.type.setValue(Constants.Login.Type.EMAIL);
+            this.email = text;
+            this.type = Constants.Login.Type.EMAIL;
         }
         return type;
     }
 
     public void setType(int type) {
-        this.type.setValue(type);
+        this.type = type;
     }
 
-    public MutableLiveData<Integer> getType() {
+    public Integer getType() {
         return type;
     }
 
@@ -113,11 +113,23 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         return repository.getGoogleSignInClient();
     }
 
-    public LiveData<FirebaseUser> googleAuthentication(Intent data, Executor context) {
-        return repository.googleAuthentication(data, context);
+    public LiveData<FirebaseUser> googleAuthentication(Intent data) {
+        return repository.googleAuthentication(data);
     }
 
-    public LiveData<FirebaseUser> facebookFirebaseUser(Executor context) {
-        return repository.facebookFirebaseUser(context);
+    public LiveData<FirebaseUser> facebookFirebaseUser() {
+        return repository.facebookFirebaseUser();
+    }
+
+    public void updateRepoUser(FirebaseUser firebaseUser) {
+        repository.updateFirebaseUser(firebaseUser);
+    }
+
+    public void UpdateRepoFacebook(Facebook facebook) {
+        repository.setFacebook(facebook);
+    }
+
+    public LiveData<FirebaseUser> signUpPhone(Activity activity) {
+        return repository.phoneSignUp(phone, activity);
     }
 }

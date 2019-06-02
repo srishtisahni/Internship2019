@@ -58,16 +58,16 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == Constants.Google.SIGN_IN_RC){
-            viewModel.googleAuthentication(data, this).observe(this, new Observer<FirebaseUser>() {
+            viewModel.googleAuthentication(data).observe(this, new Observer<FirebaseUser>() {
                 @Override
                 public void onChanged(@Nullable FirebaseUser firebaseUser) {
                     if(firebaseUser!=null){
-                        Intent intent = new Intent(LoginSignUpActivity.this,HomeActivity.class);
-                        //Add Type
-                        startActivity(intent);
+                        Bundle bundle = new Bundle();
+                        bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.GOOGLE);
+                        startHomeActivity(firebaseUser,bundle);
                     }
                     else {
-                        Toast.makeText(LoginSignUpActivity.this,"Login Failed",Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -75,9 +75,31 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
         loginFragment.onActivityResult(requestCode, resultCode, data);
     }
 
+    private void startHomeActivity(FirebaseUser firebaseUser, Bundle bundle) {
+        viewModel.updateRepoUser(firebaseUser);
+
+        bundle.putString(Constants.Login.FIREBASE_TOKEN,firebaseUser.getUid());
+        bundle.putBoolean(Constants.Login.LOGGED_IN,true);
+        Intent intent = new Intent(LoginSignUpActivity.this,HomeActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
     @Override
     public void FacebookSignUp(Facebook facebook) {
-        viewModel.facebookFirebaseUser(this);
+        viewModel.facebookFirebaseUser().observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                if(firebaseUser!=null){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.FACEBOOK);
+                    startHomeActivity(firebaseUser, bundle);
+                }
+                else {
+                    Toast.makeText(LoginSignUpActivity.this,"Facebook Login Failed",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -99,7 +121,19 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
 
     @Override
     public void PhoneSignUp() {
-        addFragment(signUpFragment);
+        viewModel.signUpPhone(this).observe(this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                if(firebaseUser!=null){
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.PHONE);
+                    startHomeActivity(firebaseUser, bundle);
+                }
+                else {
+                    Toast.makeText(LoginSignUpActivity.this,"Phone Sign Up Failed",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void addFragment(Fragment fragment) {

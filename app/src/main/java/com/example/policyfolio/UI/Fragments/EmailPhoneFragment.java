@@ -69,17 +69,13 @@ public class EmailPhoneFragment extends Fragment {
                     textError.setVisibility(View.VISIBLE);
                 else {
                     textError.setVisibility(View.GONE);
-                    viewModel.emailPhoneUpdate(text).observe(EmailPhoneFragment.this, new Observer<Integer>() {
-                        @Override
-                        public void onChanged(@Nullable Integer integer) {
-                            if(integer == Constants.Login.Type.EMAIL)
-                                callback.EmailSignUp();
-                            else if(integer == Constants.Login.Type.PHONE)
-                                callback.PhoneSignUp();
-                            else
-                                Toast.makeText(getContext(),"Invalid Input",Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    Integer type = viewModel.emailPhoneUpdate(text);
+                    if(type == Constants.Login.Type.EMAIL)
+                        callback.EmailSignUp();
+                    else if(type == Constants.Login.Type.PHONE)
+                        callback.PhoneSignUp();
+                    else
+                        Toast.makeText(getContext(),"Invalid Input",Toast.LENGTH_LONG).show();
                 }
             }
         });
