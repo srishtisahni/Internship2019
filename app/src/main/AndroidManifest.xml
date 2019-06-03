@@ -11,10 +11,11 @@
         android:roundIcon="@mipmap/logo_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".UI.Activities.PopUpActivity"></activity>
         <activity
             android:name=".UI.Activities.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.Navigation" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -29,7 +30,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Activities.WelcomeActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar.fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

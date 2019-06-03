@@ -39,6 +39,7 @@ public class LoginFragment extends Fragment {
     private EditText emailText;
     private EditText password;
     private TextView error;
+    private TextView forgetPassword;
     private Button login;
 
     private CircleImageView google;
@@ -72,6 +73,14 @@ public class LoginFragment extends Fragment {
         phone = rootView.findViewById(R.id.phone_signUp);
         email = rootView.findViewById(R.id.email_signUp);
         error = rootView.findViewById(R.id.error);
+        forgetPassword = rootView.findViewById(R.id.forgot_password);
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
 
         if(viewModel.getEmail() != null){
             emailText.setText(viewModel.getEmail());
