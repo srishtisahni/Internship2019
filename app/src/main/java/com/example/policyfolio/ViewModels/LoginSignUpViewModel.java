@@ -6,9 +6,11 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.example.policyfolio.Constants;
-import com.example.policyfolio.Data.Facebook;
+import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.UI.CallBackListeners.FragmentViewModelCallback;
 import com.facebook.AccessToken;
@@ -20,8 +22,6 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.concurrent.Executor;
-
 public class LoginSignUpViewModel extends ViewModel implements FragmentViewModelCallback {
 
     private CallbackManager callbackManager;
@@ -31,8 +31,13 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     private MutableLiveData<Integer> facebookLoginStatus = new MutableLiveData<>();
 
     private String email;
-    private Long phone;
+    private String phone;
     private Integer type;
+    private String name;
+    private Long birthdatEpoch;
+    private int gender;
+    private String city;
+    private String password;
 
 
     public void fetchFacebookData(AccessToken accessToken) {
@@ -79,26 +84,8 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         callbackManager.onActivityResult(requestCode,resultCode,data);
     }
 
-    public void logOutFacebook() {
-        LoginManager.getInstance().logOut();
-    }
-
     public void initiateGoogleLogin(String id, Context context) {
         repository.initiateGoogleLogin(id, context);
-    }
-
-    public Integer emailPhoneUpdate(String text) {
-        try{
-            Long phone = Long.parseLong(text);
-            this.phone =phone;
-            this.type = Constants.Login.Type.PHONE;
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            this.email = text;
-            this.type = Constants.Login.Type.EMAIL;
-        }
-        return type;
     }
 
     public void setType(int type) {
@@ -121,8 +108,10 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         return repository.facebookFirebaseUser();
     }
 
-    public void updateRepoUser(FirebaseUser firebaseUser) {
-        repository.updateFirebaseUser(firebaseUser);
+    public LiveData<Boolean> updateUserInfo(FirebaseUser firebaseUser) {
+        User user = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getPhoneNumber(),firebaseUser.getDisplayName(),birthdatEpoch,gender,city);
+        Log.e(firebaseUser.toString(),user.toString());
+        return repository.updateFirebaseUser(firebaseUser,user);
     }
 
     public void UpdateRepoFacebook(Facebook facebook) {
@@ -131,5 +120,45 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
 
     public LiveData<FirebaseUser> signUpPhone(Activity activity) {
         return repository.phoneSignUp(phone, activity);
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBirthDay(Long birthdayEpoch) {
+        this.birthdatEpoch = birthdayEpoch;
+    }
+
+    public void setGender(int genderSelection) {
+        this.gender = genderSelection;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public LiveData<FirebaseUser> SignUp() {
+        return repository.SignUp(email,password);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LiveData<FirebaseUser> logIn() {
+        return repository.Login(email,password);
     }
 }

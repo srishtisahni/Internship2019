@@ -1,4 +1,4 @@
-package com.example.policyfolio.Data;
+package com.example.policyfolio.DataClasses;
 
 public class LoggedIn {
     private boolean login;

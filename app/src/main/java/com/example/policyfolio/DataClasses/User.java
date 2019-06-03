@@ -1,44 +1,31 @@
-package com.example.policyfolio.Data;
-
-import java.util.Date;
+package com.example.policyfolio.DataClasses;
 
 public class User {
+
+    private String id;
     private String email;
-    private long phone;
-    private String password;
+    private String phone;
     private String name;
-    private Date birthday;
+    private Long birthday;
     private int gender;
     private String city;
 
-    public User(String email, String password, String name, Date birthday, int gender, String city){
+    public User(String id, String email, String phone, String name, Long birthday, int gender, String city){
+        this.id = id;
         this.email = email;
-        this.phone = -1;
-        this.password = password;
+        this.phone = phone;
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
         this.city = city;
     }
 
-    public User(long phone, String password, String name, Date birthday, int gender, String city){
-        this.email = null;
-        this.phone = phone;
-        this.password = password;
-        this.name = name;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.city = city;
+    public String getId() {
+        return id;
     }
 
-    public User(String email, long phone, String password, String name, Date birthday, int gender, String city){
-        this.email = email;
-        this.phone = phone;
-        this.password = password;
-        this.name = name;
-        this.birthday = birthday;
-        this.gender = gender;
-        this.city = city;
+    public void setId(String uid) {
+        id = uid;
     }
 
     public String getEmail() {
@@ -49,11 +36,11 @@ public class User {
         this.email = email;
     }
 
-    public long getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(long phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
@@ -65,19 +52,11 @@ public class User {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getBirthday() {
+    public Long getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(Long birthday) {
         this.birthday = birthday;
     }
 

@@ -5,10 +5,13 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
-import com.example.policyfolio.Data.Facebook;
+import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
 import com.example.policyfolio.Repo.Firebase.Authentication;
+import com.example.policyfolio.Repo.Firebase.DataManagement;
 import com.facebook.AccessToken;
 import com.facebook.Profile;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,10 +24,12 @@ public class Repository {
     private Facebook facebook;
     private Authentication authentication;
     private FirebaseUser firebaseUser;
+    private DataManagement dataManagement;
 
     private Repository(){
-        graphAPI = new GraphAPI();
-        authentication = new Authentication();
+        graphAPI = GraphAPI.getInstance();
+        authentication = Authentication.getInstane();
+        dataManagement = DataManagement.getInstance();
     }
 
     public static Repository getINSTANCE() {
@@ -71,15 +76,25 @@ public class Repository {
         return authentication.facebookFirebaseUser();
     }
 
-    public void updateFirebaseUser(FirebaseUser firebaseUser) {
+    public LiveData<Boolean> updateFirebaseUser(FirebaseUser firebaseUser, User user) {
         this.firebaseUser = firebaseUser;
+        Log.e("USER",user + "");
+        return dataManagement.addUser(user);
     }
 
     public void setFacebook(Facebook facebook) {
         this.facebook = facebook;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(Long phone, Activity activity) {
+    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
         return authentication.phoneSignUp(phone,activity);
+    }
+
+    public LiveData<FirebaseUser> SignUp(String email, String password) {
+        return authentication.SignUp(email,password);
+    }
+
+    public LiveData<FirebaseUser> Login(String email, String password) {
+        return authentication.Login(email,password);
     }
 }

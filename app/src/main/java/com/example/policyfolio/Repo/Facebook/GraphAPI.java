@@ -1,26 +1,34 @@
 package com.example.policyfolio.Repo.Facebook;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.example.policyfolio.Data.Facebook;
+import com.example.policyfolio.DataClasses.Facebook;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GraphAPI {
 
+    public static GraphAPI INSTANCE;
     private static final String ID = "id";
     private static final String EMAIL = "email";
     private static final String LOCATION = "location";
     private static final String NAME = "name";
     private static final String BIRTHDAY = "birthday";
     private static final String GENDER = "gender";
+
+    private GraphAPI(){
+
+    }
+
+    public static GraphAPI getInstance() {
+        if(INSTANCE == null)
+            INSTANCE = new GraphAPI();
+        return INSTANCE;
+    }
 
     public void getFacebookProfile(final MutableLiveData<Facebook> facebookFetch, AccessToken accessToken) {
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {

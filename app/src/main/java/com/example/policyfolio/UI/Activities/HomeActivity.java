@@ -1,5 +1,7 @@
 package com.example.policyfolio.UI.Activities;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -10,31 +12,44 @@ import android.view.MenuItem;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 
+import com.example.policyfolio.Constants;
+import com.example.policyfolio.R;
+import com.example.policyfolio.ViewModels.HomeViewModel;
+
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
-public class HomeActivity extends AppCompatActivity 
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private HomeViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home2);
+        setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
+        viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+
+        Bundle bundle = getIntent().getExtras();
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
+        if(bundle.getBoolean(Constants.Login.LOGGED_IN)){
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(Constants.Login.LOGGED_IN,true);
+            editor.putInt(Constants.Login.TYPE,bundle.getInt(Constants.Login.TYPE));
+            editor.putString(Constants.Login.FIREBASE_TOKEN,bundle.getString(Constants.Login.FIREBASE_TOKEN));
+            editor.commit();
+            viewModel.setType(bundle.getInt(Constants.Login.TYPE));
+            viewModel.setFirebaseToken(bundle.getString(Constants.Login.FIREBASE_TOKEN));
+        }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
@@ -49,6 +64,7 @@ public class HomeActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -5,6 +5,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -29,12 +30,20 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class Authentication {
+
+    private static Authentication INSTANCE;
     private GoogleSignInOptions gso;
     private GoogleSignInClient client;
     private FirebaseAuth mAuth;
 
-    public Authentication() {
+    private Authentication() {
         mAuth = FirebaseAuth.getInstance();
+    }
+
+    public static Authentication getInstane(){
+        if(INSTANCE == null)
+            INSTANCE = new Authentication();
+        return INSTANCE;
     }
 
     public void initiateGoogleLogin(String id, Context context) {
@@ -70,6 +79,8 @@ public class Authentication {
                         }
                     });
         } catch (ApiException e) {
+            e.printStackTrace();
+            Log.e("EXCEPTION",e.getStatusCode() + " "+ e.getMessage());
             auth.setValue(null);
         }
         return auth;
@@ -87,6 +98,7 @@ public class Authentication {
                             FirebaseUser user = mAuth.getCurrentUser();
                             auth.setValue(user);
                         } else {
+                            Log.e("EXCEPTION",task.getException().getMessage());
                             auth.setValue(null);
                         }
                     }
@@ -94,21 +106,69 @@ public class Authentication {
         return auth;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(Long phone, Activity activity) {
-        final MutableLiveData<FirebaseUser> userMutableLiveData = new MutableLiveData<>();
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(phone.toString(), 60, TimeUnit.SECONDS, activity , new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
+        final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, activity , new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                mAuth.signInWithCredential(phoneAuthCredential);
-                FirebaseUser user = mAuth.getCurrentUser();
-                userMutableLiveData.setValue(user);
+                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()){
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            auth.setValue(user);
+                        }
+                        else {
+                            Log.e("EXCEPTION",task.getException().getMessage());
+                            auth.setValue(null);
+                        }
+                    }
+                });
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                userMutableLiveData.setValue(null);
+                e.printStackTrace();
+                Log.e("EXCEPTION", e.getMessage());
+                auth.setValue(null);
             }
         });
-        return  userMutableLiveData;
+        return  auth;
+    }
+
+    public LiveData<FirebaseUser> SignUp(String email, String password) {
+        final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
+        mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    auth.setValue(user);
+                }
+                else {
+                    Log.e("EXCEPTION",task.getException().getMessage());
+                    auth.setValue(null);
+                }
+            }
+        });
+        return auth;
+    }
+
+    public LiveData<FirebaseUser> Login(String email, String password) {
+        final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
+        mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    auth.setValue(user);
+                }
+                else {
+                    Log.e("EXCEPTION",task.getException().getMessage());
+                    auth.setValue(null);
+                }
+            }
+        });
+        return auth;
     }
 }

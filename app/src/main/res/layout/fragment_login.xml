@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/email_phone"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
@@ -28,9 +28,9 @@
             android:layout_marginEnd="48dp"
             android:layout_marginRight="48dp"
             android:background="@drawable/text_background"
-            android:textColor="@color/borderGrey"
+            android:textColor="@color/colorPrimaryDark"
             android:gravity="center"
-            android:hint="Email ID/Mobile Number"
+            android:hint="Email ID"
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:textColorHint="@color/borderGrey"
@@ -41,6 +41,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.25" />
 
+
         <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
@@ -49,28 +50,43 @@
             android:background="@drawable/text_background"
             android:gravity="center"
             android:hint="Password"
-            android:textColor="@color/borderGrey"
+            android:textColor="@color/colorPrimaryDark"
             android:inputType="textPassword"
             android:padding="10dp"
             android:textColorHint="@color/borderGrey"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/email_phone"
-            app:layout_constraintStart_toStartOf="@+id/email_phone"
-            app:layout_constraintTop_toBottomOf="@+id/email_phone" />
+            app:layout_constraintEnd_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email" />
+
+        <TextView
+            android:id="@+id/error"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Email and Password cannor be left empty"
+            android:textColor="@color/colorAccent"
+            android:textSize="9sp"
+            app:layout_constraintEnd_toEndOf="@+id/password"
+            app:layout_constraintStart_toStartOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
         <Button
             android:id="@+id/login"
             android:layout_width="136dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/button_background"
             android:text="Log In"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/password"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="@+id/password"
-            app:layout_constraintTop_toBottomOf="@+id/password" />
+            app:layout_constraintTop_toBottomOf="@+id/error" />
+
 
     </android.support.constraint.ConstraintLayout>
 
@@ -137,79 +153,153 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.15" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/google_signUp"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@mipmap/google_round"
-            app:civ_border_color="@color/borderGrey"
-            app:civ_border_width="0.5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/facebook_signUp"
-            app:layout_constraintEnd_toStartOf="@+id/facebook_signUp"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.32">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/facebook_signUp"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@mipmap/facebook_round"
-            app:civ_border_color="@color/borderGrey"
-            app:civ_border_width="0.5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="0.2" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/phone_signUp"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:src="@mipmap/phone"
-            app:civ_border_color="@color/borderGrey"
-            app:civ_border_width="0.5dp"
-            app:layout_constraintBottom_toBottomOf="@+id/facebook_signUp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/facebook_signUp"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            app:layout_constraintVertical_bias="1.0" />
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/google_signUp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@mipmap/google_round"
+                    app:civ_border_color="@color/borderGrey"
+                    app:civ_border_width="0.5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/google_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/google_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Google"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/google_signUp"
-            app:layout_constraintStart_toStartOf="@+id/google_signUp"
-            app:layout_constraintTop_toBottomOf="@+id/google_signUp" />
+                <TextView
+                    android:id="@+id/google_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Google"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/google_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/google_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/google_signUp" />
+            </android.support.constraint.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/facebook_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Facebook"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/facebook_signUp"
-            app:layout_constraintStart_toStartOf="@+id/facebook_signUp"
-            app:layout_constraintTop_toBottomOf="@+id/facebook_signUp" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/phone_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Mobile"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/phone_signUp"
-            app:layout_constraintStart_toStartOf="@+id/phone_signUp"
-            app:layout_constraintTop_toBottomOf="@+id/phone_signUp" />
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/facebook_signUp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@mipmap/facebook_round"
+                    app:civ_border_color="@color/borderGrey"
+                    app:civ_border_width="0.5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/facebook_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/facebook_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Facebook"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/facebook_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/facebook_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/facebook_signUp" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/phone_signUp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:src="@mipmap/phone"
+                    app:civ_border_color="@color/borderGrey"
+                    app:civ_border_width="0.5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/phone_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/phone_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Mobile"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/phone_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/phone_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/phone_signUp" />
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/email_signUp"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginBottom="8dp"
+                    android:src="@mipmap/email"
+                    app:civ_border_color="@color/borderGrey"
+                    app:civ_border_width="0.5dp"
+                    app:layout_constraintBottom_toTopOf="@+id/email_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/email_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Email"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/email_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/email_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/email_signUp" />
+            </android.support.constraint.ConstraintLayout>
+
+
+        </LinearLayout>
 
         <com.facebook.login.widget.LoginButton
             android:visibility="gone"

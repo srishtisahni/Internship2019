@@ -1,26 +1,29 @@
 package com.example.policyfolio.UI.Fragments;
 
 
-import android.arch.lifecycle.Observer;
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.policyfolio.Constants;
-import com.example.policyfolio.Data.Facebook;
 import com.example.policyfolio.R;
+import com.example.policyfolio.UI.CallBackListeners.SignUpFragmentCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
+
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,10 +34,11 @@ public class SignUpFragment extends Fragment {
     private LoginSignUpViewModel viewModel;
 
     private EditText name;
-    private EditText birthday;
+    private TextView birthday;
     private Spinner gender;
     private EditText city;
     private EditText password;
+    private Button signUp;
 
     private TextView nameError;
     private TextView birthdayError;
@@ -42,8 +46,18 @@ public class SignUpFragment extends Fragment {
     private TextView passwordError;
 
     private ArrayAdapter<CharSequence> genderAdapter;
+    private Long birthdayEpoch;
+    private int genderSelection;
+
+    private SignUpFragmentCallback callback;
+
     public SignUpFragment() {
         // Required empty public constructor
+    }
+
+    @SuppressLint("ValidFragment")
+    public SignUpFragment(SignUpFragmentCallback callback){
+        this.callback = callback;
     }
 
 
@@ -58,15 +72,92 @@ public class SignUpFragment extends Fragment {
         gender = rootView.findViewById(R.id.gender);
         city = rootView.findViewById(R.id.city);
         password = rootView.findViewById(R.id.password);
+        signUp = rootView.findViewById(R.id.sign_up);
 
         nameError = rootView.findViewById(R.id.name_empty);
         birthdayError = rootView.findViewById(R.id.birthday_empty);
         cityError = rootView.findViewById(R.id.city_empty);
         passwordError = rootView.findViewById(R.id.password_empty);
 
+        birthday.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FetchDate();
+            }
+        });
+
         setGenderAdapter();
 
+        signUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SignUp();
+            }
+        });
+
         return rootView;
+    }
+
+    private void SignUp() {
+        String name = this.name.getText().toString();
+        if(name.equals("")){
+            nameError.setVisibility(View.VISIBLE);
+        }
+        else {
+            nameError.setVisibility(View.GONE);
+            viewModel.setName(name);
+        }
+
+        if(birthdayEpoch!=null){
+            birthdayError.setVisibility(View.GONE);
+            viewModel.setBirthDay(birthdayEpoch);
+        }
+        else {
+            birthdayError.setVisibility(View.VISIBLE);
+        }
+
+        viewModel.setGender(genderSelection);
+
+        String city = this.city.getText().toString();
+        if(city.equals("")){
+            cityError.setVisibility(View.VISIBLE);
+        }
+        else {
+            cityError.setVisibility(View.GONE);
+            viewModel.setCity(city);
+        }
+
+        String password = this.password.getText().toString();
+        if(password.length()<8){
+            passwordError.setText("Password should be atleast 8 characters long");
+            passwordError.setVisibility(View.VISIBLE);
+        }
+        else {
+            passwordError.setVisibility(View.GONE);
+            viewModel.setPassword(password);
+        }
+
+        if(nameError.getVisibility() == View.GONE && birthdayError.getVisibility() == View.GONE && cityError.getVisibility() == View.GONE && passwordError.getVisibility() == View.GONE)
+            callback.SignUp();
+    }
+
+    private void FetchDate() {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.date_picker);
+        dialog.setTitle("");
+        DatePicker datePicker = dialog.findViewById(R.id.date_picker);
+        final Calendar calendar=Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                calendar.set(year,monthOfYear,dayOfMonth);
+                birthdayEpoch = calendar.getTimeInMillis();
+                birthday.setText(Constants.DATE_FORMAT.format(birthdayEpoch));
+                birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            }
+        });
+        dialog.show();
     }
 
     private void setGenderAdapter() {
@@ -78,6 +169,7 @@ public class SignUpFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 gender.setSelection(i);
+                genderSelection = i;
                 if(i!=0)
                     ((TextView) gender.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 else
@@ -90,6 +182,7 @@ public class SignUpFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
 
                 gender.setSelection(0);
+                genderSelection = 0;
                 ((TextView) gender.getChildAt(0)).setTextColor(getResources().getColor(R.color.borderGrey));
                 ((TextView) gender.getChildAt(0)).setGravity(Gravity.CENTER);
                 ((TextView) gender.getChildAt(0)).setTextSize(16);

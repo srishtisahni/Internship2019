@@ -42,18 +42,16 @@
         app:layout_constraintStart_toStartOf="@+id/name"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
-    <EditText
+    <TextView
         android:id="@+id/birthday"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/text_background"
         android:gravity="center"
-        android:textColor="@color/colorPrimaryDark"
-        android:hint="Date of Birth* : MM/DD/YYYY"
-        android:inputType="date"
+        android:textColor="@color/borderGrey"
+        android:text="Date of Birth* : MM/DD/YYYY"
         android:padding="10dp"
-        android:textColorHint="@color/borderGrey"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/name"
         app:layout_constraintStart_toStartOf="@+id/name"

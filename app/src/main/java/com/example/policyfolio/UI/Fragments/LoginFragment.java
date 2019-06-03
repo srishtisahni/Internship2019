@@ -8,16 +8,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.policyfolio.Constants;
-import com.example.policyfolio.Data.Facebook;
+import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.CallBackListeners.LoginFragmentCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
@@ -36,13 +36,15 @@ public class LoginFragment extends Fragment {
     private LoginSignUpViewModel viewModel;
     private LoginFragmentCallback callback;
 
-    private EditText emailPhone;
+    private EditText emailText;
     private EditText password;
+    private TextView error;
     private Button login;
 
     private CircleImageView google;
     private CircleImageView facebook;
     private CircleImageView phone;
+    private CircleImageView email;
     private LoginButton facebookLogin;
 
 
@@ -62,12 +64,18 @@ public class LoginFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(LoginSignUpViewModel.class);
 
-        emailPhone = rootView.findViewById(R.id.email_phone);
+        emailText = rootView.findViewById(R.id.email);
         password = rootView.findViewById(R.id.password);
         login = rootView.findViewById(R.id.login);
         google = rootView.findViewById(R.id.google_signUp);
         facebook = rootView.findViewById(R.id.facebook_signUp);
         phone = rootView.findViewById(R.id.phone_signUp);
+        email = rootView.findViewById(R.id.email_signUp);
+        error = rootView.findViewById(R.id.error);
+
+        if(viewModel.getEmail() != null){
+            emailText.setText(viewModel.getEmail());
+        }
 
         facebookLogin = rootView.findViewById(R.id.facebook_login);
         facebookLogin.setReadPermissions(Arrays.asList(Constants.Facebook.BIRTHDAY,
@@ -124,7 +132,26 @@ public class LoginFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                String email = emailText.getText().toString();
+                String password = LoginFragment.this.password.getText().toString();
+                error.setVisibility(View.GONE);
+                if(email.equals("")){
+                    error.setVisibility(View.VISIBLE);
+                    error.setText("Email cannot be empty");
+                }
+                else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    error.setVisibility(View.VISIBLE);
+                    error.setText("Invalid Email");
+                }
+                if(password.length()<8){
+                    error.setVisibility(View.VISIBLE);
+                    error.setText("Passwoed should be atleast 8 characters long");
+                }
+                if(error.getVisibility()==View.GONE){
+                    viewModel.setEmail(email);
+                    viewModel.setPassword(password);
+                    callback.Login();
+                }
             }
         });
 
@@ -145,6 +172,13 @@ public class LoginFragment extends Fragment {
         });
 
         phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callback.enterPhone();
+            }
+        });
+
+        email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 callback.enterEmail();

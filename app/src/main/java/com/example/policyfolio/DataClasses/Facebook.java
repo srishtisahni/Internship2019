@@ -1,11 +1,7 @@
-package com.example.policyfolio.Data;
+package com.example.policyfolio.DataClasses;
 
 
 import com.example.policyfolio.Constants;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Facebook {
     private long id;

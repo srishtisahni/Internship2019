@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.example.policyfolio.Constants;
-import com.example.policyfolio.Data.LoggedIn;
+import com.example.policyfolio.DataClasses.LoggedIn;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.WelcomeViewModel;
 
@@ -31,7 +31,7 @@ public class WelcomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
 
         viewModel = ViewModelProviders.of(this).get(WelcomeViewModel.class);
-        viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<com.example.policyfolio.Data.LoggedIn>() {
+        viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<com.example.policyfolio.DataClasses.LoggedIn>() {
             @Override
             public void onChanged(@Nullable LoggedIn loggedIn) {
                 if(loggedIn==null){

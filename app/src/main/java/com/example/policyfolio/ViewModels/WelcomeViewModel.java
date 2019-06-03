@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import android.content.SharedPreferences;
 
 import com.example.policyfolio.Constants;
-import com.example.policyfolio.Data.LoggedIn;
+import com.example.policyfolio.DataClasses.LoggedIn;
 
 public class WelcomeViewModel extends ViewModel {
 

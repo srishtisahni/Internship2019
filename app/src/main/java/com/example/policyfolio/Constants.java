@@ -1,7 +1,11 @@
 package com.example.policyfolio;
 
+import java.text.SimpleDateFormat;
+import java.util.logging.Formatter;
+
 public class Constants {
     public static final String LOGIN_SHARED_PREFERENCE_KEY = "user_logged_in";
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
 
     public static class User {
 
@@ -26,6 +30,7 @@ public class Constants {
         }
     }
     public static class Facebook{
+        public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yy");
 
         public static final String EMAIL = "email";
         public static final String PROFILE = "public_profile";
@@ -44,5 +49,9 @@ public class Constants {
 
     public static class Google{
         public static final int SIGN_IN_RC = 9001;
+    }
+
+    public static class Firestrore{
+        public static final String COLLECTION_USERS = "users";
     }
 }
