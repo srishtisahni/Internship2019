@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1074504279970",
+    "firebase_url": "https://policyfolio-1c78c.firebaseio.com",
+    "project_id": "policyfolio-1c78c",
+    "storage_bucket": "policyfolio-1c78c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1074504279970:android:7d3364f2d4cb2986",
+        "android_client_info": {
+          "package_name": "com.example.policyfolio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1074504279970-bgjfpb5202d97nu4l1kl3o7pcs21hrt6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.policyfolio",
+            "certificate_hash": "9ab43f2273081d330ebeb51bf813e1d607e317d1"
+          }
+        },
+        {
+          "client_id": "1074504279970-r3nmh2h8ee2vqbudnnv3lcr1ejenm40f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.policyfolio",
+            "certificate_hash": "33c383603a516a782e69f41ff2a095698b744496"
+          }
+        },
+        {
+          "client_id": "1074504279970-acjr0agiks80o3it93s215iqmgrlqc2a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQoUeo7agObOpuIlbjETLTe7t8se69730"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1074504279970-acjr0agiks80o3it93s215iqmgrlqc2a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
