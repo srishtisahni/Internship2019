@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:focusableInTouchMode="true"
+    android:layout_height="wrap_content"
+    tools:context=".UI.PopUps.EmailPopUp">
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/text_background"
+        android:gravity="center"
+        android:hint="Email ID"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/borderGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.19999999" />
+
+    <TextView
+        android:id="@+id/error"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Enter a valid Email"
+        android:textColor="@color/colorAccent"
+        android:textSize="8sp"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <Button
+        android:id="@+id/next"
+        android:layout_width="136dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/button_background"
+        android:text="Next"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>

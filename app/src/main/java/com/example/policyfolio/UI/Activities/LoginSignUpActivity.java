@@ -3,6 +3,7 @@ package com.example.policyfolio.UI.Activities;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -28,6 +29,7 @@ import com.example.policyfolio.UI.Fragments.SignUpFragment;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.ParseException;
 import java.util.List;
 
 public class LoginSignUpActivity extends AppCompatActivity implements LoginFragmentCallback, EmailPhoneCallback, SignUpFragmentCallback {
@@ -79,7 +81,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
                     if(firebaseUser!=null){
                         addUser(firebaseUser);
                         Bundle bundle = new Bundle();
-                        bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.GOOGLE);
+                        bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.GOOGLE);
                         startHomeActivity(firebaseUser,bundle);
                     }
                     else {
@@ -92,8 +94,16 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     }
 
     private void startHomeActivity(FirebaseUser firebaseUser, Bundle bundle) {
-        bundle.putString(Constants.Login.FIREBASE_TOKEN,firebaseUser.getUid());
-        bundle.putBoolean(Constants.Login.LOGGED_IN,true);
+        bundle.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,firebaseUser.getUid());
+        bundle.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,true);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,true);
+        editor.putInt(Constants.SharedPreferenceKeys.TYPE,bundle.getInt(Constants.SharedPreferenceKeys.TYPE));
+        editor.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,bundle.getString(Constants.SharedPreferenceKeys.FIREBASE_UID));
+        editor.commit();
+
         Intent intent = new Intent(LoginSignUpActivity.this,HomeActivity.class);
         intent.putExtras(bundle);
         startActivity(intent);
@@ -102,6 +112,14 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
 
     @Override
     public void FacebookSignUp(Facebook facebook) {
+        viewModel.setGender(facebook.getGender());
+        viewModel.setCity(facebook.getLocationName());
+        try {
+            viewModel.setBirthDay(Constants.FACEBOOK_DATE_FORMAT.parse(facebook.getBirthday()).getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+            viewModel.setBirthDay(null);
+        }
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
         viewModel.facebookFirebaseUser().observe(this, new Observer<FirebaseUser>() {
@@ -112,7 +130,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
                 if(firebaseUser!=null){
                     addUser(firebaseUser);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.FACEBOOK);
+                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.FACEBOOK);
                     startHomeActivity(firebaseUser, bundle);
                 }
                 else {
@@ -125,7 +143,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     @Override
     public void enterEmail() {
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.Login.TYPE,Constants.Login.Type.EMAIL);
+        bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
         emailPhoneFragment.setArguments(bundle);
         addFragment(emailPhoneFragment);
     }
@@ -133,7 +151,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     @Override
     public void enterPhone() {
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.Login.TYPE,Constants.Login.Type.PHONE);
+        bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.PHONE);
         emailPhoneFragment.setArguments(bundle);
         addFragment(emailPhoneFragment);
     }
@@ -155,14 +173,22 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
                 fragmentHolder.setAlpha(1f);
                 if(firebaseUser!=null){
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.EMAIL);
+                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
                     startHomeActivity(firebaseUser, bundle);
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Email Login Failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginSignUpActivity.this,"Invalid Email or Password",Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    @Override
+    public void forgotPassword() {
+        Intent intent = new Intent(this,PopUpActivity.class);
+        intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.EMAIL_POPUP);
+        intent.putExtra(Constants.User.EMAIL,viewModel.getEmail());
+        startActivity(intent);
     }
 
 
@@ -183,7 +209,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
                 if(firebaseUser!=null){
                     addUser(firebaseUser);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.PHONE);
+                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.PHONE);
                     startHomeActivity(firebaseUser, bundle);
                 }
                 else {
@@ -207,7 +233,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
 
                     addUser(firebaseUser);
                     Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.Login.TYPE, Constants.Login.Type.EMAIL);
+                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
                     startHomeActivity(firebaseUser, bundle);
                 }
                 else {

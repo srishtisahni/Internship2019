@@ -6,8 +6,11 @@ import java.util.logging.Formatter;
 public class Constants {
     public static final String LOGIN_SHARED_PREFERENCE_KEY = "user_logged_in";
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
+    public static final SimpleDateFormat FACEBOOK_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
 
     public static class User {
+        public static final String EMAIL = "email";
+        public static final String USER = "user";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;
@@ -16,11 +19,11 @@ public class Constants {
             public static final int GENDER_OTHER = 3;
         }
     }
-    public static class Login {
+    public static class SharedPreferenceKeys {
 
         public static final String LOGGED_IN = "log_in";
         public static final String TYPE = "type";
-        public static final String FIREBASE_TOKEN = "firebase_token";
+        public static final String FIREBASE_UID = "firebase_token";
 
         public static class Type{
             public static final int GOOGLE = 0;
@@ -51,7 +54,18 @@ public class Constants {
         public static final int SIGN_IN_RC = 9001;
     }
 
-    public static class Firestrore{
+    public static class FirebaseDataManagement {
         public static final String COLLECTION_USERS = "users";
+        public static final int UPDATE_REQUEST = 1001;
+        public static final int UPDATE_RESULT = 1002;
+    }
+
+    public static class PopUps{
+        public static final String POPUP_TYPE = "type";
+
+        public static class Type{
+            public static final int EMAIL_POPUP = 1;
+            public static final int INFO_POPUP = 2;
+        }
     }
 }

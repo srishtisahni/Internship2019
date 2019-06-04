@@ -25,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginSignUpViewModel extends ViewModel implements FragmentViewModelCallback {
 
     private CallbackManager callbackManager;
-    private Repository repository = Repository.getINSTANCE();
+    private Repository repository = Repository.getInstance();
 
     private MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();
     private MutableLiveData<Integer> facebookLoginStatus = new MutableLiveData<>();

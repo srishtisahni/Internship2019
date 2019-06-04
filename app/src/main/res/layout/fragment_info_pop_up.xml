@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/white"
+    android:layout_width="wrap_content"
+    android:focusableInTouchMode="true"
+    android:layout_height="wrap_content"
+    tools:context=".UI.Fragments.EmailPhoneFragment">
+
+    <EditText
+        android:id="@+id/name"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_background"
+        android:gravity="center"
+        android:hint="Name*"
+        android:inputType="textPersonName"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/borderGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/name_empty"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The field cannot be left empty"
+        android:textColor="@color/colorAccent"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="@+id/name"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
+
+    <EditText
+        android:id="@+id/email"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_background"
+        android:gravity="center"
+        android:hint="Email*"
+        android:inputType="textEmailAddress"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/borderGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/name"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/email_empty"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The field cannot be left empty"
+        android:textColor="@color/colorAccent"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email" />
+
+    <EditText
+        android:id="@+id/phone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_background"
+        android:gravity="center"
+        android:hint="Phone*"
+        android:inputType="phone"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/borderGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/email"
+        app:layout_constraintStart_toStartOf="@+id/email"
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/phone_empty"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The field cannot be left empty"
+        android:textColor="@color/colorAccent"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="@+id/phone"
+        app:layout_constraintStart_toStartOf="@+id/phone"
+        app:layout_constraintTop_toBottomOf="@+id/phone" />
+
+    <TextView
+        android:id="@+id/birthday"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_background"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="Date of Birth* : DD/MM/YY"
+        android:textColor="@color/borderGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/phone"
+        app:layout_constraintStart_toStartOf="@+id/phone"
+        app:layout_constraintTop_toBottomOf="@+id/phone"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/birthday_empty"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The field cannot be left empty"
+        android:textColor="@color/colorAccent"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="@+id/birthday"
+        app:layout_constraintStart_toStartOf="@+id/birthday"
+        app:layout_constraintTop_toBottomOf="@+id/birthday" />
+
+    <Spinner
+        android:id="@+id/gender"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_background"
+        android:padding="10dp"
+        android:popupBackground="@drawable/dropdown_background"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/birthday"
+        app:layout_constraintStart_toStartOf="@+id/birthday"
+        app:layout_constraintTop_toBottomOf="@+id/birthday"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <EditText
+        android:id="@+id/city"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/text_background"
+        android:gravity="center"
+        android:hint="City*"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/borderGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/gender"
+        app:layout_constraintStart_toStartOf="@+id/gender"
+        app:layout_constraintTop_toBottomOf="@+id/gender"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/city_empty"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="The field cannot be left empty"
+        android:textColor="@color/colorAccent"
+        android:textSize="9sp"
+        app:layout_constraintEnd_toEndOf="@+id/city"
+        app:layout_constraintStart_toStartOf="@+id/city"
+        app:layout_constraintTop_toBottomOf="@+id/city" />
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="136dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/button_background"
+        android:text="Save"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/city_empty"
+        app:layout_constraintVertical_bias="0.0" />
+
+</android.support.constraint.ConstraintLayout>

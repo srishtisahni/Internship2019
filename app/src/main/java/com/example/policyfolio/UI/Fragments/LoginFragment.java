@@ -78,7 +78,7 @@ public class LoginFragment extends Fragment {
         forgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                callback.forgotPassword();
             }
         });
 
@@ -110,7 +110,7 @@ public class LoginFragment extends Fragment {
                             @Override
                             public void onChanged(@Nullable Facebook facebook) {
                                 if(facebook!=null) {
-                                    viewModel.setType(Constants.Login.Type.FACEBOOK);
+                                    viewModel.setType(Constants.SharedPreferenceKeys.Type.FACEBOOK);
                                     viewModel.UpdateRepoFacebook(facebook);
                                     callback.FacebookSignUp(facebook);
                                 }
@@ -150,7 +150,7 @@ public class LoginFragment extends Fragment {
                 }
                 else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                     error.setVisibility(View.VISIBLE);
-                    error.setText("Invalid Email");
+                    error.setText("Invalid EmailPopUp");
                 }
                 if(password.length()<8){
                     error.setVisibility(View.VISIBLE);

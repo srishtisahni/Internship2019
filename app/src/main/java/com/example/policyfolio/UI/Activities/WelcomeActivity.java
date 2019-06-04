@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.WindowManager;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.LoggedIn;
@@ -38,9 +37,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 else{
                     intent = new Intent(WelcomeActivity.this,HomeActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.Login.LOGGED_IN,loggedIn.isLogin());
-                    bundle.putInt(Constants.Login.TYPE,loggedIn.getType());
-                    bundle.putString(Constants.Login.FIREBASE_TOKEN,loggedIn.getFirebseToken());
+                    bundle.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,loggedIn.isLogin());
+                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE,loggedIn.getType());
+                    bundle.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,loggedIn.getFirebseToken());
                     intent.putExtras(bundle);
                 }
             }

@@ -8,4 +8,5 @@ public interface LoginFragmentCallback {
     void enterPhone();
     void GoogleSignUp();
     void Login();
+    void forgotPassword();
 }

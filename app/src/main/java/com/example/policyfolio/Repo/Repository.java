@@ -25,6 +25,7 @@ public class Repository {
     private Authentication authentication;
     private FirebaseUser firebaseUser;
     private DataManagement dataManagement;
+    private User user;
 
     private Repository(){
         graphAPI = GraphAPI.getInstance();
@@ -32,7 +33,7 @@ public class Repository {
         dataManagement = DataManagement.getInstance();
     }
 
-    public static Repository getINSTANCE() {
+    public static Repository getInstance() {
         if(INSTANCE==null){
             INSTANCE = new Repository();
         }
@@ -59,7 +60,6 @@ public class Repository {
             return null;
     }
 
-
     public void initiateGoogleLogin(String id, Context context) {
         authentication.initiateGoogleLogin(id, context);
     }
@@ -82,6 +82,10 @@ public class Repository {
         return dataManagement.addUser(user);
     }
 
+    public LiveData<Boolean> updateFirebaseUser(User user) {
+        return dataManagement.addUser(user);
+    }
+
     public void setFacebook(Facebook facebook) {
         this.facebook = facebook;
     }
@@ -96,5 +100,21 @@ public class Repository {
 
     public LiveData<FirebaseUser> Login(String email, String password) {
         return authentication.Login(email,password);
+    }
+
+    public LiveData<Boolean> resetPassword(String email) {
+        return authentication.resetPassword(email);
+    }
+
+    public LiveData<User> fetchUser(String id) {
+        return dataManagement.fetchUser(id);
+    }
+
+    public void updateUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

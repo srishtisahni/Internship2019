@@ -7,9 +7,11 @@ import android.util.Log;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class DataManagement {
@@ -28,7 +30,7 @@ public class DataManagement {
 
     public LiveData<Boolean> addUser(final User user) {
         final MutableLiveData<Boolean> update = new MutableLiveData<>();
-        firebaseFirestore.collection(Constants.Firestrore.COLLECTION_USERS)
+        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
                 .document(user.getId())
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -45,5 +47,26 @@ public class DataManagement {
                     }
                 });
         return update;
+    }
+
+    public LiveData<User> fetchUser(String id) {
+        final MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+                .document(id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            User user=task.getResult().toObject(User.class);
+                            userMutableLiveData.setValue(user);
+                        }
+                        else {
+                            userMutableLiveData.setValue(null);
+                            Log.e("EXCEPTION",task.getException().getMessage());
+                        }
+                    }
+                });
+        return userMutableLiveData;
     }
 }

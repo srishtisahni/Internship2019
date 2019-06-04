@@ -61,12 +61,12 @@ public class EmailPhoneFragment extends Fragment {
             email.setText(viewModel.getEmail());
         }
 
-        if(bundle.getInt(Constants.Login.TYPE,-1) == Constants.Login.Type.PHONE) {
+        if(bundle.getInt(Constants.SharedPreferenceKeys.TYPE,-1) == Constants.SharedPreferenceKeys.Type.PHONE) {
             email.setVisibility(View.GONE);
             next.setText("Sign Up");
             phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         }
-        else if(bundle.getInt(Constants.Login.TYPE, -1) == Constants.Login.Type.EMAIL) {
+        else if(bundle.getInt(Constants.SharedPreferenceKeys.TYPE, -1) == Constants.SharedPreferenceKeys.Type.EMAIL) {
             phone.setVisibility(View.GONE);
             next.setText("Next");
         }
@@ -83,35 +83,35 @@ public class EmailPhoneFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if(email.getVisibility()!=View.GONE) {
-                    String text = email.getText().toString();
-                    if (text.equals("")) {
+                    String email = EmailPhoneFragment.this.email.getText().toString();
+                    if (email.equals("")) {
                         textError.setVisibility(View.VISIBLE);
                         textError.setText("Empty Field Not Allowed");
                     }
-                    else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(text).matches()){
+                    else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                         textError.setVisibility(View.VISIBLE);
-                        textError.setText("Invalid Email");
+                        textError.setText("Invalid Email Id");
                     }
                     else {
                         textError.setVisibility(View.GONE);
-                        viewModel.setEmail(text);
+                        viewModel.setEmail(email);
                         callback.EmailSignUp();
                     }
                 }
                 else if(phone.getVisibility() != View.GONE){
-                    String text = phone.getText().toString();
-                    Log.e("TEXT",text);
-                    if (text.equals("")) {
+                    String phone = EmailPhoneFragment.this.phone.getText().toString();
+                    Log.e("TEXT",phone);
+                    if (phone.equals("")) {
                         textError.setVisibility(View.VISIBLE);
                         textError.setText("Empty Field Not Allowed");
                     }
-                    else if(!Patterns.PHONE.matcher(text).matches()){
+                    else if(!Patterns.PHONE.matcher(phone).matches()){
                         textError.setVisibility(View.VISIBLE);
                         textError.setText("Invalid PhoneNumber");
                     }
                     else {
                         textError.setVisibility(View.GONE);
-                        viewModel.setPhone(text);
+                        viewModel.setPhone(phone);
                         callback.PhoneSignUp();
                     }
                 }

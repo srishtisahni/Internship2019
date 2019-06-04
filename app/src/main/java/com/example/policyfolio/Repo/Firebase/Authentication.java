@@ -5,7 +5,6 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -16,6 +15,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
@@ -170,5 +171,22 @@ public class Authentication {
             }
         });
         return auth;
+    }
+
+    public LiveData<Boolean> resetPassword(String email) {
+        final MutableLiveData<Boolean> code = new MutableLiveData<>();
+        mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                code.setValue(true);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                code.setValue(false);
+                Log.e("EXCEPTION",e.getMessage());
+            }
+        });
+        return code;
     }
 }
