@@ -3,10 +3,7 @@ package com.example.policyfolio.UI.PopUps;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Patterns;
 import android.view.Gravity;
@@ -21,10 +18,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.CallBackListeners.PopUpCallBack;
-import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 import com.example.policyfolio.ViewModels.PopUpViewModel;
 
 import java.util.Calendar;
@@ -70,6 +69,7 @@ public class InfoPopUp extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_info_pop_up, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
+        viewModel.initiateRepo(getContext());
 
         name = rootView.findViewById(R.id.name);
         email = rootView.findViewById(R.id.email);

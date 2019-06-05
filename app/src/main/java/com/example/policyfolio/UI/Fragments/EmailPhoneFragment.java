@@ -2,9 +2,7 @@ package com.example.policyfolio.UI.Fragments;
 
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.util.Patterns;
@@ -14,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.R;
@@ -50,6 +51,7 @@ public class EmailPhoneFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_email_phone, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(LoginSignUpViewModel.class);
+        viewModel.initiateRepo(getContext());
 
         Bundle bundle = getArguments();
 

@@ -2,9 +2,7 @@ package com.example.policyfolio.UI.PopUps;
 
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -13,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.R;
@@ -48,6 +49,7 @@ public class EmailPopUp extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_email_popup, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
+        viewModel.initiateRepo(getContext());
 
         email = rootView.findViewById(R.id.email);
         next = rootView.findViewById(R.id.next);

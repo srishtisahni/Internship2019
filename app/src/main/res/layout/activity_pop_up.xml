@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     tools:context=".UI.Activities.PopUpActivity">
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         app:cardBackgroundColor="@color/white"
         android:id="@+id/card_view"
         app:cardCornerRadius="5dp"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:id="@+id/fragment_holder"
             android:layout_margin="10dp"/>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -39,4 +39,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

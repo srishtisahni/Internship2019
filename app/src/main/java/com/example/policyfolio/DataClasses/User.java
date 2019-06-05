@@ -3,10 +3,15 @@ package com.example.policyfolio.DataClasses;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
+@Entity
 public class User implements Parcelable {
-
+    @NonNull
+    @PrimaryKey
     private String id;
     private String email;
     private String phone;
@@ -14,8 +19,14 @@ public class User implements Parcelable {
     private Long birthday;
     private int gender = 0;
     private String city;
+    @Ignore
     private boolean complete;
+    @Ignore
+    private String firstName;
+    @Ignore
+    private String lastName;
 
+    @Ignore
     public User(String id, String email, String phone, String name, Long birthday, int gender, String city){
         this.id = id;
         this.email = email;
@@ -25,8 +36,23 @@ public class User implements Parcelable {
         this.gender = gender;
         this.city = city;
         setComplete();
+        splitName();
     }
 
+    private void splitName() {
+        lastName = "";
+        firstName= "";
+        if(name.split("\\w+").length>1){
+
+            lastName = name.substring(name.lastIndexOf(" ")+1);
+            firstName = name.substring(0, name.lastIndexOf(' '));
+        }
+        else{
+            firstName = name;
+        }
+    }
+
+    @Ignore
     public User(String id) {
         this.id = id;
         setComplete();
@@ -36,6 +62,34 @@ public class User implements Parcelable {
         setComplete();
     }
 
+    protected User(Parcel in) {
+        id = in.readString();
+        email = in.readString();
+        phone = in.readString();
+        name = in.readString();
+        if (in.readByte() == 0) {
+            birthday = null;
+        } else {
+            birthday = in.readLong();
+        }
+        gender = in.readInt();
+        city = in.readString();
+        complete = in.readByte() != 0;
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
+    @NonNull
     public String getId() {
         return id;
     }
@@ -70,6 +124,7 @@ public class User implements Parcelable {
     public void setName(String name) {
         this.name = name;
         setComplete();
+        splitName();
     }
 
     public Long getBirthday() {
@@ -99,6 +154,14 @@ public class User implements Parcelable {
         setComplete();
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     public boolean isComplete() {
         return complete;
     }
@@ -121,5 +184,7 @@ public class User implements Parcelable {
         parcel.writeString(city);
         parcel.writeLong(birthday);
         parcel.writeInt(gender);
+        parcel.writeString(firstName);
+        parcel.writeString(lastName);
     }
 }

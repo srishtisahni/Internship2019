@@ -1,21 +1,22 @@
 package com.example.policyfolio.UI.Activities;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
@@ -56,6 +57,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
         getSupportActionBar().setIcon(d);
 
         viewModel = ViewModelProviders.of(this).get(LoginSignUpViewModel.class);
+        viewModel.initiateRepo(this);
 
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);

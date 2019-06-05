@@ -1,7 +1,9 @@
 package com.example.policyfolio.ViewModels;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.ViewModel;
+import android.content.Context;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
@@ -10,7 +12,11 @@ public class PopUpViewModel extends ViewModel {
 
     private User user = new User();
 
-    private Repository repository = Repository.getInstance();
+    private Repository repository;
+
+    public void initiateRepo(Context context) {
+        repository = Repository.getInstance(context);
+    }
 
     public LiveData<Boolean> resetPassword() {
         return repository.resetPassword(user.getEmail());

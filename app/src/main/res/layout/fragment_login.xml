@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".UI.Fragments.LoginFragment">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_credentials"
         android:layout_width="match_parent"
         android:focusable="true"
@@ -101,7 +101,7 @@
             app:layout_constraintTop_toBottomOf="@+id/login" />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:id="@+id/divider"
@@ -140,7 +140,7 @@
             android:background="@color/borderGrey" />
     </LinearLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/signUp_options"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -182,7 +182,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView"
             app:layout_constraintVertical_bias="0.32">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
@@ -212,9 +212,9 @@
                     app:layout_constraintEnd_toEndOf="@+id/google_signUp"
                     app:layout_constraintStart_toStartOf="@+id/google_signUp"
                     app:layout_constraintTop_toBottomOf="@+id/google_signUp" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
@@ -244,9 +244,9 @@
                     app:layout_constraintEnd_toEndOf="@+id/facebook_signUp"
                     app:layout_constraintStart_toStartOf="@+id/facebook_signUp"
                     app:layout_constraintTop_toBottomOf="@+id/facebook_signUp" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
@@ -276,9 +276,9 @@
                     app:layout_constraintEnd_toEndOf="@+id/phone_signUp"
                     app:layout_constraintStart_toStartOf="@+id/phone_signUp"
                     app:layout_constraintTop_toBottomOf="@+id/phone_signUp" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
@@ -309,7 +309,7 @@
                     app:layout_constraintEnd_toEndOf="@+id/email_signUp"
                     app:layout_constraintStart_toStartOf="@+id/email_signUp"
                     app:layout_constraintTop_toBottomOf="@+id/email_signUp" />
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>
@@ -329,7 +329,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

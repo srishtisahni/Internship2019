@@ -1,6 +1,9 @@
 package com.example.policyfolio.Repo.Facebook;
-import android.arch.lifecycle.MutableLiveData;
 import android.os.Bundle;
+
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.DataClasses.Facebook;
 import com.facebook.AccessToken;
@@ -30,7 +33,8 @@ public class GraphAPI {
         return INSTANCE;
     }
 
-    public void getFacebookProfile(final MutableLiveData<Facebook> facebookFetch, AccessToken accessToken) {
+    public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
+        final MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
@@ -57,5 +61,6 @@ public class GraphAPI {
         parameters.putString("fields", ID + "," + EMAIL + "," + LOCATION + "," + NAME + "," + BIRTHDAY + "," + GENDER);
         request.setParameters(parameters);
         request.executeAsync();
+        return facebookFetch;
     }
 }

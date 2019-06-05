@@ -3,9 +3,7 @@ package com.example.policyfolio.UI.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.R;
@@ -66,6 +67,7 @@ public class SignUpFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(LoginSignUpViewModel.class);
+        viewModel.initiateRepo(getContext());
 
         name = rootView.findViewById(R.id.name);
         birthday = rootView.findViewById(R.id.birthday);

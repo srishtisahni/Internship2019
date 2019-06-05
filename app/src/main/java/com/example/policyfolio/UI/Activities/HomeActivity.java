@@ -1,61 +1,80 @@
 package com.example.policyfolio.UI.Activities;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.HomeViewModel;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private HomeViewModel viewModel;
+
+    private FrameLayout fragmentHolder;
+    private ProgressBar progressBar;
     private DrawerLayout drawer;
     private Toolbar toolbar;
+    private FrameLayout snackBar;
+
+    private TextView name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        fragmentHolder = findViewById(R.id.fragment_holder);
+        progressBar = findViewById(R.id.progress_bar);
+        snackBar = findViewById(R.id.snackbar_action);
+        drawer = findViewById(R.id.drawer_layout);
+        name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
 
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("PolicyFolio");
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        viewModel.initiateRepo(this);
 
         viewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User user) {
                 if(user.getName()!=null){
-                    getSupportActionBar().setTitle(user.getName() + "'s Profile");
+                    fragmentHolder.setAlpha(1f);
+                    progressBar.setVisibility(View.GONE);
+                    getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
+                    name.setText(user.getFirstName());
                 }
             }
         });
 
-        drawer = findViewById(R.id.drawer_layout);
         setUpDrawer();
 
         fetchInfo();
-
     }
 
     private void fetchInfo() {
@@ -83,7 +102,8 @@ public class HomeActivity extends AppCompatActivity
                     }
                 }
                 else {
-                    Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_LONG).show();
+                    Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(snackBar,"Please Check you Internet Connection and Retry",Snackbar.LENGTH_LONG).show();
                 }
             }
         });
@@ -127,19 +147,19 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        if (id == R.id.nav_home) {
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_tools) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+//
+//        if (id == R.id.nav_home) {
+//        } else if (id == R.id.nav_gallery) {
+//
+//        } else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_tools) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         drawer.closeDrawer(GravityCompat.START);
         return true;

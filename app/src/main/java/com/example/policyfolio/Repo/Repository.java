@@ -1,19 +1,20 @@
 package com.example.policyfolio.Repo;
 
 import android.app.Activity;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
 import com.example.policyfolio.Repo.Firebase.Authentication;
 import com.example.policyfolio.Repo.Firebase.DataManagement;
 import com.facebook.AccessToken;
-import com.facebook.Profile;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -21,43 +22,28 @@ public class Repository {
 
     private GraphAPI graphAPI;
     public static Repository INSTANCE;
-    private Facebook facebook;
     private Authentication authentication;
-    private FirebaseUser firebaseUser;
     private DataManagement dataManagement;
-    private User user;
+    private AppDatabase appDatabase;
+    private Cache cache;
 
-    private Repository(){
+    private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
         authentication = Authentication.getInstane();
         dataManagement = DataManagement.getInstance();
+        appDatabase = AppDatabase.getInstance(context);
+        cache = Cache.getInstance();
     }
 
-    public static Repository getInstance() {
+    public static Repository getInstance(Context context) {
         if(INSTANCE==null){
-            INSTANCE = new Repository();
+            INSTANCE = new Repository(context);
         }
         return INSTANCE;
     }
 
-    public void getFacebookProfile(MutableLiveData<Facebook> facebookFetch, AccessToken accessToken) {
-        Profile profile = Profile.getCurrentProfile();
-        if(facebook !=null){
-            if(facebook != null) {
-                if(profile.getId().equals(facebook.getId()+"")) {
-                    facebookFetch.setValue(facebook);
-                    return;
-                }
-            }
-        }
-        graphAPI.getFacebookProfile(facebookFetch,accessToken);
-    }
-
-    public Facebook getFacebook(long id) {
-        if(id == facebook.getId())
-            return facebook;
-        else
-            return null;
+    public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
+        return graphAPI.getFacebookProfile(accessToken);
     }
 
     public void initiateGoogleLogin(String id, Context context) {
@@ -76,20 +62,6 @@ public class Repository {
         return authentication.facebookFirebaseUser();
     }
 
-    public LiveData<Boolean> updateFirebaseUser(FirebaseUser firebaseUser, User user) {
-        this.firebaseUser = firebaseUser;
-        Log.e("USER",user + "");
-        return dataManagement.addUser(user);
-    }
-
-    public LiveData<Boolean> updateFirebaseUser(User user) {
-        return dataManagement.addUser(user);
-    }
-
-    public void setFacebook(Facebook facebook) {
-        this.facebook = facebook;
-    }
-
     public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
         return authentication.phoneSignUp(phone,activity);
     }
@@ -106,15 +78,46 @@ public class Repository {
         return authentication.resetPassword(email);
     }
 
-    public LiveData<User> fetchUser(String id) {
-        return dataManagement.fetchUser(id);
+    public LiveData<Boolean> updateFirebaseUser(User user) {
+        updateUser(user);
+        return dataManagement.addUser(user);
     }
 
     public void updateUser(User user) {
-        this.user = user;
+        cache.addUser(user);
+        new AsyncTask<User, Void, Void>() {
+            @Override
+            protected Void doInBackground(User... users) {
+                User user = users[0];
+                appDatabase.policyFolioDao().putUser(user);
+                return null;
+            }
+        }.execute(user);
     }
 
-    public User getUser() {
-        return user;
+    public LiveData<User> fetchUser(final String id) {
+        final MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+        if(cache.getUser(id) != null)
+            userMutableLiveData.setValue(cache.getUser(id));
+        else{
+            new AsyncTask<String, Void, User>() {
+                @Override
+                protected User doInBackground(String... strings) {
+                    String id = strings[0];
+                    User user = appDatabase.policyFolioDao().getUser(id);
+                    return user;
+                }
+
+                @Override
+                protected void onPostExecute(User user) {
+                    super.onPostExecute(user);
+                    if(user != null)
+                        userMutableLiveData.setValue(user);
+                    else
+                        dataManagement.fetchUser(id, userMutableLiveData);
+                }
+            }.execute(id);
+        }
+        return userMutableLiveData;
     }
 }

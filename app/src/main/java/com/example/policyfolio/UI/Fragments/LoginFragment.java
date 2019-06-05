@@ -2,12 +2,8 @@ package com.example.policyfolio.UI.Fragments;
 
 
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
@@ -64,6 +65,7 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_login, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(LoginSignUpViewModel.class);
+        viewModel.initiateRepo(getContext());
 
         emailText = rootView.findViewById(R.id.email);
         password = rootView.findViewById(R.id.password);
@@ -106,12 +108,10 @@ public class LoginFragment extends Fragment {
             public void onChanged(@Nullable Integer integer) {
                 if(integer!=null){
                     switch (integer){
-                        case Constants.Facebook.Login.LOGGED_IN: viewModel.getFacebookFetch().observe(LoginFragment.this, new Observer<Facebook>() {
+                        case Constants.Facebook.Login.LOGGED_IN: viewModel.fetchFacebookData().observe(LoginFragment.this, new Observer<Facebook>() {
                             @Override
                             public void onChanged(@Nullable Facebook facebook) {
                                 if(facebook!=null) {
-                                    viewModel.setType(Constants.SharedPreferenceKeys.Type.FACEBOOK);
-                                    viewModel.UpdateRepoFacebook(facebook);
                                     callback.FacebookSignUp(facebook);
                                 }
                                 else

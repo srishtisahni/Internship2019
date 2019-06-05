@@ -1,14 +1,15 @@
 package com.example.policyfolio.UI.Activities;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.LoggedIn;
@@ -28,7 +29,8 @@ public class WelcomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
 
         viewModel = ViewModelProviders.of(this).get(WelcomeViewModel.class);
-        viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<com.example.policyfolio.DataClasses.LoggedIn>() {
+        viewModel.initiateRepo(this);
+        viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<LoggedIn>() {
             @Override
             public void onChanged(@Nullable LoggedIn loggedIn) {
                 if(loggedIn==null){

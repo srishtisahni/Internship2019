@@ -1,15 +1,16 @@
 package com.example.policyfolio.UI.Activities;
 
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.User;
@@ -37,6 +38,7 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
         setContentView(R.layout.activity_pop_up);
 
         viewModel = ViewModelProviders.of(this).get(PopUpViewModel.class);
+        viewModel.initiateRepo(this);
 
         popUpHolder = findViewById(R.id.card_view);
         progressBar = findViewById(R.id.progress_bar);

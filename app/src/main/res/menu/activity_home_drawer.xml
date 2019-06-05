@@ -5,34 +5,47 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/menu_home" />
+            android:id="@+id/add_policy"
+            android:title="Add Policy" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:id="@+id/renew_policy"
+            android:title="Renew Policy" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:id="@+id/claim_support"
+            android:title="Claim Support" />
         <item
-            android:id="@+id/nav_tools"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:id="@+id/legal_support"
+            android:title="Legal Support" />
+        <item
+            android:id="@+id/nominee_support"
+            android:title="Nominee Support" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/promotions"
+            android:title="Promotions and Offers" />
+        <item
+            android:id="@+id/documents"
+            android:title="Document Vault" />
+        <item
+            android:id="@+id/faq"
+            android:title="FAQs" />
+        <item
+            android:id="@+id/help"
+            android:title="Need Help" />
+    </group>
+
+    <group>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="@string/menu_share" />
+                android:id="@+id/about_us"
+                android:title="About Us" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="@string/menu_send" />
-        </menu>
-    </item>
+                android:id="@+id/legal"
+                android:title="Legal" />
+            <item
+                android:id="@+id/logout"
+                android:title="Log Out" />
+    </group>
 
 </menu>

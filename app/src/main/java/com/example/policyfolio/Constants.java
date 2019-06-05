@@ -5,6 +5,8 @@ import java.util.logging.Formatter;
 
 public class Constants {
     public static final String LOGIN_SHARED_PREFERENCE_KEY = "user_logged_in";
+    public static final String DATABASE_NAME = "policy_folio_database";
+    public static final int DATABASE_VERSION = 1;
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
     public static final SimpleDateFormat FACEBOOK_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
 

@@ -1,12 +1,13 @@
 package com.example.policyfolio.ViewModels;
 
 import android.app.Activity;
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.ViewModel;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
@@ -25,23 +26,24 @@ import com.google.firebase.auth.FirebaseUser;
 public class LoginSignUpViewModel extends ViewModel implements FragmentViewModelCallback {
 
     private CallbackManager callbackManager;
-    private Repository repository = Repository.getInstance();
+    private Repository repository;
 
-    private MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();
     private MutableLiveData<Integer> facebookLoginStatus = new MutableLiveData<>();
 
     private String email;
     private String phone;
-    private Integer type;
     private String name;
     private Long birthdatEpoch;
     private int gender;
     private String city;
     private String password;
 
+    public void initiateRepo(Context context) {
+        repository = Repository.getInstance(context);
+    }
 
-    public void fetchFacebookData(AccessToken accessToken) {
-        repository.getFacebookProfile(facebookFetch,accessToken);
+    public LiveData<Facebook> fetchFacebookData() {
+        return repository.getFacebookProfile(AccessToken.getCurrentAccessToken());
     }
 
     public MutableLiveData<Integer> facebookLogin() {
@@ -55,7 +57,6 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
                         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
                         if(isLoggedIn) {
                             facebookLoginStatus.setValue(Constants.Facebook.Login.LOGGED_IN);
-                            fetchFacebookData(accessToken);
                         }
                         else
                             facebookLoginStatus.setValue(Constants.Facebook.Login.LOGIN_FAILED);
@@ -75,10 +76,6 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         return facebookLoginStatus;
     }
 
-    public MutableLiveData<Facebook> getFacebookFetch() {
-        return facebookFetch;
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode,resultCode,data);
@@ -86,14 +83,6 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
 
     public void initiateGoogleLogin(String id, Context context) {
         repository.initiateGoogleLogin(id, context);
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public Integer getType() {
-        return type;
     }
 
     public GoogleSignInClient getGoogleSignInClient() {
@@ -111,11 +100,7 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     public LiveData<Boolean> updateUserInfo(FirebaseUser firebaseUser) {
         User user = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getPhoneNumber(),firebaseUser.getDisplayName(),birthdatEpoch,gender,city);
         Log.e(firebaseUser.toString(),user.toString());
-        return repository.updateFirebaseUser(firebaseUser,user);
-    }
-
-    public void UpdateRepoFacebook(Facebook facebook) {
-        repository.setFacebook(facebook);
+        return repository.updateFirebaseUser(user);
     }
 
     public LiveData<FirebaseUser> signUpPhone(Activity activity) {

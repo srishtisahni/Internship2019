@@ -1,9 +1,10 @@
 package com.example.policyfolio.Repo.Firebase;
 
-import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.User;
@@ -49,8 +50,7 @@ public class DataManagement {
         return update;
     }
 
-    public LiveData<User> fetchUser(String id) {
-        final MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+    public void fetchUser(String id, final MutableLiveData<User> userMutableLiveData) {
         firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
                 .document(id)
                 .get()
@@ -67,6 +67,5 @@ public class DataManagement {
                         }
                     }
                 });
-        return userMutableLiveData;
     }
 }
