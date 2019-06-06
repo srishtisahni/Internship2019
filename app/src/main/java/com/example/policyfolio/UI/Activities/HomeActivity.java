@@ -7,8 +7,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Constants;
+import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
+import com.example.policyfolio.UI.CallBackListeners.HomeFragmentCallback;
+import com.example.policyfolio.UI.Fragments.PolicyStartupFragment;
 import com.example.policyfolio.ViewModels.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,9 +32,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import java.util.List;
+
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HomeFragmentCallback {
 
     private HomeViewModel viewModel;
 
@@ -40,8 +45,11 @@ public class HomeActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private Toolbar toolbar;
     private FrameLayout snackBar;
+    private NavigationView navigationView;
 
     private TextView name;
+
+    private PolicyStartupFragment policyStartupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +61,7 @@ public class HomeActivity extends AppCompatActivity
         snackBar = findViewById(R.id.snackbar_action);
         drawer = findViewById(R.id.drawer_layout);
         name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
+        navigationView = findViewById(R.id.nav_view);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("PolicyFolio");
@@ -89,16 +98,19 @@ public class HomeActivity extends AppCompatActivity
             viewModel.setType(bundle.getInt(Constants.SharedPreferenceKeys.TYPE));
             viewModel.setUid(bundle.getString(Constants.SharedPreferenceKeys.FIREBASE_UID));
         }
-        viewModel.fetchUser().observe(this, new Observer<User>() {
+        viewModel.fetchUser(this).observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User user) {
                 if(user!=null){
-                    viewModel.updateUser(user);
                     if(!user.isComplete()){
                         Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
                         intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
                         intent.putExtra(Constants.SharedPreferenceKeys.FIREBASE_UID,viewModel.getUid());
                         startActivityForResult(intent,Constants.FirebaseDataManagement.UPDATE_REQUEST);
+                    }
+                    else{
+                        viewModel.updateUser(user);
+                        renderFragment(user);
                     }
                 }
                 else {
@@ -107,12 +119,42 @@ public class HomeActivity extends AppCompatActivity
                 }
             }
         });
+    }
+
+    private void renderFragment(User user) {
+        viewModel.fetchPolicies(user.getId(),this).observe(this, new Observer<List<Policy>>() {
+            @Override
+            public void onChanged(List<Policy> policies) {
+                if(policies!=null){
+                    if(policies.size()==0)
+                        zeroPolicies();
+                    else
+                        policies();
+                }
+                else {
+                    Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(snackBar,"Please Check you Internet Connection and Retry",Snackbar.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void policies() {
+    }
+
+    private void zeroPolicies() {
+        policyStartupFragment = new PolicyStartupFragment(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,policyStartupFragment).commit();
+    }
 
 
+    @Override
+    public void addPolicy() {
+        Intent intent = new Intent(this,AddPolicyActivity.class);
+        startActivity(intent);
     }
 
     private void setUpDrawer() {
-        NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.setDrawerIndicatorEnabled(false);
@@ -147,20 +189,12 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-//
-//        if (id == R.id.nav_home) {
-//        } else if (id == R.id.nav_gallery) {
-//
-//        } else if (id == R.id.nav_slideshow) {
-//
-//        } else if (id == R.id.nav_tools) {
-//
-//        } else if (id == R.id.nav_share) {
-//
-//        } else if (id == R.id.nav_send) {
-//
-//        }
 
+        switch (id){
+            case R.id.add_policy:
+                addPolicy();
+                break;
+        }
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -171,6 +205,8 @@ public class HomeActivity extends AppCompatActivity
 
         if(requestCode == Constants.FirebaseDataManagement.UPDATE_REQUEST && resultCode == Constants.FirebaseDataManagement.UPDATE_RESULT){
             viewModel.updateUser((User) data.getParcelableExtra(Constants.User.USER));
+            renderFragment((User) data.getParcelableExtra(Constants.User.USER));
         }
     }
+
 }

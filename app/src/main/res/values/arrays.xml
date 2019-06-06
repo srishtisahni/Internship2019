@@ -6,4 +6,28 @@
         <item>Female</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="insurance_type">
+        <item>Life Insurance</item>
+        <item>Auto Insurance</item>
+        <item>Health Insurance</item>
+        <item>Card Insurance</item>
+        <item>Travel Insurance</item>
+        <item>Property Insurance</item>
+        <item>Business Insurance</item>
+        <item>Employee Insurance</item>
+        <item>Appliance Insurance</item>
+    </string-array>
+
+    <array name="icons">
+        <item>@drawable/life_insurance</item>
+        <item>@drawable/auto_insurance</item>
+        <item>@drawable/health_insurance</item>
+        <item>@drawable/card_insurance</item>
+        <item>@drawable/travel_insurance</item>
+        <item>@drawable/property_insurance</item>
+        <item>@drawable/business_insurance</item>
+        <item>@drawable/employee_insurance</item>
+        <item>@drawable/appliance_insurance</item>
+    </array>
 </resources>

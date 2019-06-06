@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.CallBackListeners.EmailPhoneCallback;
 import com.example.policyfolio.UI.CallBackListeners.LoginFragmentCallback;
@@ -232,7 +233,6 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
                 progressBar.setVisibility(View.GONE);
                 fragmentHolder.setAlpha(1f);
                 if(firebaseUser!=null){
-
                     addUser(firebaseUser);
                     Bundle bundle = new Bundle();
                     bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
@@ -245,12 +245,19 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
         });
     }
 
-    private void addUser(FirebaseUser firebaseUser) {
-        viewModel.updateUserInfo(firebaseUser).observe(this, new Observer<Boolean>() {
+    private void addUser(final FirebaseUser firebaseUser) {
+        viewModel.fetchUser(firebaseUser.getUid(),this).observe(this, new Observer<User>() {
             @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                if(!aBoolean)
-                    Toast.makeText(LoginSignUpActivity.this,"Information Not Updated",Toast.LENGTH_LONG).show();
+            public void onChanged(User user) {
+                if(user == null){
+                    viewModel.updateUserInfo(firebaseUser).observe(LoginSignUpActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(@Nullable Boolean aBoolean) {
+                            if(!aBoolean)
+                                Toast.makeText(LoginSignUpActivity.this,"Information couldn't be updated.",Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
     }

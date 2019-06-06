@@ -2,12 +2,16 @@ package com.example.policyfolio.ViewModels;
 
 import android.content.Context;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
+
+import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
@@ -35,17 +39,19 @@ public class HomeViewModel extends ViewModel {
         return user.getValue().getId();
     }
 
-    public LiveData<User> fetchUser() {
-        return repository.fetchUser(user.getValue().getId());
-    }
-
-    public void updateUser(User user) {
-        this.user.setValue(user);
-        repository.updateUser(user);
+    public LiveData<User> fetchUser(LifecycleOwner owner) {
+        return repository.fetchUser(user.getValue().getId(),owner);
     }
 
     public LiveData<User> getUser() {
         return user;
     }
 
+    public LiveData<List<Policy>> fetchPolicies(String id, LifecycleOwner owner) {
+        return repository.fetchPolicies(id,owner);
+    }
+
+    public void updateUser(User user) {
+        this.user.setValue(user);
+    }
 }

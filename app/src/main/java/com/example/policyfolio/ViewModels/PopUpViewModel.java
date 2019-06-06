@@ -2,6 +2,7 @@ package com.example.policyfolio.ViewModels;
 
 import android.content.Context;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -78,8 +79,8 @@ public class PopUpViewModel extends ViewModel {
         user.setPhone(phone);
     }
 
-    public LiveData<User> fetchUser(String id) {
-        return repository.fetchUser(id);
+    public LiveData<User> fetchUser(String id, LifecycleOwner owner) {
+        return repository.fetchUser(id,owner);
     }
 
     public void updateUser(User user) {

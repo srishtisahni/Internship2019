@@ -21,8 +21,20 @@ public class Constants {
             public static final int GENDER_OTHER = 3;
         }
     }
+    public static class Policy{
+        public static class Type{
+            public static final int LIFE_INSURANCE = 0;
+            public static final int AUTO_INSURANCE = 1;
+            public static final int HEALTH_INSURANCE = 2;
+            public static final int CARD_INSURANCE = 3;
+            public static final int TRAVEL_INSURANCE = 4;
+            public static final int PROPERTY_INSURANCE = 5;
+            public static final int BUSINESS_INSURANCE = 6;
+            public static final int EMPLOYEE_INSURANCE = 7;
+            public static final int APPLIANCE_INSURANCE = 8;
+        }
+    }
     public static class SharedPreferenceKeys {
-
         public static final String LOGGED_IN = "log_in";
         public static final String TYPE = "type";
         public static final String FIREBASE_UID = "firebase_token";
@@ -58,6 +70,9 @@ public class Constants {
 
     public static class FirebaseDataManagement {
         public static final String COLLECTION_USERS = "users";
+        public static final String POLICIES_COLLECTION = "policies";
+        public static final String COMPANIES_COLLECTION = "insurance_providers";
+
         public static final int UPDATE_REQUEST = 1001;
         public static final int UPDATE_RESULT = 1002;
     }

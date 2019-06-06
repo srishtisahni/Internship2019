@@ -66,7 +66,7 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                 if(id!=null){
                     progressBar.setVisibility(View.VISIBLE);
                     popUpHolder.setAlpha(0.5f);
-                    viewModel.fetchUser(id).observe(this, new Observer<User>() {
+                    viewModel.fetchUser(id,this).observe(this, new Observer<User>() {
                         @Override
                         public void onChanged(@Nullable User user) {
                             popUpHolder.setAlpha(1f);

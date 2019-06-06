@@ -10,7 +10,7 @@
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="0dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginLeft="48dp"
@@ -33,7 +33,7 @@
 
     <EditText
         android:id="@+id/phone"
-        android:layout_width="0dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginLeft="48dp"
@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The field cannot be left empty"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/red"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="@+id/email"
         app:layout_constraintStart_toStartOf="@+id/email"

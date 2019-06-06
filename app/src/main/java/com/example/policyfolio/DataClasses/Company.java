@@ -7,26 +7,28 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class Company {
-    @NonNull @PrimaryKey
-    private String id;
+    @NonNull @PrimaryKey(autoGenerate = true)
+    private Long id;
     private String name;
+    private int type;
 
     public Company(){
 
     }
 
     @Ignore
-    public Company(String id,String name){
+    public Company(Long id, String name, int type){
         this.id = id;
         this.name = name;
+        this.type = type;
     }
 
     @NonNull
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(@NonNull String id) {
+    public void setId(@NonNull Long id) {
         this.id = id;
     }
 
@@ -36,5 +38,13 @@ public class Company {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

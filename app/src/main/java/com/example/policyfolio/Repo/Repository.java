@@ -4,11 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
@@ -17,6 +21,9 @@ import com.example.policyfolio.Repo.Firebase.DataManagement;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Repository {
 
@@ -79,11 +86,6 @@ public class Repository {
     }
 
     public LiveData<Boolean> updateFirebaseUser(User user) {
-        updateUser(user);
-        return dataManagement.addUser(user);
-    }
-
-    public void updateUser(User user) {
         cache.addUser(user);
         new AsyncTask<User, Void, Void>() {
             @Override
@@ -93,31 +95,66 @@ public class Repository {
                 return null;
             }
         }.execute(user);
+        return dataManagement.addUser(user);
     }
 
-    public LiveData<User> fetchUser(final String id) {
-        final MutableLiveData<User> userMutableLiveData = new MutableLiveData<>();
+
+    public LiveData<User> fetchUser(final String id, final LifecycleOwner owner) {
+        final MutableLiveData<User> user = new MutableLiveData<>();
         if(cache.getUser(id) != null)
-            userMutableLiveData.setValue(cache.getUser(id));
+            user.setValue(cache.getUser(id));
         else{
-            new AsyncTask<String, Void, User>() {
+            new AsyncTask<String, Void, LiveData<User>>() {
                 @Override
-                protected User doInBackground(String... strings) {
+                protected LiveData<User> doInBackground(String... strings) {
                     String id = strings[0];
-                    User user = appDatabase.policyFolioDao().getUser(id);
+                    LiveData<User> user = appDatabase.policyFolioDao().getUser(id);
                     return user;
                 }
 
                 @Override
-                protected void onPostExecute(User user) {
-                    super.onPostExecute(user);
-                    if(user != null)
-                        userMutableLiveData.setValue(user);
-                    else
-                        dataManagement.fetchUser(id, userMutableLiveData);
+                protected void onPostExecute(LiveData<User> result) {
+                    super.onPostExecute(result);
+                    result.observe(owner, new Observer<User>() {
+                        @Override
+                        public void onChanged(User result) {
+                            if(result!=null) {
+                                user.setValue(result);
+                                cache.addUser(result);
+                            }
+                        }
+                    });
+                    dataManagement.fetchUser(id,appDatabase);
                 }
             }.execute(id);
         }
-        return userMutableLiveData;
+        return user;
     }
+
+    public LiveData<List<Policy>> fetchPolicies(final String id, final LifecycleOwner owner) {
+        final MutableLiveData<List<Policy>> policies = new MutableLiveData<>();
+        new AsyncTask<String, Void, LiveData<List<Policy>>>() {
+            @Override
+            protected LiveData<List<Policy>> doInBackground(String... strings) {
+                String id = strings[0];
+                LiveData<List<Policy>> policies = appDatabase.policyFolioDao().getPolicies(id);
+                return policies;
+            }
+
+            @Override
+            protected void onPostExecute(LiveData<List<Policy>> result) {
+                super.onPostExecute(result);
+                result.observe(owner, new Observer<List<Policy>>() {
+                    @Override
+                    public void onChanged(List<Policy> result) {
+                        policies.setValue(result);
+                        cache.addPolicies(result);
+                    }
+                });
+                dataManagement.fetchPolicies(id,appDatabase);
+            }
+        }.execute(id);
+        return policies;
+    }
+
 }

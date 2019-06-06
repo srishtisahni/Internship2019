@@ -34,9 +34,11 @@ public class Policy {
     @NonNull @PrimaryKey
     private String policyNumber;
     @NonNull
-    private String company;
+    private Long company;
     private Long startDate;
     private Long endDate;
+    private Long nextDueDate;
+    private Long cycle;
     private Long premium;
     private Long sumAssured;
     @NonNull
@@ -47,12 +49,14 @@ public class Policy {
     }
 
     @Ignore
-    public Policy(String id,String pNum,String company,Long startDate, Long endDate, Long premium, Long sumAssured, int type){
+    public Policy(String id, String pNum, Long company, Long startDate, Long endDate, Long nextDueDate, Long cycle, Long premium, Long sumAssured, int type){
         this.id = id;
         this.policyNumber = pNum;
         this.company = company;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.nextDueDate = nextDueDate;
+        this.cycle = cycle;
         this.premium = premium;
         this.sumAssured = sumAssured;
         this.type = type;
@@ -77,11 +81,11 @@ public class Policy {
     }
 
     @NonNull
-    public String getCompany() {
+    public Long getCompany() {
         return company;
     }
 
-    public void setCompany(String company) {
+    public void setCompany(Long company) {
         this.company = company;
     }
 
@@ -91,6 +95,22 @@ public class Policy {
 
     public void setStartDate(Long startDate) {
         this.startDate = startDate;
+    }
+
+    public Long getNextDueDate() {
+        return nextDueDate;
+    }
+
+    public void setNextDueDate(Long nextDueDate) {
+        this.nextDueDate = nextDueDate;
+    }
+
+    public Long getCycle() {
+        return cycle;
+    }
+
+    public void setCycle(Long cycle) {
+        this.cycle = cycle;
     }
 
     public Long getPremium() {

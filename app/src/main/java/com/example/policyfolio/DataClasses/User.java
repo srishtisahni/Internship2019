@@ -41,14 +41,15 @@ public class User implements Parcelable {
 
     private void splitName() {
         lastName = "";
-        firstName= "";
-        if(name.split("\\w+").length>1){
+        firstName = "";
+        if(name!=null) {
+            if (name.split("\\w+").length > 1) {
 
-            lastName = name.substring(name.lastIndexOf(" ")+1);
-            firstName = name.substring(0, name.lastIndexOf(' '));
-        }
-        else{
-            firstName = name;
+                lastName = name.substring(name.lastIndexOf(" ") + 1);
+                firstName = name.substring(0, name.lastIndexOf(' '));
+            } else {
+                firstName = name;
+            }
         }
     }
 

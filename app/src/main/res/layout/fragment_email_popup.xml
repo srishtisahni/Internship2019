@@ -38,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="Enter a valid Email"
-        android:textColor="@color/colorAccent"
+        android:textColor="@color/red"
         android:textSize="8sp"
         app:layout_constraintEnd_toEndOf="@+id/email"
         app:layout_constraintStart_toStartOf="@+id/email"
