@@ -1,5 +1,6 @@
 package com.example.policyfolio.Repo.Facebook;
 import android.os.Bundle;
+import android.util.Log;
 
 
 import androidx.lifecycle.LiveData;
@@ -27,13 +28,17 @@ public class GraphAPI {
 
     }
 
+    //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
+
     public static GraphAPI getInstance() {
+        //Singleton Pattern
         if(INSTANCE == null)
             INSTANCE = new GraphAPI();
         return INSTANCE;
     }
 
     public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
+        //Fetching information from facebook profile of the user
         final MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
@@ -52,6 +57,7 @@ public class GraphAPI {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Log.e("EXCEPTION",e.getMessage());
                 }
                 facebookFetch.setValue(facebook);
             }

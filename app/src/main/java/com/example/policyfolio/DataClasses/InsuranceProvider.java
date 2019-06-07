@@ -6,18 +6,19 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class Company {
+public class InsuranceProvider {
+    //Insurance Providers
     @NonNull @PrimaryKey(autoGenerate = true)
     private Long id;
     private String name;
     private int type;
 
-    public Company(){
+    public InsuranceProvider(){
 
     }
 
     @Ignore
-    public Company(Long id, String name, int type){
+    public InsuranceProvider(Long id, String name, int type){
         this.id = id;
         this.name = name;
         this.type = type;

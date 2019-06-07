@@ -39,9 +39,9 @@ public class WelcomeActivity extends AppCompatActivity {
                 else{
                     intent = new Intent(WelcomeActivity.this,HomeActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,loggedIn.isLogin());
-                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE,loggedIn.getType());
-                    bundle.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,loggedIn.getFirebseToken());
+                    bundle.putBoolean(Constants.LoginInInfo.LOGGED_IN,loggedIn.isLogin());
+                    bundle.putInt(Constants.LoginInInfo.TYPE,loggedIn.getType());
+                    bundle.putString(Constants.LoginInInfo.FIREBASE_UID,loggedIn.getFirebseToken());
                     intent.putExtras(bundle);
                 }
             }

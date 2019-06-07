@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey;
 
 @Entity
 public class User implements Parcelable {
+    //User Information
     @NonNull
     @PrimaryKey
     private String id;
@@ -19,15 +20,13 @@ public class User implements Parcelable {
     private Long birthday;
     private int gender = 0;
     private String city;
-    @Ignore
+    private Integer type;
     private boolean complete;
-    @Ignore
     private String firstName;
-    @Ignore
     private String lastName;
 
     @Ignore
-    public User(String id, String email, String phone, String name, Long birthday, int gender, String city){
+    public User(String id, String email, String phone, String name, Long birthday, int gender, String city,int type){
         this.id = id;
         this.email = email;
         this.phone = phone;
@@ -35,6 +34,7 @@ public class User implements Parcelable {
         this.birthday = birthday;
         this.gender = gender;
         this.city = city;
+        this.type = type;
         setComplete();
         splitName();
     }
@@ -44,7 +44,6 @@ public class User implements Parcelable {
         firstName = "";
         if(name!=null) {
             if (name.split("\\w+").length > 1) {
-
                 lastName = name.substring(name.lastIndexOf(" ") + 1);
                 firstName = name.substring(0, name.lastIndexOf(' '));
             } else {
@@ -155,6 +154,14 @@ public class User implements Parcelable {
         setComplete();
     }
 
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -167,8 +174,22 @@ public class User implements Parcelable {
         return complete;
     }
 
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        this.name = firstName+" "+lastName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        this.name = firstName+" "+lastName;
+    }
+
     private void setComplete() {
-        this.complete = email!=null && id!=null && phone!=null && name!=null && birthday!=null && city!=null;
+        this.complete = email!=null && id!=null && phone!=null && name!=null && birthday!=null && city!=null && type!=null;
     }
 
     @Override

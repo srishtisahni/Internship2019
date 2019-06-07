@@ -20,7 +20,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.LoginFragmentCallback;
+import com.example.policyfolio.UI.CallBackListeners.LoginCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 import com.facebook.login.widget.LoginButton;
 
@@ -35,7 +35,7 @@ public class LoginFragment extends Fragment {
 
     private View rootView;
     private LoginSignUpViewModel viewModel;
-    private LoginFragmentCallback callback;
+    private LoginCallback callback;
 
     private EditText emailText;
     private EditText password;
@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public LoginFragment(LoginFragmentCallback callback) {
+    public LoginFragment(LoginCallback callback) {
         this.callback = callback;
     }
 

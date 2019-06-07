@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.Constants;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -42,13 +43,17 @@ public class Authentication {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public static Authentication getInstane(){
+    public static Authentication getInstance(){
+        //Singleton Pattern
         if(INSTANCE == null)
             INSTANCE = new Authentication();
         return INSTANCE;
     }
 
+    //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
+
     public void initiateGoogleLogin(String id, Context context) {
+        //Initializing parameters for google sign in
         if(gso == null) {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(id)
@@ -63,6 +68,7 @@ public class Authentication {
     }
 
     public LiveData<FirebaseUser> googleAuthentication(Intent data) {
+        //Authenticating Google Account based in the email choice by the user
         final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         try {
@@ -71,7 +77,7 @@ public class Authentication {
             mAuth.signInWithCredential(credential)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
+                        public void onComplete(@NonNull Task<AuthResult> task) {    //Returns user if authentication is complete, null otherwise
                             if (task.isSuccessful()) {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 auth.setValue(user);
@@ -89,6 +95,7 @@ public class Authentication {
     }
 
     public LiveData<FirebaseUser> facebookFirebaseUser() {
+        //Facebook Authentication using Firebase
         String token = AccessToken.getCurrentAccessToken().getToken();
         final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         AuthCredential credential = FacebookAuthProvider.getCredential(token);
@@ -97,7 +104,7 @@ public class Authentication {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = mAuth.getCurrentUser();       //Returns user if authentication is complete, null otherwise
                             auth.setValue(user);
                         } else {
                             Log.e("EXCEPTION",task.getException().getMessage());
@@ -108,7 +115,8 @@ public class Authentication {
         return auth;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
+    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) { // Activity is passed for verification
+        //Signing in  using Phone Number.
         final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, activity , new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -117,7 +125,7 @@ public class Authentication {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            FirebaseUser user = mAuth.getCurrentUser();         //Returns user if authentication is complete, null otherwise
                             auth.setValue(user);
                         }
                         else {
@@ -138,13 +146,14 @@ public class Authentication {
         return  auth;
     }
 
-    public LiveData<FirebaseUser> SignUp(String email, String password) {
+    public LiveData<FirebaseUser> SignUpEmailPassword(String email, String password) {
+        //Signing Up using Email and Password
         final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         mAuth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser user = mAuth.getCurrentUser();
+                    FirebaseUser user = mAuth.getCurrentUser();         //Returns user if signUp is complete, null otherwise
                     auth.setValue(user);
                 }
                 else {
@@ -157,12 +166,13 @@ public class Authentication {
     }
 
     public LiveData<FirebaseUser> Login(String email, String password) {
+        //Loging In using Email and Password
         final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    FirebaseUser user = mAuth.getCurrentUser();
+                    FirebaseUser user = mAuth.getCurrentUser();          //Returns user if Login is complete, null otherwise
                     auth.setValue(user);
                 }
                 else {
@@ -175,11 +185,12 @@ public class Authentication {
     }
 
     public LiveData<Boolean> resetPassword(String email) {
+        //Send reset password email
         final MutableLiveData<Boolean> code = new MutableLiveData<>();
         mAuth.sendPasswordResetEmail(email).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                code.setValue(true);
+                code.setValue(true);                    //Returns true if a reset email is sent, false otherwise
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -189,5 +200,19 @@ public class Authentication {
             }
         });
         return code;
+    }
+
+    public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
+        String email;
+        try {
+            //Extracting email from user's intent to verify if the account exists
+            email = GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class).getEmail();
+            return DataManagement.getInstance().checkIfUserExistsEmail(email, Constants.LoginInInfo.Type.GOOGLE);
+        } catch (ApiException e) {
+            Log.e("EXCEPTION", e.getMessage());
+            MutableLiveData<Integer> nullValue = new MutableLiveData<>();
+            nullValue.setValue(null);               //Returns null in case of an exception
+            return nullValue;
+        }
     }
 }

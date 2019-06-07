@@ -14,10 +14,10 @@ import com.example.policyfolio.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PolicyDetailsFragment extends Fragment {
+public class HomePoliciesFragment extends Fragment {
 
 
-    public PolicyDetailsFragment() {
+    public HomePoliciesFragment() {
         // Required empty public constructor
     }
 
@@ -26,7 +26,7 @@ public class PolicyDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_policy_details, container, false);
+        return inflater.inflate(R.layout.fragment_home_policies, container, false);
     }
 
 }

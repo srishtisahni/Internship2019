@@ -98,8 +98,8 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         return repository.facebookFirebaseUser();
     }
 
-    public LiveData<Boolean> updateUserInfo(FirebaseUser firebaseUser) {
-        User user = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getPhoneNumber(),firebaseUser.getDisplayName(), birthdayEpoch,gender,city);
+    public LiveData<Boolean> updateUserInfo(FirebaseUser firebaseUser,Integer type) {
+        User user = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getPhoneNumber(),firebaseUser.getDisplayName(), birthdayEpoch,gender,city,type);
         Log.e(firebaseUser.toString(),user.toString());
         return repository.updateFirebaseUser(user);
     }
@@ -150,5 +150,21 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
 
     public LiveData<FirebaseUser> logIn() {
         return repository.Login(email,password);
+    }
+
+    public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
+        return repository.checkIfUserExistsEmail(data);
+    }
+
+    public LiveData<Integer> checkIfUserExistsEmail(String email,Integer type) {
+        return repository.checkIfUserExistsEmail(email,type);
+    }
+
+    public LiveData<Integer> checkIfUserExistsEmail(Integer type) {
+        return repository.checkIfUserExistsEmail(email,type);
+    }
+
+    public LiveData<Integer> checkIfUserExistsPhone() {
+        return repository.checkIfUserExistsPhone(phone);
     }
 }

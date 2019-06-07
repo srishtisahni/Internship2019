@@ -1,5 +1,5 @@
 package com.example.policyfolio.UI.CallBackListeners;
 
-public interface HomeFragmentCallback {
+public interface HomeCallback {
     void addPolicy();
 }

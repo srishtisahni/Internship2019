@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -22,11 +21,10 @@ import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
-
+    //Fetches and stores data
     private GraphAPI graphAPI;
     public static Repository INSTANCE;
     private Authentication authentication;
@@ -36,13 +34,16 @@ public class Repository {
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
-        authentication = Authentication.getInstane();
+        authentication = Authentication.getInstance();
         dataManagement = DataManagement.getInstance();
         appDatabase = AppDatabase.getInstance(context);
         cache = Cache.getInstance();
     }
 
+    //All **UPDATES** on the **LOCAL DATABASE** occur on the background thread
+
     public static Repository getInstance(Context context) {
+        //Singleton Pattern
         if(INSTANCE==null){
             INSTANCE = new Repository(context);
         }
@@ -50,44 +51,45 @@ public class Repository {
     }
 
     public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
-        return graphAPI.getFacebookProfile(accessToken);
+        return graphAPI.getFacebookProfile(accessToken);    //Fetch Facebook info
     }
 
     public void initiateGoogleLogin(String id, Context context) {
-        authentication.initiateGoogleLogin(id, context);
+        authentication.initiateGoogleLogin(id, context);    //Initialize Google Sign in variables
     }
 
     public GoogleSignInClient getGoogleSignInClient() {
-        return authentication.getGoogleSignInClient();
+        return authentication.getGoogleSignInClient();      //Fetch Google SignIn Client for intent initialization
     }
 
     public LiveData<FirebaseUser> googleAuthentication(Intent data) {
-        return authentication.googleAuthentication(data);
+        return authentication.googleAuthentication(data);   //Perform Google Authentication
     }
 
     public LiveData<FirebaseUser> facebookFirebaseUser() {
-        return authentication.facebookFirebaseUser();
+        return authentication.facebookFirebaseUser();       //Perform Facebook Authentication
     }
 
     public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
-        return authentication.phoneSignUp(phone,activity);
+        //Activity is passed as a parameter for verification functions
+        return authentication.phoneSignUp(phone,activity);  //SignUp using phone number
     }
 
     public LiveData<FirebaseUser> SignUp(String email, String password) {
-        return authentication.SignUp(email,password);
+        return authentication.SignUpEmailPassword(email,password);  //Sign Up using Email and Password
     }
 
     public LiveData<FirebaseUser> Login(String email, String password) {
-        return authentication.Login(email,password);
+        return authentication.Login(email,password);                //Login Using Email and Password
     }
 
     public LiveData<Boolean> resetPassword(String email) {
-        return authentication.resetPassword(email);
+        return authentication.resetPassword(email);                 //Send Password Reset Email
     }
 
     public LiveData<Boolean> updateFirebaseUser(User user) {
-        cache.addUser(user);
-        new AsyncTask<User, Void, Void>() {
+        cache.addUser(user);                                        //Add the current user to Cache
+        new AsyncTask<User, Void, Void>() {                         //Update local database
             @Override
             protected Void doInBackground(User... users) {
                 User user = users[0];
@@ -95,14 +97,14 @@ public class Repository {
                 return null;
             }
         }.execute(user);
-        return dataManagement.addUser(user);
+        return dataManagement.addUser(user);                        //Update Firestore Database
     }
 
 
     public LiveData<User> fetchUser(final String id, final LifecycleOwner owner) {
         final MutableLiveData<User> user = new MutableLiveData<>();
         if(cache.getUser(id) != null)
-            user.setValue(cache.getUser(id));
+            user.setValue(cache.getUser(id));                       //Sets the value from cache to speed up process
         else{
             new AsyncTask<String, Void, LiveData<User>>() {
                 @Override
@@ -119,12 +121,12 @@ public class Repository {
                         @Override
                         public void onChanged(User result) {
                             if(result!=null) {
-                                user.setValue(result);
-                                cache.addUser(result);
+                                user.setValue(result);          //Sets value from the local database
+                                cache.addUser(result);          //Updates cache with the latest value
                             }
                         }
                     });
-                    dataManagement.fetchUser(id,appDatabase);
+                    dataManagement.fetchUser(id,appDatabase);      //Uses firestore to update local database
                 }
             }.execute(id);
         }
@@ -137,7 +139,7 @@ public class Repository {
             @Override
             protected LiveData<List<Policy>> doInBackground(String... strings) {
                 String id = strings[0];
-                LiveData<List<Policy>> policies = appDatabase.policyFolioDao().getPolicies(id);
+                LiveData<List<Policy>> policies = appDatabase.policyFolioDao().getPolicies(id);     //Fetches Policies from the Local Database
                 return policies;
             }
 
@@ -147,14 +149,26 @@ public class Repository {
                 result.observe(owner, new Observer<List<Policy>>() {
                     @Override
                     public void onChanged(List<Policy> result) {
-                        policies.setValue(result);
-                        cache.addPolicies(result);
+                        policies.setValue(result);                                                  //Updates the values sent to the user
+                        cache.addPolicies(result);                                                  //Updates the values in cache
                     }
                 });
-                dataManagement.fetchPolicies(id,appDatabase);
+                dataManagement.fetchPolicies(id,appDatabase);                                       //Updates the Local Database from Firestore
             }
         }.execute(id);
         return policies;
     }
 
+    public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
+        return authentication.checkIfUserExistsEmail(data);         //Checks if the  user with same email as his/her google account exists
+    }
+
+    public LiveData<Integer> checkIfUserExistsEmail(String email, Integer type) {
+        //Type is used to identify the login Type as Facebook or Email
+        return dataManagement.checkIfUserExistsEmail(email,type);   //Checks if the  user with same the email exists
+    }
+
+    public LiveData<Integer> checkIfUserExistsPhone(String phone) {
+        return dataManagement.checkIfUserExistsPhone(phone);        //Checks if the  user with same the phone number exists
+    }
 }

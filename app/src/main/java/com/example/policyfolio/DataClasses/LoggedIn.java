@@ -1,6 +1,7 @@
 package com.example.policyfolio.DataClasses;
 
 public class LoggedIn {
+    //Store Login Info in Shared Preference
     private boolean login;
     private int type;
     private String firebseToken;

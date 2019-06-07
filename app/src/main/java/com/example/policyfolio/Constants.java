@@ -13,6 +13,7 @@ public class Constants {
     public static class User {
         public static final String EMAIL = "email";
         public static final String USER = "user";
+        public static final String PHONE = "phone";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;
@@ -34,7 +35,7 @@ public class Constants {
             public static final int APPLIANCE_INSURANCE = 8;
         }
     }
-    public static class SharedPreferenceKeys {
+    public static class LoginInInfo {
         public static final String LOGGED_IN = "log_in";
         public static final String TYPE = "type";
         public static final String FIREBASE_UID = "firebase_token";
@@ -42,8 +43,8 @@ public class Constants {
         public static class Type{
             public static final int GOOGLE = 0;
             public static final int FACEBOOK = 1;
-            public static final int PHONE = 3;
-            public static final int EMAIL = 4;
+            public static final int PHONE = 2;
+            public static final int EMAIL = 3;
         }
     }
     public static class Facebook{
@@ -71,7 +72,7 @@ public class Constants {
     public static class FirebaseDataManagement {
         public static final String COLLECTION_USERS = "users";
         public static final String POLICIES_COLLECTION = "policies";
-        public static final String COMPANIES_COLLECTION = "insurance_providers";
+        public static final String PROVIDERS_COLLECTION = "insurance_providers";
 
         public static final int UPDATE_REQUEST = 1001;
         public static final int UPDATE_RESULT = 1002;

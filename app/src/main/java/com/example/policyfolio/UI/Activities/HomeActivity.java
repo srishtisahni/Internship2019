@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.HomeFragmentCallback;
-import com.example.policyfolio.UI.Fragments.PolicyStartupFragment;
+import com.example.policyfolio.UI.CallBackListeners.HomeCallback;
+import com.example.policyfolio.UI.Fragments.HomeStartupFragment;
 import com.example.policyfolio.ViewModels.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,7 +37,7 @@ import java.util.List;
 
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomeFragmentCallback {
+        implements NavigationView.OnNavigationItemSelectedListener, HomeCallback {
 
     private HomeViewModel viewModel;
 
@@ -49,7 +50,7 @@ public class HomeActivity extends AppCompatActivity
 
     private TextView name;
 
-    private PolicyStartupFragment policyStartupFragment;
+    private HomeStartupFragment policyStartupFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,23 +90,24 @@ public class HomeActivity extends AppCompatActivity
     private void fetchInfo() {
         Bundle bundle = getIntent().getExtras();
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
-        if(bundle.getBoolean(Constants.SharedPreferenceKeys.LOGGED_IN)){
+        if(bundle.getBoolean(Constants.LoginInInfo.LOGGED_IN)){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,true);
-            editor.putInt(Constants.SharedPreferenceKeys.TYPE,bundle.getInt(Constants.SharedPreferenceKeys.TYPE));
-            editor.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,bundle.getString(Constants.SharedPreferenceKeys.FIREBASE_UID));
+            editor.putBoolean(Constants.LoginInInfo.LOGGED_IN,true);
+            editor.putInt(Constants.LoginInInfo.TYPE,bundle.getInt(Constants.LoginInInfo.TYPE));
+            editor.putString(Constants.LoginInInfo.FIREBASE_UID,bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
             editor.commit();
-            viewModel.setType(bundle.getInt(Constants.SharedPreferenceKeys.TYPE));
-            viewModel.setUid(bundle.getString(Constants.SharedPreferenceKeys.FIREBASE_UID));
+            viewModel.setType(bundle.getInt(Constants.LoginInInfo.TYPE));
+            viewModel.setUid(bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
         }
         viewModel.fetchUser(this).observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User user) {
                 if(user!=null){
+                    Log.e("COMPLETE",user.isComplete()+"");
                     if(!user.isComplete()){
                         Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
                         intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
-                        intent.putExtra(Constants.SharedPreferenceKeys.FIREBASE_UID,viewModel.getUid());
+                        intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
                         startActivityForResult(intent,Constants.FirebaseDataManagement.UPDATE_REQUEST);
                     }
                     else{
@@ -143,7 +145,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void zeroPolicies() {
-        policyStartupFragment = new PolicyStartupFragment(this);
+        policyStartupFragment = new HomeStartupFragment(this);
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,policyStartupFragment).commit();
     }
 
@@ -195,6 +197,7 @@ public class HomeActivity extends AppCompatActivity
                 addPolicy();
                 break;
         }
+        navigationView.getCheckedItem().setChecked(false);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

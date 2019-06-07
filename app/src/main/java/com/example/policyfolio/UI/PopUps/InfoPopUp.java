@@ -112,8 +112,11 @@ public class InfoPopUp extends Fragment {
             name.setText(viewModel.getName());
         if(viewModel.getPhone()!= null)
             phone.setText(viewModel.getPhone());
-        if (viewModel.getBirthday()!=null)
+        if (viewModel.getBirthday()!=null) {
             birthday.setText(Constants.DATE_FORMAT.format(viewModel.getBirthday()));
+            birthdayEpoch = viewModel.getBirthday();
+            birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
         gender.setSelection(viewModel.getGender());
         if(viewModel.getCity()!=null)
             city.setText(viewModel.getCity());

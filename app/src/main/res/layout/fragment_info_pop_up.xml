@@ -9,7 +9,7 @@
     tools:context=".UI.Fragments.EmailPhoneFragment">
 
     <EditText
-        android:id="@+id/name"
+        android:userId="@+userId/name"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -33,19 +33,19 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/name_empty"
+        android:userId="@+userId/name_empty"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The field cannot be left empty"
         android:textColor="@color/red"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="@+id/name"
-        app:layout_constraintStart_toStartOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        app:layout_constraintEnd_toEndOf="@+userId/name"
+        app:layout_constraintStart_toStartOf="@+userId/name"
+        app:layout_constraintTop_toBottomOf="@+userId/name" />
 
     <EditText
-        android:id="@+id/email"
+        android:userId="@+userId/email"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -59,25 +59,25 @@
         android:textColorHint="@color/borderGrey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/name"
-        app:layout_constraintStart_toStartOf="@+id/name"
-        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintEnd_toEndOf="@+userId/name"
+        app:layout_constraintStart_toStartOf="@+userId/name"
+        app:layout_constraintTop_toBottomOf="@+userId/name"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/email_empty"
+        android:userId="@+userId/email_empty"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The field cannot be left empty"
         android:textColor="@color/red"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintEnd_toEndOf="@+userId/email"
+        app:layout_constraintStart_toStartOf="@+userId/email"
+        app:layout_constraintTop_toBottomOf="@+userId/email" />
 
     <EditText
-        android:id="@+id/phone"
+        android:userId="@+userId/phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -91,25 +91,25 @@
         android:textColorHint="@color/borderGrey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="@+userId/email"
+        app:layout_constraintStart_toStartOf="@+userId/email"
+        app:layout_constraintTop_toBottomOf="@+userId/email"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/phone_empty"
+        android:userId="@+userId/phone_empty"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The field cannot be left empty"
         android:textColor="@color/red"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="@+id/phone"
-        app:layout_constraintStart_toStartOf="@+id/phone"
-        app:layout_constraintTop_toBottomOf="@+id/phone" />
+        app:layout_constraintEnd_toEndOf="@+userId/phone"
+        app:layout_constraintStart_toStartOf="@+userId/phone"
+        app:layout_constraintTop_toBottomOf="@+userId/phone" />
 
     <TextView
-        android:id="@+id/birthday"
+        android:userId="@+userId/birthday"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -121,25 +121,25 @@
         android:textColor="@color/borderGrey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/phone"
-        app:layout_constraintStart_toStartOf="@+id/phone"
-        app:layout_constraintTop_toBottomOf="@+id/phone"
+        app:layout_constraintEnd_toEndOf="@+userId/phone"
+        app:layout_constraintStart_toStartOf="@+userId/phone"
+        app:layout_constraintTop_toBottomOf="@+userId/phone"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/birthday_empty"
+        android:userId="@+userId/birthday_empty"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The field cannot be left empty"
         android:textColor="@color/red"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="@+id/birthday"
-        app:layout_constraintStart_toStartOf="@+id/birthday"
-        app:layout_constraintTop_toBottomOf="@+id/birthday" />
+        app:layout_constraintEnd_toEndOf="@+userId/birthday"
+        app:layout_constraintStart_toStartOf="@+userId/birthday"
+        app:layout_constraintTop_toBottomOf="@+userId/birthday" />
 
     <Spinner
-        android:id="@+id/gender"
+        android:userId="@+userId/gender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -149,14 +149,14 @@
         android:popupBackground="@drawable/dropdown_background"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/birthday"
-        app:layout_constraintStart_toStartOf="@+id/birthday"
-        app:layout_constraintTop_toBottomOf="@+id/birthday"
+        app:layout_constraintEnd_toEndOf="@+userId/birthday"
+        app:layout_constraintStart_toStartOf="@+userId/birthday"
+        app:layout_constraintTop_toBottomOf="@+userId/birthday"
         app:layout_constraintVertical_bias="0.0" />
 
 
     <EditText
-        android:id="@+id/city"
+        android:userId="@+userId/city"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -170,25 +170,25 @@
         android:textColorHint="@color/borderGrey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/gender"
-        app:layout_constraintStart_toStartOf="@+id/gender"
-        app:layout_constraintTop_toBottomOf="@+id/gender"
+        app:layout_constraintEnd_toEndOf="@+userId/gender"
+        app:layout_constraintStart_toStartOf="@+userId/gender"
+        app:layout_constraintTop_toBottomOf="@+userId/gender"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/city_empty"
+        android:userId="@+userId/city_empty"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="The field cannot be left empty"
         android:textColor="@color/red"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="@+id/city"
-        app:layout_constraintStart_toStartOf="@+id/city"
-        app:layout_constraintTop_toBottomOf="@+id/city" />
+        app:layout_constraintEnd_toEndOf="@+userId/city"
+        app:layout_constraintStart_toStartOf="@+userId/city"
+        app:layout_constraintTop_toBottomOf="@+userId/city" />
 
     <Button
-        android:id="@+id/save"
+        android:userId="@+userId/save"
         android:layout_width="136dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -205,7 +205,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/city_empty"
+        app:layout_constraintTop_toBottomOf="@+userId/city_empty"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

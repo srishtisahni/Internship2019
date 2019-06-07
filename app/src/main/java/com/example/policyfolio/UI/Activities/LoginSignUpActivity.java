@@ -22,19 +22,18 @@ import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.EmailPhoneCallback;
-import com.example.policyfolio.UI.CallBackListeners.LoginFragmentCallback;
-import com.example.policyfolio.UI.CallBackListeners.SignUpFragmentCallback;
+import com.example.policyfolio.UI.CallBackListeners.LoginCallback;
 import com.example.policyfolio.UI.Fragments.EmailPhoneFragment;
 import com.example.policyfolio.UI.Fragments.LoginFragment;
 import com.example.policyfolio.UI.Fragments.SignUpFragment;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
+import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.text.ParseException;
 import java.util.List;
 
-public class LoginSignUpActivity extends AppCompatActivity implements LoginFragmentCallback, EmailPhoneCallback, SignUpFragmentCallback {
+public class LoginSignUpActivity extends AppCompatActivity implements LoginCallback {
 
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
@@ -71,24 +70,53 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == Constants.Google.SIGN_IN_RC){
             progressBar.setVisibility(View.VISIBLE);
             fragmentHolder.setAlpha(0.4f);
-            viewModel.googleAuthentication(data).observe(this, new Observer<FirebaseUser>() {
+            viewModel.checkIfUserExistsEmail(data).observe(this, new Observer<Integer>() {
                 @Override
-                public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                    progressBar.setVisibility(View.GONE);
-                    fragmentHolder.setAlpha(1f);
-                    if(firebaseUser!=null){
-                        addUser(firebaseUser);
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.GOOGLE);
-                        startHomeActivity(firebaseUser,bundle);
+                public void onChanged(Integer integer) {
+                    if(integer!=null){
+                        switch (integer){
+                            case Constants.LoginInInfo.Type.GOOGLE:
+                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        progressBar.setVisibility(View.GONE);
+                                        fragmentHolder.setAlpha(1f);
+                                        if(firebaseUser!=null){
+                                            addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.GOOGLE);
+                                            startHomeActivity(firebaseUser,bundle);
+                                        }
+                                        else {
+                                            Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                                break;
+                            case Constants.LoginInInfo.Type.FACEBOOK:
+                                progressBar.setVisibility(View.GONE);
+                                fragmentHolder.setAlpha(1f);
+                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Facebook",Toast.LENGTH_LONG).show();
+                                break;
+                            case Constants.LoginInInfo.Type.PHONE:
+                                progressBar.setVisibility(View.GONE);
+                                fragmentHolder.setAlpha(1f);
+                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Phone Number",Toast.LENGTH_LONG).show();
+                                break;
+                            case Constants.LoginInInfo.Type.EMAIL:
+                                progressBar.setVisibility(View.GONE);
+                                fragmentHolder.setAlpha(1f);
+                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                                break;
+                        }
                     }
                     else {
-                        Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -97,14 +125,14 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     }
 
     private void startHomeActivity(FirebaseUser firebaseUser, Bundle bundle) {
-        bundle.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,firebaseUser.getUid());
-        bundle.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,true);
+        bundle.putString(Constants.LoginInInfo.FIREBASE_UID,firebaseUser.getUid());
+        bundle.putBoolean(Constants.LoginInInfo.LOGGED_IN,true);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(Constants.SharedPreferenceKeys.LOGGED_IN,true);
-        editor.putInt(Constants.SharedPreferenceKeys.TYPE,bundle.getInt(Constants.SharedPreferenceKeys.TYPE));
-        editor.putString(Constants.SharedPreferenceKeys.FIREBASE_UID,bundle.getString(Constants.SharedPreferenceKeys.FIREBASE_UID));
+        editor.putBoolean(Constants.LoginInInfo.LOGGED_IN,true);
+        editor.putInt(Constants.LoginInInfo.TYPE,bundle.getInt(Constants.LoginInInfo.TYPE));
+        editor.putString(Constants.LoginInInfo.FIREBASE_UID,bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
         editor.commit();
 
         Intent intent = new Intent(LoginSignUpActivity.this,HomeActivity.class);
@@ -114,7 +142,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     }
 
     @Override
-    public void FacebookSignUp(Facebook facebook) {
+    public void FacebookSignUp(final Facebook facebook) {
         viewModel.setGender(facebook.getGender());
         viewModel.setCity(facebook.getLocationName());
         try {
@@ -125,19 +153,51 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
         }
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.facebookFirebaseUser().observe(this, new Observer<FirebaseUser>() {
+        viewModel.checkIfUserExistsEmail(facebook.getEmail(),Constants.LoginInInfo.Type.FACEBOOK).observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                progressBar.setVisibility(View.GONE);
-                fragmentHolder.setAlpha(1f);
-                if(firebaseUser!=null){
-                    addUser(firebaseUser);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.FACEBOOK);
-                    startHomeActivity(firebaseUser, bundle);
+            public void onChanged(Integer integer) {
+                if(integer!=null){
+                    switch (integer){
+                        case Constants.LoginInInfo.Type.GOOGLE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            LoginManager.getInstance().logOut();
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Google",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.FACEBOOK:
+                            viewModel.facebookFirebaseUser().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    progressBar.setVisibility(View.GONE);
+                                    fragmentHolder.setAlpha(1f);
+                                    if(firebaseUser!=null){
+                                        addUser(firebaseUser,Constants.LoginInInfo.Type.FACEBOOK);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.FACEBOOK);
+                                        startHomeActivity(firebaseUser, bundle);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginSignUpActivity.this,"Facebook Login Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                            break;
+                        case Constants.LoginInInfo.Type.PHONE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            LoginManager.getInstance().logOut();
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Phone Number",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.EMAIL:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            LoginManager.getInstance().logOut();
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                            break;
+                    }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Facebook Login Failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -146,7 +206,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     @Override
     public void enterEmail() {
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
+        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.EMAIL);
         emailPhoneFragment.setArguments(bundle);
         addFragment(emailPhoneFragment);
     }
@@ -154,7 +214,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     @Override
     public void enterPhone() {
         Bundle bundle = new Bundle();
-        bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.PHONE);
+        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.PHONE);
         emailPhoneFragment.setArguments(bundle);
         addFragment(emailPhoneFragment);
     }
@@ -169,18 +229,47 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     public void Login() {
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.logIn().observe(this, new Observer<FirebaseUser>() {
+        viewModel.checkIfUserExistsEmail(Constants.LoginInInfo.Type.EMAIL).observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                progressBar.setVisibility(View.GONE);
-                fragmentHolder.setAlpha(1f);
-                if(firebaseUser!=null){
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
-                    startHomeActivity(firebaseUser, bundle);
+            public void onChanged(Integer integer) {
+                if(integer!=null){
+                    switch (integer){
+                        case Constants.LoginInInfo.Type.GOOGLE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Google",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.FACEBOOK:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Facebook",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.PHONE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Phone Number",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.EMAIL:
+                            viewModel.logIn().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    progressBar.setVisibility(View.GONE);
+                                    fragmentHolder.setAlpha(1f);
+                                    if(firebaseUser!=null){
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.EMAIL);
+                                        startHomeActivity(firebaseUser, bundle);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginSignUpActivity.this,"Invalid Email or Password",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                            break;
+                    }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Invalid Email or Password",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -196,7 +285,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
 
 
     @Override
-    public void EmailSignUp() {
+    public void EmailNext() {
         addFragment(signUpFragment);
     }
 
@@ -204,19 +293,48 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
     public void PhoneSignUp() {
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.signUpPhone(this).observe(this, new Observer<FirebaseUser>() {
+        viewModel.checkIfUserExistsPhone().observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                progressBar.setVisibility(View.GONE);
-                fragmentHolder.setAlpha(1f);
-                if(firebaseUser!=null){
-                    addUser(firebaseUser);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.PHONE);
-                    startHomeActivity(firebaseUser, bundle);
+            public void onChanged(Integer integer) {
+                if(integer!=null){
+                    switch (integer){
+                        case Constants.LoginInInfo.Type.GOOGLE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Google",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.FACEBOOK:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Facebook",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.PHONE:
+                            viewModel.signUpPhone(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    progressBar.setVisibility(View.GONE);
+                                    fragmentHolder.setAlpha(1f);
+                                    if(firebaseUser!=null){
+                                        addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.PHONE);
+                                        startHomeActivity(firebaseUser, bundle);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginSignUpActivity.this,"Phone Sign Up Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                            break;
+                        case Constants.LoginInInfo.Type.EMAIL:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                            break;
+                    }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Phone Sign Up Failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -224,33 +342,62 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginFragm
 
 
     @Override
-    public void SignUp() {
+    public void SignUpEmailAndPassword() {
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.SignUp().observe(this, new Observer<FirebaseUser>() {
+        viewModel.checkIfUserExistsEmail(Constants.LoginInInfo.Type.EMAIL).observe(this, new Observer<Integer>() {
             @Override
-            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                progressBar.setVisibility(View.GONE);
-                fragmentHolder.setAlpha(1f);
-                if(firebaseUser!=null){
-                    addUser(firebaseUser);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(Constants.SharedPreferenceKeys.TYPE, Constants.SharedPreferenceKeys.Type.EMAIL);
-                    startHomeActivity(firebaseUser, bundle);
+            public void onChanged(Integer integer) {
+                if(integer!=null){
+                    switch (integer){
+                        case Constants.LoginInInfo.Type.GOOGLE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Google",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.FACEBOOK:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Facebook",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.PHONE:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Phone Number",Toast.LENGTH_LONG).show();
+                            break;
+                        case Constants.LoginInInfo.Type.EMAIL:
+                            viewModel.SignUp().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    progressBar.setVisibility(View.GONE);
+                                    fragmentHolder.setAlpha(1f);
+                                    if(firebaseUser!=null){
+                                        addUser(firebaseUser,Constants.LoginInInfo.Type.EMAIL);
+                                        Bundle bundle = new Bundle();
+                                        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.EMAIL);
+                                        startHomeActivity(firebaseUser, bundle);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginSignUpActivity.this,"Email Sign Up Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                            break;
+                    }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Email Sign Up Failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
                 }
             }
         });
     }
 
-    private void addUser(final FirebaseUser firebaseUser) {
+    private void addUser(final FirebaseUser firebaseUser, final Integer type) {
         viewModel.fetchUser(firebaseUser.getUid(),this).observe(this, new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 if(user == null){
-                    viewModel.updateUserInfo(firebaseUser).observe(LoginSignUpActivity.this, new Observer<Boolean>() {
+                    viewModel.updateUserInfo(firebaseUser,type).observe(LoginSignUpActivity.this, new Observer<Boolean>() {
                         @Override
                         public void onChanged(@Nullable Boolean aBoolean) {
                             if(!aBoolean)

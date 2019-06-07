@@ -13,28 +13,29 @@ import static androidx.room.ForeignKey.CASCADE;
         foreignKeys = {
                 @ForeignKey(
                         entity = User.class,
-                        parentColumns = "id",
-                        childColumns = "id",
+                        parentColumns = "userId",
+                        childColumns = "userId",
                         onDelete = CASCADE
                 ),
                 @ForeignKey(
-                        entity = Company.class,
-                        parentColumns = "id",
-                        childColumns = "company"
+                        entity = InsuranceProvider.class,
+                        parentColumns = "userId",
+                        childColumns = "insuranceProviderId"
                 ),
         },
         indices = {
-                @Index("id"),
-                @Index("company")
+                @Index("userId"),
+                @Index("insuranceProviderId")
         }
 )
 public class Policy {
+    //Policy Information indexed using userId and Insurance Providers
     @NonNull
-    private String id;
+    private String userId;
     @NonNull @PrimaryKey
     private String policyNumber;
     @NonNull
-    private Long company;
+    private Long insuranceProviderId;
     private Long startDate;
     private Long endDate;
     private Long nextDueDate;
@@ -49,10 +50,10 @@ public class Policy {
     }
 
     @Ignore
-    public Policy(String id, String pNum, Long company, Long startDate, Long endDate, Long nextDueDate, Long cycle, Long premium, Long sumAssured, int type){
-        this.id = id;
+    public Policy(String id, String pNum, Long insuranceProviderId, Long startDate, Long endDate, Long nextDueDate, Long cycle, Long premium, Long sumAssured, int type){
+        this.userId = id;
         this.policyNumber = pNum;
-        this.company = company;
+        this.insuranceProviderId = insuranceProviderId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.nextDueDate = nextDueDate;
@@ -63,12 +64,12 @@ public class Policy {
     }
 
     @NonNull
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(@NonNull String id) {
-        this.id = id;
+    public void setUserId(@NonNull String userId) {
+        this.userId = userId;
     }
 
     @NonNull
@@ -81,12 +82,12 @@ public class Policy {
     }
 
     @NonNull
-    public Long getCompany() {
-        return company;
+    public Long getInsuranceProviderId() {
+        return insuranceProviderId;
     }
 
-    public void setCompany(Long company) {
-        this.company = company;
+    public void setInsuranceProviderId(Long insuranceProviderId) {
+        this.insuranceProviderId = insuranceProviderId;
     }
 
     public Long getStartDate() {

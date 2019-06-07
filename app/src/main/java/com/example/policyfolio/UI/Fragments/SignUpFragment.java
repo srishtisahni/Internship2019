@@ -21,7 +21,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.SignUpFragmentCallback;
+import com.example.policyfolio.UI.CallBackListeners.LoginCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 
 import java.util.Calendar;
@@ -50,14 +50,14 @@ public class SignUpFragment extends Fragment {
     private Long birthdayEpoch;
     private int genderSelection;
 
-    private SignUpFragmentCallback callback;
+    private LoginCallback callback;
 
     public SignUpFragment() {
         // Required empty public constructor
     }
 
     @SuppressLint("ValidFragment")
-    public SignUpFragment(SignUpFragmentCallback callback){
+    public SignUpFragment(LoginCallback callback){
         this.callback = callback;
     }
 
@@ -140,7 +140,7 @@ public class SignUpFragment extends Fragment {
         }
 
         if(nameError.getVisibility() == View.GONE && birthdayError.getVisibility() == View.GONE && cityError.getVisibility() == View.GONE && passwordError.getVisibility() == View.GONE)
-            callback.SignUp();
+            callback.SignUpEmailAndPassword();
     }
 
     private void FetchDate() {

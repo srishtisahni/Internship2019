@@ -30,13 +30,17 @@ public class DataManagement {
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
+    //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
+
     public static DataManagement getInstance() {
+        //Singleton Pattern
         if(INSTANCE == null)
             INSTANCE = new DataManagement();
         return INSTANCE;
     }
 
     public LiveData<Boolean> addUser(final User user) {
+        //Add User to Firebase Firestore
         final MutableLiveData<Boolean> update = new MutableLiveData<>();
         firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
                 .document(user.getId())
@@ -44,7 +48,7 @@ public class DataManagement {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        update.setValue(true);
+                        update.setValue(true);              //Returns true if the user is added to firestore, false otherwise
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -58,6 +62,7 @@ public class DataManagement {
     }
 
     public void fetchUser(String id, final AppDatabase appDatabase) {
+        //Updates the local database using the fetched user information from firestore
         firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
                 .document(id)
                 .get()
@@ -70,7 +75,7 @@ public class DataManagement {
                                 @Override
                                 protected Void doInBackground(User... users) {
                                     User user = users[0];
-                                    appDatabase.policyFolioDao().putUser(user);
+                                    appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
                                     return null;
                                 }
                             }.execute(user);
@@ -83,6 +88,7 @@ public class DataManagement {
     }
 
     public void fetchPolicies(String id, final AppDatabase appDatabase) {
+        ////Updates the local database using the fetched policy information from firestore
         firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
                 .document(id)
                 .collection(Constants.FirebaseDataManagement.POLICIES_COLLECTION)
@@ -99,7 +105,7 @@ public class DataManagement {
                                 @Override
                                 protected Void doInBackground(List<Policy>... lists) {
                                     List<Policy> policies = lists[0];
-                                    appDatabase.policyFolioDao().putPolicies(policies);
+                                    appDatabase.policyFolioDao().putPolicies(policies);         //The Local database is updated on the background thread
                                     return null;
                                 }
                             }.execute(policies);
@@ -109,5 +115,61 @@ public class DataManagement {
                         }
                     }
                 });
+    }
+
+    public LiveData<Integer> checkIfUserExistsEmail(String email, final Integer type) {
+        //Checks if an account exists if the same email id
+        final MutableLiveData<Integer> result = new MutableLiveData<>();
+        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+                .whereEqualTo(Constants.User.EMAIL,email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            ArrayList<User> users = new ArrayList<User>(task.getResult().toObjects(User.class));
+                            if(users.size()>0) {
+                                User user = users.get(0);
+                                result.setValue(user.getType());        //Returns the type of the account if it exists
+                            }
+                            else {
+                                result.setValue(type);                  //Returns the type current login/signUp type if it doesn't
+                            }
+                        }
+                        else {
+                            Log.e("EXCEPTION",task.getException().getMessage());
+                            result.setValue(null);                      //Returns null in case of an exception
+                        }
+                    }
+                });
+        return result;
+    }
+
+    public LiveData<Integer> checkIfUserExistsPhone(String phone) {
+        //Checks if an account exists if the same phone number
+        final MutableLiveData<Integer> result = new MutableLiveData<>();
+        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+                .whereEqualTo(Constants.User.PHONE,phone)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            ArrayList<User> users = new ArrayList<User>(task.getResult().toObjects(User.class));
+                            if(users.size()>0) {
+                                User user = users.get(0);
+                                result.setValue(user.getType());            //Returns the type of the account if it exists
+                            }
+                            else {
+                                result.setValue(Constants.LoginInInfo.Type.PHONE);      //Returns the type "PHONE" if it doesn't
+                            }
+                        }
+                        else {
+                            Log.e("EXCEPTION",task.getException().getMessage());
+                            result.setValue(null);                          //Returns null in case of an exception
+                        }
+                    }
+                });
+        return result;
     }
 }

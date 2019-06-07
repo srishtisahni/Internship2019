@@ -4,6 +4,7 @@ package com.example.policyfolio.DataClasses;
 import com.example.policyfolio.Constants;
 
 public class Facebook {
+    //Fetched Data from Graph API
     private long id;
     private String email;
     private String name;

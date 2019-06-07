@@ -6,7 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.policyfolio.DataClasses.Company;
+import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 
@@ -25,11 +25,11 @@ public interface PolicyFolioDao {
     @Query("SELECT * from User where phone = :phone")
     LiveData<User> getUserFromPhone(String phone);
 
-    @Query("SELECT * from Policy where id = :userId")
+    @Query("SELECT * from Policy where userId = :userId")
     LiveData<List<Policy>> getPolicies(String userId);
 
-    @Query("SELECT * from Company where id = :company")
-    LiveData<Company> getComapny(String company);
+    @Query("SELECT * from InsuranceProvider where id = :company")
+    LiveData<InsuranceProvider> getComapny(String company);
 
     @Insert(onConflict = REPLACE)
     void putUser(User user);
@@ -41,5 +41,5 @@ public interface PolicyFolioDao {
     void putPolicies(List<Policy> policies);
 
     @Insert(onConflict = REPLACE)
-    void putCompany(Company company);
+    void putCompany(InsuranceProvider insuranceProvider);
 }

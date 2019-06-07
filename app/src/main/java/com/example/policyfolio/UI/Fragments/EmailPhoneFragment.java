@@ -18,7 +18,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.EmailPhoneCallback;
+import com.example.policyfolio.UI.CallBackListeners.LoginCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 
 /**
@@ -28,7 +28,7 @@ public class EmailPhoneFragment extends Fragment {
 
     private View rootView;
     private LoginSignUpViewModel viewModel;
-    private EmailPhoneCallback callback;
+    private LoginCallback callback;
 
     private EditText email;
     private EditText phone;
@@ -41,7 +41,7 @@ public class EmailPhoneFragment extends Fragment {
     }
 
     @SuppressLint("ValidFragment")
-    public EmailPhoneFragment(EmailPhoneCallback callback){
+    public EmailPhoneFragment(LoginCallback callback){
         this.callback = callback;
     }
 
@@ -63,12 +63,12 @@ public class EmailPhoneFragment extends Fragment {
             email.setText(viewModel.getEmail());
         }
 
-        if(bundle.getInt(Constants.SharedPreferenceKeys.TYPE,-1) == Constants.SharedPreferenceKeys.Type.PHONE) {
+        if(bundle.getInt(Constants.LoginInInfo.TYPE,-1) == Constants.LoginInInfo.Type.PHONE) {
             email.setVisibility(View.GONE);
             next.setText("Sign Up");
             phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         }
-        else if(bundle.getInt(Constants.SharedPreferenceKeys.TYPE, -1) == Constants.SharedPreferenceKeys.Type.EMAIL) {
+        else if(bundle.getInt(Constants.LoginInInfo.TYPE, -1) == Constants.LoginInInfo.Type.EMAIL) {
             phone.setVisibility(View.GONE);
             next.setText("Next");
         }
@@ -97,7 +97,7 @@ public class EmailPhoneFragment extends Fragment {
                     else {
                         textError.setVisibility(View.GONE);
                         viewModel.setEmail(email);
-                        callback.EmailSignUp();
+                        callback.EmailNext();
                     }
                 }
                 else if(phone.getVisibility() != View.GONE){

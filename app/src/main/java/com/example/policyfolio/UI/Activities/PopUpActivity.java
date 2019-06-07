@@ -61,7 +61,7 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                 break;
             case Constants.PopUps.Type.INFO_POPUP:
                 infoPopUp = new InfoPopUp(this);
-                String id = getIntent().getExtras().getString(Constants.SharedPreferenceKeys.FIREBASE_UID,null);
+                String id = getIntent().getExtras().getString(Constants.LoginInInfo.FIREBASE_UID,null);
                 getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,infoPopUp).commit();
                 if(id!=null){
                     progressBar.setVisibility(View.VISIBLE);
