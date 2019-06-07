@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
+import com.example.policyfolio.UI.Activities.NavigationActionActivities.AddPolicyActivity;
 import com.example.policyfolio.UI.CallBackListeners.HomeCallback;
 import com.example.policyfolio.UI.Fragments.HomeStartupFragment;
 import com.example.policyfolio.ViewModels.HomeViewModel;
@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity
 
         viewModel.getUser().observe(this, new Observer<User>() {
             @Override
-            public void onChanged(@Nullable User user) {
+            public void onChanged(@Nullable User user) {                    //Update the action bar with the Person's name once the user is fetched
                 if(user.getName()!=null){
                     fragmentHolder.setAlpha(1f);
                     progressBar.setVisibility(View.GONE);
@@ -90,7 +90,7 @@ public class HomeActivity extends AppCompatActivity
     private void fetchInfo() {
         Bundle bundle = getIntent().getExtras();
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
-        if(bundle.getBoolean(Constants.LoginInInfo.LOGGED_IN)){
+        if(bundle.getBoolean(Constants.LoginInInfo.LOGGED_IN)){                     //Update the shared preference with the latest information
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(Constants.LoginInInfo.LOGGED_IN,true);
             editor.putInt(Constants.LoginInInfo.TYPE,bundle.getInt(Constants.LoginInInfo.TYPE));
@@ -103,16 +103,15 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onChanged(@Nullable User user) {
                 if(user!=null){
-                    Log.e("COMPLETE",user.isComplete()+"");
-                    if(!user.isComplete()){
+                    if(!user.isComplete()){                                        //If user information is not complete, generate a pop up to fetch information
                         Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
                         intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
                         intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
                         startActivityForResult(intent,Constants.FirebaseDataManagement.UPDATE_REQUEST);
                     }
                     else{
-                        viewModel.updateUser(user);
-                        renderFragment(user);
+                        viewModel.updateUser(user);                                 //Update local user info stored in the view model
+                        renderFragment(user);                                       //Render UI based on the user info
                     }
                 }
                 else {
@@ -128,10 +127,10 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onChanged(List<Policy> policies) {
                 if(policies!=null){
-                    if(policies.size()==0)
+                    if(policies.size()==0)                                                          //If no policies are added yet, render zero policy fragment
                         zeroPolicies();
                     else
-                        policies();
+                        policies();                                                                 //Rendering multiple policy fragment
                 }
                 else {
                     Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_SHORT).show();
@@ -152,7 +151,7 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public void addPolicy() {
-        Intent intent = new Intent(this,AddPolicyActivity.class);
+        Intent intent = new Intent(this, AddPolicyActivity.class);
         startActivity(intent);
     }
 
@@ -194,10 +193,10 @@ public class HomeActivity extends AppCompatActivity
 
         switch (id){
             case R.id.add_policy:
+                item.setChecked(false);
                 addPolicy();
                 break;
         }
-        navigationView.getCheckedItem().setChecked(false);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -207,8 +206,8 @@ public class HomeActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constants.FirebaseDataManagement.UPDATE_REQUEST && resultCode == Constants.FirebaseDataManagement.UPDATE_RESULT){
-            viewModel.updateUser((User) data.getParcelableExtra(Constants.User.USER));
-            renderFragment((User) data.getParcelableExtra(Constants.User.USER));
+            viewModel.updateUser((User) data.getParcelableExtra(Constants.User.USER));                  //On Result from pop up, update the user info
+            renderFragment((User) data.getParcelableExtra(Constants.User.USER));                        //Render Fragments based on user information
         }
     }
 

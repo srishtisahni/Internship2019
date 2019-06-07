@@ -75,7 +75,8 @@ public class DataManagement {
                                 @Override
                                 protected Void doInBackground(User... users) {
                                     User user = users[0];
-                                    appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
+                                    if(user!=null)
+                                        appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
                                     return null;
                                 }
                             }.execute(user);
@@ -117,7 +118,7 @@ public class DataManagement {
                 });
     }
 
-    public LiveData<Integer> checkIfUserExistsEmail(String email, final Integer type) {
+    public LiveData<Integer> checkIfUserExistsEmail(String email, final Integer type, final AppDatabase appDatabase) {
         //Checks if an account exists if the same email id
         final MutableLiveData<Integer> result = new MutableLiveData<>();
         firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
@@ -130,6 +131,15 @@ public class DataManagement {
                             ArrayList<User> users = new ArrayList<User>(task.getResult().toObjects(User.class));
                             if(users.size()>0) {
                                 User user = users.get(0);
+                                new AsyncTask<User, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(User... users) {
+                                        User user = users[0];
+                                        if(user!=null)
+                                            appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
+                                        return null;
+                                    }
+                                }.execute(user);
                                 result.setValue(user.getType());        //Returns the type of the account if it exists
                             }
                             else {
@@ -145,7 +155,7 @@ public class DataManagement {
         return result;
     }
 
-    public LiveData<Integer> checkIfUserExistsPhone(String phone) {
+    public LiveData<Integer> checkIfUserExistsPhone(String phone, final AppDatabase appDatabase) {
         //Checks if an account exists if the same phone number
         final MutableLiveData<Integer> result = new MutableLiveData<>();
         firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
@@ -158,6 +168,15 @@ public class DataManagement {
                             ArrayList<User> users = new ArrayList<User>(task.getResult().toObjects(User.class));
                             if(users.size()>0) {
                                 User user = users.get(0);
+                                new AsyncTask<User, Void, Void>() {
+                                    @Override
+                                    protected Void doInBackground(User... users) {
+                                        User user = users[0];
+                                        if(user!=null)
+                                            appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
+                                        return null;
+                                    }
+                                }.execute(user);
                                 result.setValue(user.getType());            //Returns the type of the account if it exists
                             }
                             else {

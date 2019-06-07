@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.Constants;
+import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -202,12 +203,12 @@ public class Authentication {
         return code;
     }
 
-    public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
+    public LiveData<Integer> checkIfUserExistsEmail(Intent data, AppDatabase appDatabase) {
         String email;
         try {
             //Extracting email from user's intent to verify if the account exists
             email = GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class).getEmail();
-            return DataManagement.getInstance().checkIfUserExistsEmail(email, Constants.LoginInInfo.Type.GOOGLE);
+            return DataManagement.getInstance().checkIfUserExistsEmail(email, Constants.LoginInInfo.Type.GOOGLE,appDatabase);
         } catch (ApiException e) {
             Log.e("EXCEPTION", e.getMessage());
             MutableLiveData<Integer> nullValue = new MutableLiveData<>();

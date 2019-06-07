@@ -160,15 +160,15 @@ public class Repository {
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
-        return authentication.checkIfUserExistsEmail(data);         //Checks if the  user with same email as his/her google account exists
+        return authentication.checkIfUserExistsEmail(data,appDatabase);         //Checks if the  user with same email as his/her google account exists
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(String email, Integer type) {
         //Type is used to identify the login Type as Facebook or Email
-        return dataManagement.checkIfUserExistsEmail(email,type);   //Checks if the  user with same the email exists
+        return dataManagement.checkIfUserExistsEmail(email,type,appDatabase);   //Checks if the  user with same the email exists
     }
 
     public LiveData<Integer> checkIfUserExistsPhone(String phone) {
-        return dataManagement.checkIfUserExistsPhone(phone);        //Checks if the  user with same the phone number exists
+        return dataManagement.checkIfUserExistsPhone(phone,appDatabase);        //Checks if the  user with same the phone number exists
     }
 }

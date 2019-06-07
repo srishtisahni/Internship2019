@@ -205,7 +205,7 @@ public class InfoPopUp extends Fragment {
 
     private void setGenderAdapter() {
         genderAdapter =  ArrayAdapter.createFromResource(getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
-        genderAdapter.setDropDownViewResource(R.layout.custom_spinner_layout);
+        genderAdapter.setDropDownViewResource(R.layout.custom_spinner_sign_up);
         gender.setAdapter(genderAdapter);
 
         gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

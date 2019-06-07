@@ -117,7 +117,8 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                     Intent data = new Intent();
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Constants.User.USER,viewModel.getUser());
-                    setResult(Constants.FirebaseDataManagement.UPDATE_RESULT);
+                    data.putExtras(bundle);
+                    setResult(Constants.FirebaseDataManagement.UPDATE_RESULT,data);
                     finish();
                 }
                 else {
