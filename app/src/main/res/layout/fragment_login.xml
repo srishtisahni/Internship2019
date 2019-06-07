@@ -10,18 +10,18 @@
     tools:context=".UI.Fragments.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:userId="@+userId/login_credentials"
+        android:id="@+id/login_credentials"
         android:layout_width="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+userId/divider"
+        app:layout_constraintBottom_toTopOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:userId="@+userId/email"
+            android:id="@+id/email"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
@@ -44,7 +44,7 @@
 
 
         <EditText
-            android:userId="@+userId/password"
+            android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -56,12 +56,12 @@
             android:padding="10dp"
             android:textColorHint="@color/borderGrey"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+userId/email"
-            app:layout_constraintStart_toStartOf="@+userId/email"
-            app:layout_constraintTop_toBottomOf="@+userId/email" />
+            app:layout_constraintEnd_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <TextView
-            android:userId="@+userId/error"
+            android:id="@+id/error"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,12 +69,12 @@
             android:text="Email and Password cannor be left empty"
             android:textColor="@color/red"
             android:textSize="9sp"
-            app:layout_constraintEnd_toEndOf="@+userId/password"
-            app:layout_constraintStart_toStartOf="@+userId/password"
-            app:layout_constraintTop_toBottomOf="@+userId/password" />
+            app:layout_constraintEnd_toEndOf="@+id/password"
+            app:layout_constraintStart_toStartOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
         <Button
-            android:userId="@+userId/login"
+            android:id="@+id/login"
             android:layout_width="136dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -83,28 +83,28 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+userId/password"
+            app:layout_constraintEnd_toEndOf="@+id/password"
             app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="@+userId/password"
-            app:layout_constraintTop_toBottomOf="@+userId/error" />
+            app:layout_constraintStart_toStartOf="@+id/password"
+            app:layout_constraintTop_toBottomOf="@+id/error" />
 
         <TextView
-            android:userId="@+userId/forgot_password"
+            android:id="@+id/forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
             android:textColor="@color/borderGrey"
             android:textSize="12sp"
             android:text="Forgot Password?"
-            app:layout_constraintEnd_toEndOf="@+userId/login"
-            app:layout_constraintStart_toStartOf="@+userId/login"
-            app:layout_constraintTop_toBottomOf="@+userId/login" />
+            app:layout_constraintEnd_toEndOf="@+id/login"
+            app:layout_constraintStart_toStartOf="@+id/login"
+            app:layout_constraintTop_toBottomOf="@+id/login" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:userId="@+userId/divider"
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -141,16 +141,16 @@
     </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:userId="@+userId/signUp_options"
+        android:id="@+id/signUp_options"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@userId/divider">
+        app:layout_constraintTop_toBottomOf="@id/divider">
 
         <TextView
-            android:userId="@+userId/textView"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -167,7 +167,7 @@
             app:layout_constraintVertical_bias="0.15" />
 
         <LinearLayout
-            android:userId="@+userId/linearLayout"
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -179,7 +179,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+userId/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
             app:layout_constraintVertical_bias="0.32">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -187,7 +187,7 @@
                 android:layout_height="match_parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:userId="@+userId/google_signUp"
+                    android:id="@+id/google_signUp"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginStart="12dp"
@@ -197,21 +197,21 @@
                     android:src="@mipmap/google_round"
                     app:civ_border_color="@color/borderGrey"
                     app:civ_border_width="0.5dp"
-                    app:layout_constraintBottom_toTopOf="@+userId/google_text"
+                    app:layout_constraintBottom_toTopOf="@+id/google_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:userId="@+userId/google_text"
+                    android:id="@+id/google_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Google"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+userId/google_signUp"
-                    app:layout_constraintStart_toStartOf="@+userId/google_signUp"
-                    app:layout_constraintTop_toBottomOf="@+userId/google_signUp" />
+                    app:layout_constraintEnd_toEndOf="@+id/google_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/google_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/google_signUp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -219,7 +219,7 @@
                 android:layout_height="match_parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:userId="@+userId/facebook_signUp"
+                    android:id="@+id/facebook_signUp"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginStart="12dp"
@@ -229,21 +229,21 @@
                     android:src="@mipmap/facebook_round"
                     app:civ_border_color="@color/borderGrey"
                     app:civ_border_width="0.5dp"
-                    app:layout_constraintBottom_toTopOf="@+userId/facebook_text"
+                    app:layout_constraintBottom_toTopOf="@+id/facebook_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:userId="@+userId/facebook_text"
+                    android:id="@+id/facebook_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Facebook"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+userId/facebook_signUp"
-                    app:layout_constraintStart_toStartOf="@+userId/facebook_signUp"
-                    app:layout_constraintTop_toBottomOf="@+userId/facebook_signUp" />
+                    app:layout_constraintEnd_toEndOf="@+id/facebook_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/facebook_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/facebook_signUp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -251,7 +251,7 @@
                 android:layout_height="match_parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:userId="@+userId/phone_signUp"
+                    android:id="@+id/phone_signUp"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginStart="12dp"
@@ -261,21 +261,21 @@
                     android:src="@mipmap/phone"
                     app:civ_border_color="@color/borderGrey"
                     app:civ_border_width="0.5dp"
-                    app:layout_constraintBottom_toTopOf="@+userId/phone_text"
+                    app:layout_constraintBottom_toTopOf="@+id/phone_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:userId="@+userId/phone_text"
+                    android:id="@+id/phone_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Mobile"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+userId/phone_signUp"
-                    app:layout_constraintStart_toStartOf="@+userId/phone_signUp"
-                    app:layout_constraintTop_toBottomOf="@+userId/phone_signUp" />
+                    app:layout_constraintEnd_toEndOf="@+id/phone_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/phone_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/phone_signUp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -283,7 +283,7 @@
                 android:layout_height="match_parent">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:userId="@+userId/email_signUp"
+                    android:id="@+id/email_signUp"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginStart="12dp"
@@ -294,28 +294,28 @@
                     android:src="@mipmap/email"
                     app:civ_border_color="@color/borderGrey"
                     app:civ_border_width="0.5dp"
-                    app:layout_constraintBottom_toTopOf="@+userId/email_text"
+                    app:layout_constraintBottom_toTopOf="@+id/email_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:userId="@+userId/email_text"
+                    android:id="@+id/email_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="Email"
                     android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+userId/email_signUp"
-                    app:layout_constraintStart_toStartOf="@+userId/email_signUp"
-                    app:layout_constraintTop_toBottomOf="@+userId/email_signUp" />
+                    app:layout_constraintEnd_toEndOf="@+id/email_signUp"
+                    app:layout_constraintStart_toStartOf="@+id/email_signUp"
+                    app:layout_constraintTop_toBottomOf="@+id/email_signUp" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>
 
         <com.facebook.login.widget.LoginButton
-            android:userId="@+userId/facebook_login"
+            android:id="@+id/facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

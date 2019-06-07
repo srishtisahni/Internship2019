@@ -4,61 +4,61 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single"
-        android:userId="@+userId/main_group">
+        android:id="@+id/main_group">
         <item
-            android:userId="@+userId/add_policy"
+            android:id="@+id/add_policy"
             android:icon="@drawable/ic_note_add_black_24dp"
             android:title="Add Policy" />
         <item
-            android:userId="@+userId/renew_policy"
+            android:id="@+id/renew_policy"
             android:icon="@drawable/ic_autorenew_black_24dp"
             android:title="Renew Policy" />
         <item
-            android:userId="@+userId/claim_support"
+            android:id="@+id/claim_support"
             android:icon="@drawable/ic_assignment_late_black_24dp"
             android:title="Claim Support" />
         <item
-            android:userId="@+userId/legal_support"
+            android:id="@+id/legal_support"
             android:icon="@drawable/ic_business_center_black_24dp"
             android:title="Legal Support" />
         <item
-            android:userId="@+userId/nominee_support"
+            android:id="@+id/nominee_support"
             android:icon="@drawable/ic_group_black_24dp"
             android:title="Nominee Support" />
     </group>
 
     <group android:checkableBehavior="single"
-        android:userId="@+userId/support_group">
+        android:id="@+id/support_group">
         <item
-            android:userId="@+userId/promotions"
+            android:id="@+id/promotions"
             android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:title="Promotions and Offers" />
         <item
-            android:userId="@+userId/documents"
+            android:id="@+id/documents"
             android:icon="@drawable/ic_attach_file_black_24dp"
             android:title="Document Vault" />
         <item
-            android:userId="@+userId/faq"
+            android:id="@+id/faq"
             android:icon="@drawable/ic_speaker_notes_black_24dp"
             android:title="FAQs" />
         <item
-            android:userId="@+userId/help"
+            android:id="@+id/help"
             android:icon="@drawable/ic_live_help_black_24dp"
             android:title="Need Help" />
     </group>
 
     <group android:checkableBehavior="single"
-        android:userId="@+userId/info_group">
+        android:id="@+id/info_group">
             <item
-                android:userId="@+userId/about_us"
+                android:id="@+id/about_us"
                 android:icon="@drawable/ic_info_outline_black_24dp"
                 android:title="About Us" />
             <item
-                android:userId="@+userId/legal"
+                android:id="@+id/legal"
                 android:icon="@drawable/ic_insert_drive_file_black_24dp"
                 android:title="Legal" />
             <item
-                android:userId="@+userId/logout"
+                android:id="@+id/logout"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
                 android:title="Log Out" />
     </group>
