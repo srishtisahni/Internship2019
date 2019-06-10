@@ -28,8 +28,11 @@ public interface PolicyFolioDao {
     @Query("SELECT * from Policy where userId = :userId")
     LiveData<List<Policy>> getPolicies(String userId);
 
-    @Query("SELECT * from InsuranceProvider where id = :company")
-    LiveData<InsuranceProvider> getComapny(String company);
+    @Query("SELECT * from InsuranceProvider where id = :id")
+    LiveData<InsuranceProvider> getProvider(Long id);
+
+    @Query("SELECT * from InsuranceProvider where type = :type")
+    LiveData<List<InsuranceProvider>> getProvidersFromType(int type);
 
     @Insert(onConflict = REPLACE)
     void putUser(User user);
@@ -41,5 +44,8 @@ public interface PolicyFolioDao {
     void putPolicies(List<Policy> policies);
 
     @Insert(onConflict = REPLACE)
-    void putCompany(InsuranceProvider insuranceProvider);
+    void putProvider(InsuranceProvider insuranceProvider);
+
+    @Insert(onConflict = REPLACE)
+    void putProviders(List<InsuranceProvider> providers);
 }

@@ -247,6 +247,8 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                             viewModel.logIn().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
                                 @Override
                                 public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    progressBar.setVisibility(View.GONE);
+                                    fragmentHolder.setAlpha(1f);
                                     if(firebaseUser!=null){
                                         startHomeActivity(firebaseUser, Constants.LoginInInfo.Type.EMAIL);
                                     }
@@ -380,11 +382,11 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
         viewModel.updateUserInfo(firebaseUser,type).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
+                progressBar.setVisibility(View.GONE);
+                fragmentHolder.setAlpha(1f);
                 if(!aBoolean)
                     Toast.makeText(LoginSignUpActivity.this,"Information couldn't be updated.",Toast.LENGTH_LONG).show();
                 else {
-                    progressBar.setVisibility(View.GONE);
-                    fragmentHolder.setAlpha(1f);
                     startHomeActivity(firebaseUser, type);
                 }
             }

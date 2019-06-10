@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".UI.Fragments.NavigationActionFragments.AddPolicyDetailsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="9.5"
+        android:background="@color/colorPrimary"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/insurance_provider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Insurance Provider"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/policy_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Policy Number"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/insurance_provider"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/insurance_provider"
+            app:layout_constraintTop_toBottomOf="@+id/insurance_provider" />
+
+        <EditText
+            android:id="@+id/cover_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_background_8dp"
+            android:hint="Cover Amount"
+            android:paddingVertical="4dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="32dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:inputType="numberDecimal"
+            android:textColorHint="@color/Grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/policy_number"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/policy_number"
+            app:layout_constraintTop_toBottomOf="@+id/policy_number" />
+
+        <FrameLayout
+            android:id="@+id/frequency_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/dropdown_item_8dp"
+            app:layout_constraintEnd_toEndOf="@+id/cover_amount"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/cover_amount"
+            app:layout_constraintTop_toBottomOf="@+id/cover_amount">
+
+            <TextView
+                android:id="@+id/frequency_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Payment Frequency*"
+                android:paddingLeft="20dp"
+                android:textSize="16sp"
+                android:textColor="@color/Grey"
+                android:paddingRight="32dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/frequency"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="@drawable/text_background_8dp"/>
+
+        </FrameLayout>
+
+        <EditText
+            android:id="@+id/premium_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_background_8dp"
+            android:hint="Premium Amount*"
+            android:paddingVertical="4dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="32dp"
+            android:inputType="numberDecimal"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="@color/Grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/frequency_frame"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/frequency_frame"
+            app:layout_constraintTop_toBottomOf="@+id/frequency_frame" />
+
+        <LinearLayout
+            android:id="@+id/date_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_background_8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/premium_amount"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/premium_amount"
+            app:layout_constraintTop_toBottomOf="@+id/premium_amount">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="22dp"
+                android:layout_marginRight="32dp"
+                android:paddingVertical="4dp"
+                android:text="Due Date for next Payment"
+                android:textColor="@color/Grey"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/date_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_date_range_black_24dp" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/nominee_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/dropdown_item_8dp"
+            app:layout_constraintEnd_toEndOf="@+id/date_picker"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/date_picker"
+            app:layout_constraintTop_toBottomOf="@+id/date_picker">
+
+            <TextView
+                android:id="@+id/nominee_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Nominee*"
+                android:paddingLeft="20dp"
+                android:textSize="16sp"
+                android:textColor="@color/Grey"
+                android:paddingRight="32dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/nominee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:background="@drawable/text_background_8dp"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/add_document"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_background_8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/nominee_frame"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/nominee_frame"
+            app:layout_constraintTop_toBottomOf="@+id/nominee_frame">
+
+            <ImageView
+                android:id="@+id/document_add_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:paddingLeft="8dp"
+                android:src="@drawable/ic_add_black_24dp" />
+
+            <TextView
+                android:id="@+id/add_document_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:layout_marginRight="24dp"
+                android:text="Add Policy Document"
+                android:textColor="@color/Grey"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/optional1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="Optional"
+            android:textColor="@color/Grey"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/add_document"
+            app:layout_constraintStart_toEndOf="@+id/add_document"
+            app:layout_constraintTop_toTopOf="@+id/add_document" />
+
+        <LinearLayout
+            android:id="@+id/click_document"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_background_8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/add_document"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/add_document"
+            app:layout_constraintTop_toBottomOf="@+id/add_document">
+
+            <ImageView
+                android:id="@+id/document_click_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="4dp"
+                android:paddingLeft="8dp"
+                android:src="@drawable/ic_add_a_photo_black_24dp" />
+
+            <TextView
+                android:id="@+id/click_document_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="6dp"
+                android:text="Click Policy Document"
+                android:textColor="@color/Grey"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/optional2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:text="Optional"
+            android:textColor="@color/Grey"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/click_document"
+            app:layout_constraintStart_toEndOf="@+id/click_document"
+            app:layout_constraintTop_toTopOf="@+id/click_document" />
+
+        <Button
+            android:id="@+id/done"
+            android:layout_width="136dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/button_background"
+            android:text="Done"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/click_document"
+            app:layout_constraintVertical_bias="0.75" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -5,38 +5,53 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.policyfolio.Constants;
+import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.R;
+import com.example.policyfolio.UI.Adapters.BasicDropdownProviderAdapter;
+import com.example.policyfolio.UI.Adapters.BasicDropdownTextAdapter;
+import com.example.policyfolio.UI.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class BasicAddPolicyFragment extends Fragment {
+public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTextAdapter.ParentCallback, BasicDropdownProviderAdapter.ParentCallback {
 
     private View rootView;
     private AddViewModel viewModel;
 
-    private Spinner typeSpinner;
-    private ArrayAdapter<CharSequence> typeAdapter;
+    private TextView typeValue;
+    private RecyclerView typeChoice;
+    private BasicDropdownTextAdapter typeAdapter;
+    private String[] insurances;
 
-    private Spinner providerSpinner;
+    private RecyclerView providerChoice;
     private TextView providerText;
     private FrameLayout providerFrame;
+    private BasicDropdownProviderAdapter providerAdapter;
+    private ArrayList<InsuranceProvider> providers;
 
     private EditText policyNumber;
 
@@ -46,8 +61,14 @@ public class BasicAddPolicyFragment extends Fragment {
     private ConstraintLayout buy;
     private RecyclerView sellerList;
 
+    private AddPolicyCallback callback;
+
     public BasicAddPolicyFragment() {
         // Required empty public constructor
+    }
+
+    public BasicAddPolicyFragment(AddPolicyCallback callback){
+        this.callback = callback;
     }
 
 
@@ -56,12 +77,14 @@ public class BasicAddPolicyFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_basic_add_policy, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(AddViewModel.class);
+        viewModel.initiateRepo(getContext());
 
-        typeSpinner = rootView.findViewById(R.id.policy_type);
+        typeValue = rootView.findViewById(R.id.policy_type);
+        typeChoice = rootView.findViewById(R.id.policy_choice);
 
         providerFrame = rootView.findViewById(R.id.frame_insurance);
         providerText = rootView.findViewById(R.id.text_insurance);
-        providerSpinner = rootView.findViewById(R.id.insurance_provider);
+        providerChoice = rootView.findViewById(R.id.insurance_provider);
 
         policyNumber = rootView.findViewById(R.id.policy_number);
 
@@ -72,40 +95,128 @@ public class BasicAddPolicyFragment extends Fragment {
         buy = rootView.findViewById(R.id.buy_new);
         sellerList = rootView.findViewById(R.id.policy_sellers);
 
-        setTypeAdapter();
+        setUpViews();
 
         return rootView;
     }
 
-    private void setTypeAdapter() {
-        typeAdapter = ArrayAdapter.createFromResource(getContext(),R.array.insurance_type,android.R.layout.simple_spinner_item);
-        typeAdapter.setDropDownViewResource(R.layout.custom_spinner_add);
-        typeSpinner.setAdapter(typeAdapter);
+    private void setUpViews() {
+        insurances = getResources().getStringArray(R.array.insurance_type);
+        typeAdapter = new BasicDropdownTextAdapter(getContext(),insurances,this);
+        typeChoice.setAdapter(typeAdapter);
+        typeChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
 
-        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        typeValue.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                typeSpinner.setSelection(position);
-                viewModel.setType(position);
+            public void onClick(View v) {
+                typeValue.setVisibility(View.GONE);
+                typeChoice.setVisibility(View.VISIBLE);
 
-                ((TextView) typeSpinner.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                ((TextView) typeSpinner.getChildAt(0)).setTextSize(16);
-
-                providerFrame.setVisibility(View.VISIBLE);
-                divider.setVisibility(View.VISIBLE);
-                buy.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
                 providerFrame.setVisibility(View.GONE);
                 divider.setVisibility(View.GONE);
                 buy.setVisibility(View.GONE);
 
-                ((TextView) typeSpinner.getChildAt(0)).setTextColor(getResources().getColor(R.color.Grey));
-                ((TextView) typeSpinner.getChildAt(0)).setTextSize(16);
+                policyNumber.setVisibility(View.GONE);
+                next.setVisibility(View.GONE);
+            }
+        });
+
+        providers = new ArrayList<>();
+        providerAdapter = new BasicDropdownProviderAdapter(getContext(),providers,this);
+        providerChoice.setAdapter(providerAdapter);
+        providerChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+
+        providerFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                providerText.setVisibility(View.GONE);
+                providerChoice.setVisibility(View.VISIBLE);
+                providerFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+                divider.setVisibility(View.GONE);
+                buy.setVisibility(View.GONE);
+
+                policyNumber.setVisibility(View.GONE);
+                next.setVisibility(View.GONE);
+            }
+        });
+
+        policyNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String text = s.toString();
+                if(text.length() >= 10)
+                    next.setVisibility(View.VISIBLE);
+                else
+                    next.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewModel.setPolicyNumber(policyNumber.getText().toString().toUpperCase());
+                callback.next();
             }
         });
     }
 
+    @Override
+    public void setValue(int position, int type) {
+        switch (type){
+            case Constants.DropDownType.INSURANCE_TYPE:
+                typeValue.setText(insurances[position]);
+                typeValue.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                typeValue.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                typeChoice.setVisibility(View.GONE);
+                typeValue.setVisibility(View.VISIBLE);
+
+                providerFrame.setVisibility(View.VISIBLE);
+                divider.setVisibility(View.VISIBLE);
+                buy.setVisibility(View.VISIBLE);
+
+                providerText.setText("Insurance Provider*");
+                providerText.setVisibility(View.VISIBLE);
+                providerChoice.setVisibility(View.GONE);
+                providerText.setTextColor(getResources().getColor(R.color.Grey));
+                providerFrame.setBackground(getResources().getDrawable(R.drawable.dropdown_item_8dp));
+
+                policyNumber.setVisibility(View.GONE);
+                policyNumber.setText("");
+
+                viewModel.setType(position,this).observe(this, new Observer<List<InsuranceProvider>>() {
+                    @Override
+                    public void onChanged(List<InsuranceProvider> providers) {
+                        BasicAddPolicyFragment.this.providers.clear();
+                        BasicAddPolicyFragment.this.providers.addAll(providers);
+                        Log.e("SIZE",BasicAddPolicyFragment.this.providers.size()+"");
+                    }
+                });
+                break;
+
+            case Constants.DropDownType.INSURANCE_PROVIDER:
+                Log.e("SIZE",providers.size()+"");
+                Log.e("POSITION",providers.get(position).getName()+" "+position);
+                providerText.setText(providers.get(position).getName());
+                providerText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                providerChoice.setVisibility(View.GONE);
+                providerText.setVisibility(View.VISIBLE);
+
+                policyNumber.setVisibility(View.VISIBLE);
+                policyNumber.setText("");
+
+                viewModel.setProvider(providers.get(position));
+                break;
+        }
+    }
 }

@@ -34,6 +34,12 @@ public class Constants {
             public static final int EMPLOYEE_INSURANCE = 7;
             public static final int APPLIANCE_INSURANCE = 8;
         }
+        public static class PREMIUM{
+            public static final int PREMIUM_MONTHLY = 0;
+            public static final int PREMIUM_QUATERLY = 1;
+            public static final int PREMIUM_BI_ANNUALLY = 2;
+            public static final int PREMIUM_ANNUALLY = 3;
+        }
     }
     public static class LoginInInfo {
         public static final String LOGGED_IN = "log_in";
@@ -73,6 +79,8 @@ public class Constants {
         public static final String COLLECTION_USERS = "users";
         public static final String POLICIES_COLLECTION = "policies";
         public static final String PROVIDERS_COLLECTION = "insurance_providers";
+        public static final String PRODUCTS_COLLECTION = "insurance_products";
+        public static final String NOMINEE_COLLECTION = "nominees";
 
         public static final int UPDATE_REQUEST = 1001;
         public static final int UPDATE_RESULT = 1002;
@@ -84,6 +92,30 @@ public class Constants {
         public static class Type{
             public static final int EMAIL_POPUP = 1;
             public static final int INFO_POPUP = 2;
+        }
+    }
+
+    public static class DropDownType {
+        public static final int INSURANCE_TYPE = 0;
+        public static final int INSURANCE_PROVIDER = 1;
+        public static final int PREMIUM_FREQUENCY = 2;
+        public static final int NOMINEE = 3;
+    }
+
+    public static class InsuranceProviders {
+        public static final String TYPE = "type";
+    }
+
+    public static class Nominee {
+        public static class Relation{
+            public static final int MOTHER = 0;
+            public static final int FATHER = 1;
+            public static final int BROTHER = 2;
+            public static final int SISTER = 3;
+            public static final int HUSBAND = 4;
+            public static final int WIFE = 5;
+            public static final int SON = 6;
+            public static final int DAUGHTER = 7;
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
@@ -170,5 +171,30 @@ public class Repository {
 
     public LiveData<Integer> checkIfUserExistsPhone(String phone) {
         return dataManagement.checkIfUserExistsPhone(phone,appDatabase);        //Checks if the  user with same the phone number exists
+    }
+
+    public LiveData<List<InsuranceProvider>> fetchProviders(final int type, final LifecycleOwner owner) {
+        final MutableLiveData<List<InsuranceProvider>> providers = new MutableLiveData<>();
+        new AsyncTask<Integer, Void, LiveData<List<InsuranceProvider>>>() {
+            @Override
+            protected LiveData<List<InsuranceProvider>> doInBackground(Integer... integers) {
+                Integer type = integers[0];
+                LiveData<List<InsuranceProvider>> providers = appDatabase.policyFolioDao().getProvidersFromType(type);      //Fetch Insurance Providers from the Local Database
+                return providers;
+            }
+
+            @Override
+            protected void onPostExecute(LiveData<List<InsuranceProvider>> result) {
+                super.onPostExecute(result);
+                result.observe(owner, new Observer<List<InsuranceProvider>>() {
+                    @Override
+                    public void onChanged(List<InsuranceProvider> insuranceProviders) {
+                        providers.setValue(insuranceProviders);                                                             //Update the values sent to user
+                    }
+                });
+                dataManagement.fetchProviders(type,appDatabase);                                                            //Update Local Database from Firestore
+            }
+        }.execute(type);
+        return providers;
     }
 }

@@ -19,6 +19,24 @@
         <item>Appliance Insurance</item>
     </string-array>
 
+    <string-array name="premium_frequency">
+        <item>Monthly</item>
+        <item>Quarterly</item>
+        <item>Bi-annually</item>
+        <item>Annually</item>
+    </string-array>
+
+    <string-array name="relationship_array">
+        <item>Mother</item>
+        <item>Father</item>
+        <item>Brother</item>
+        <item>Sister</item>
+        <item>Husband</item>
+        <item>Wife</item>
+        <item>Son</item>
+        <item>Daughter</item>
+    </string-array>
+
     <array name="icons">
         <item>@drawable/life_insurance</item>
         <item>@drawable/auto_insurance</item>

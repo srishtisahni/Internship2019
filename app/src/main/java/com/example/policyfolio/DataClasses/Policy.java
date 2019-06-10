@@ -39,28 +39,30 @@ public class Policy {
     private Long startDate;
     private Long endDate;
     private Long nextDueDate;
-    private Long cycle;
+    private Integer frequency;
     private Long premium;
     private Long sumAssured;
     @NonNull
     private int type;
+    private String documentUrl;
 
     public Policy(){
 
     }
 
     @Ignore
-    public Policy(String id, String pNum, Long insuranceProviderId, Long startDate, Long endDate, Long nextDueDate, Long cycle, Long premium, Long sumAssured, int type){
+    public Policy(String id, String pNum, Long insuranceProviderId, Long startDate, Long endDate, Long nextDueDate, Integer frequency, Long premium, Long sumAssured, int type, String documentUrl){
         this.userId = id;
         this.policyNumber = pNum;
         this.insuranceProviderId = insuranceProviderId;
         this.startDate = startDate;
         this.endDate = endDate;
         this.nextDueDate = nextDueDate;
-        this.cycle = cycle;
+        this.frequency = frequency;
         this.premium = premium;
         this.sumAssured = sumAssured;
         this.type = type;
+        this.documentUrl = documentUrl;
     }
 
     @NonNull
@@ -106,12 +108,12 @@ public class Policy {
         this.nextDueDate = nextDueDate;
     }
 
-    public Long getCycle() {
-        return cycle;
+    public Integer getFrequency() {
+        return frequency;
     }
 
-    public void setCycle(Long cycle) {
-        this.cycle = cycle;
+    public void setFrequency(Integer frequency) {
+        this.frequency = frequency;
     }
 
     public Long getPremium() {
@@ -145,5 +147,13 @@ public class Policy {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getDocumentUrl() {
+        return documentUrl;
+    }
+
+    public void setDocumentUrl(String documentUrl) {
+        this.documentUrl = documentUrl;
     }
 }

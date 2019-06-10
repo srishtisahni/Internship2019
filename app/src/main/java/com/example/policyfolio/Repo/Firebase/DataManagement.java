@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.Constants;
+import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
@@ -190,5 +191,34 @@ public class DataManagement {
                     }
                 });
         return result;
+    }
+
+    public void fetchProviders(int type, final AppDatabase appDatabase) {
+        ////Updates the local database using the fetched provider information from firestore
+        firebaseFirestore.collection(Constants.FirebaseDataManagement.PROVIDERS_COLLECTION)
+                .whereEqualTo(Constants.InsuranceProviders.TYPE,type)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            ArrayList<InsuranceProvider> insuranceProviders = new ArrayList<>();
+                            for (int i = 0; i < documentSnapshots.size(); i++)
+                                insuranceProviders.add(documentSnapshots.get(i).toObject(InsuranceProvider.class));
+                            new AsyncTask<List<InsuranceProvider>, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(List<InsuranceProvider>... lists) {
+                                    List<InsuranceProvider> providers = lists[0];
+                                    appDatabase.policyFolioDao().putProviders(providers);
+                                    return null;
+                                }
+                            }.execute(insuranceProviders);
+                        }
+                        else {
+                            Log.e("EXCEPTION", task.getException().getMessage());
+                        }
+                    }
+                });
     }
 }

@@ -12,16 +12,18 @@ public class InsuranceProvider {
     private Long id;
     private String name;
     private int type;
+    private String photoUrl;
 
     public InsuranceProvider(){
 
     }
 
     @Ignore
-    public InsuranceProvider(Long id, String name, int type){
+    public InsuranceProvider(Long id, String name, int type, String photoUrl){
         this.id = id;
         this.name = name;
         this.type = type;
+        this.photoUrl = photoUrl;
     }
 
     @NonNull
@@ -47,5 +49,13 @@ public class InsuranceProvider {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
