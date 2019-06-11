@@ -4,6 +4,7 @@ package com.example.policyfolio.DataClasses;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -18,14 +19,15 @@ import androidx.room.PrimaryKey;
 public class Nominee {
     @PrimaryKey(autoGenerate = true) @NonNull
     private Long id;
-    private String userId;
-    private String pfId;
+    private String userId;                  //Id of the user the nominee is associated to
+    private String pfId;                    //Policy Folio Id of the user
     private String name;
     private int relation;
     private String email;
     private String phone;
     private String alternativeNumber;
 
+    @Ignore
     public Nominee(Long id, String userId, String pfId, String name, int relation, String email, String phone, String alternativeNumber){
         this.id = id;
         this.userId = userId;
@@ -35,6 +37,9 @@ public class Nominee {
         this.email = email;
         this.phone = phone;
         this.alternativeNumber = alternativeNumber;
+    }
+    public Nominee(){
+
     }
 
     public String getName() {

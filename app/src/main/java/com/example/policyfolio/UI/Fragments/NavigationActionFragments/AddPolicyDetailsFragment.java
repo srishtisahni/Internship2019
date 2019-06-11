@@ -1,23 +1,37 @@
 package com.example.policyfolio.UI.Fragments.NavigationActionFragments;
 
 
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.Nominee;
@@ -28,11 +42,13 @@ import com.example.policyfolio.UI.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
+public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownTextAdapter.ParentCallback, BasicDropdownNomineeAdapter.ParentCallback {
 
     private View rootView;
     private AddViewModel viewModel;
@@ -49,7 +65,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
     private EditText premiumAmount;
 
-    private LinearLayout datePicker;
+    private LinearLayout datePickerLayout;
     private TextView date;
     private ImageView dateImage;
     private Long dateEpoch;
@@ -60,15 +76,15 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
     private ArrayList<Nominee> nominees;
     private BasicDropdownNomineeAdapter nomineeAdapter;
 
-    private FrameLayout addPolicy;
+    private LinearLayout addPolicy;
     private TextView documentAddText;
     private ImageView documentAddImage;
     private TextView optional1;
 
-    private FrameLayout clickPolicy;
+    private LinearLayout clickPolicy;
     private TextView optional2;
 
-
+    private Button done;
 
     private AddPolicyCallback callback;
 
@@ -86,6 +102,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_policy_details, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(AddViewModel.class);
+        viewModel.initiateRepo(getContext());
 
         insuranceProvider = rootView.findViewById(R.id.insurance_provider);
         policyNumber = rootView.findViewById(R.id.policy_number);
@@ -98,7 +115,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
         premiumAmount = rootView.findViewById(R.id.premium_amount);
 
-        datePicker = rootView.findViewById(R.id.date_picker);
+        datePickerLayout = rootView.findViewById(R.id.date_picker);
         date = rootView.findViewById(R.id.date);
         dateImage = rootView.findViewById(R.id.date_image);
 
@@ -114,6 +131,8 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
         clickPolicy = rootView.findViewById(R.id.click_document);
         optional2 = rootView.findViewById(R.id.optional2);
+
+        done = rootView.findViewById(R.id.done);
 
         setDefaults();
         setAdapters();
@@ -147,13 +166,19 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             }
         });
 
-        premiumAdapter = new BasicDropdownTextAdapter(getContext(),premiums, this);
+        premiumAdapter = new BasicDropdownTextAdapter(getContext(),premiums, this,Constants.DropDownType.PREMIUM_FREQUENCY);
         premiumChoice.setAdapter(premiumAdapter);
         premiumChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
 
-        premiumText.setOnClickListener(new View.OnClickListener() {
+        premiumFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+                hideSoftKeyboard(getActivity());
+
+                premiumFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                premiumFrame.setPadding(0,4,0,4);
                 premiumText.setVisibility(View.GONE);
                 premiumChoice.setVisibility(View.VISIBLE);
             }
@@ -184,24 +209,182 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             }
         });
 
+        datePickerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+                hideSoftKeyboard(getActivity());
+
+                final Dialog dialog = new Dialog(getContext());
+                dialog.setContentView(R.layout.date_picker);
+                dialog.setTitle("");
+                DatePicker datePicker = dialog.findViewById(R.id.date_picker);
+                final Calendar calendar=Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year,monthOfYear,dayOfMonth);
+                        dateEpoch = calendar.getTimeInMillis();
+                        date.setText(Constants.DATE_FORMAT.format(dateEpoch));
+                        date.setPadding(0,4,0,4);
+                        date.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        dateImage.setVisibility(View.GONE);
+                        datePickerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        nomineeAdapter = new BasicDropdownNomineeAdapter(getContext(),nominees,this);
+        nomineeChoice.setAdapter(nomineeAdapter);
+        nomineeChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+
+        nomineeFrame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+                hideSoftKeyboard(getActivity());
+
+                if(nominees.size()!=0) {
+                    nomineeFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    nomineeText.setVisibility(View.GONE);
+                    nomineeChoice.setVisibility(View.VISIBLE);
+                }
+                else
+                    Toast.makeText(getContext(),"No Nominees exist for the User",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        addPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+                hideSoftKeyboard(getActivity());
+
+                callback.addPolicyImage();
+            }
+        });
+
+        clickPolicy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+                hideSoftKeyboard(getActivity());
+
+                callback.clickPolicyImage();
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+                hideSoftKeyboard(getActivity());
+
+                //IMPLEMENT CHECKS!!
+                callback.done();
+            }
+        });
     }
 
     private void setDefaults() {
         insuranceProvider.setText(viewModel.getProvider().getName());
         policyNumber.setText(viewModel.getPolicyNumber());
+        viewModel.fetchNominees(this).observe(this, new Observer<List<Nominee>>() {
+            @Override
+            public void onChanged(List<Nominee> nominees) {
+                AddPolicyDetailsFragment.this.nominees.clear();
+                AddPolicyDetailsFragment.this.nominees.addAll(nominees);
+            }
+        });
     }
 
     @Override
     public void setValue(int position, int type) {
+        coverAmount.clearFocus();
+        premiumAmount.clearFocus();
+        hideSoftKeyboard(getActivity());
         switch (type){
             case Constants.DropDownType.PREMIUM_FREQUENCY:
                 premiumText.setText(premiums[position]);
                 premiumText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 premiumText.setPadding(0,4,0,4);
                 premiumChoice.setVisibility(View.GONE);
-                premiumFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                premiumText.setVisibility(View.VISIBLE);
                 viewModel.setPremiumFrequency(position);
                 break;
+            case Constants.DropDownType.NOMINEE:
+                String[] relations = getResources().getStringArray(R.array.relationship_array);
+                nomineeText.setText(nominees.get(position).getName() + ", " + relations[nominees.get(position).getRelation()]);
+                nomineeText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                nomineeText.setPadding(0,4,0,4);
+                nomineeChoice.setVisibility(View.GONE);
+                nomineeText.setVisibility(View.VISIBLE);
+                viewModel.setNominee(nominees.get(position));
+                break;
+        }
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Constants.PermissionAndRequests.PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data!=null) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            Bitmap bmp = BitmapFactory.decodeFile(picturePath);
+            Log.e("BITMAP",bmp+"");
+            documentAddImage.setVisibility(View.GONE);
+            documentAddText.setVisibility(View.GONE);
+            clickPolicy.setVisibility(View.GONE);
+            optional2.setVisibility(View.GONE);
+            optional1.setText("Policy Document");
+//            viewModel.saveImage(bmp).observe(this, new Observer<String>() {
+//                @Override
+//                public void onChanged(String s) {
+//                   if (s != null)
+//                       viewModel.setPhotoUrl(s);
+//                   else
+//                       Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
+//                }
+//            });
+        }
+        if(requestCode == Constants.PermissionAndRequests.CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data!=null){
+            Bitmap bmp = (Bitmap) data.getExtras().get("data");
+            documentAddImage.setVisibility(View.GONE);
+            documentAddText.setVisibility(View.GONE);
+            clickPolicy.setVisibility(View.GONE);
+            optional2.setVisibility(View.GONE);
+            optional1.setText("Policy Document");
+//                viewModel.saveImage(bmp).observe(this, new Observer<String>() {
+//                    @Override
+//                    public void onChanged(String s) {
+//                        if (s != null)
+//                            viewModel.setPhotoUrl(s);
+//                        else
+//                            Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
+//                    }
+//                });
         }
     }
 }

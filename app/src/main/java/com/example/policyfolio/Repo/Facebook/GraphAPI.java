@@ -37,6 +37,10 @@ public class GraphAPI {
         return INSTANCE;
     }
 
+    public static void destroyInstance(){
+        INSTANCE = null;
+    }
+
     public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
         //Fetching information from facebook profile of the user
         final MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();

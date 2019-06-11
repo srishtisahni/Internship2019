@@ -144,7 +144,7 @@ public class SignUpFragment extends Fragment {
     }
 
     private void FetchDate() {
-        Dialog dialog = new Dialog(getContext());
+        final Dialog dialog = new Dialog(getContext());
         dialog.setContentView(R.layout.date_picker);
         dialog.setTitle("");
         DatePicker datePicker = dialog.findViewById(R.id.date_picker);
@@ -157,6 +157,7 @@ public class SignUpFragment extends Fragment {
                 birthdayEpoch = calendar.getTimeInMillis();
                 birthday.setText(Constants.DATE_FORMAT.format(birthdayEpoch));
                 birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                dialog.dismiss();
             }
         });
         dialog.show();

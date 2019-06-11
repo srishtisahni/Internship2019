@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity
                         Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
                         intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
                         intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
-                        startActivityForResult(intent,Constants.FirebaseDataManagement.UPDATE_REQUEST);
+                        startActivityForResult(intent, Constants.FirebaseDataManager.UPDATE_REQUEST);
                     }
                     else{
                         viewModel.updateUser(user);                                 //Update local user info stored in the view model
@@ -152,6 +152,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
         startActivity(intent);
     }
 
@@ -205,7 +206,7 @@ public class HomeActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constants.FirebaseDataManagement.UPDATE_REQUEST && resultCode == Constants.FirebaseDataManagement.UPDATE_RESULT){
+        if(requestCode == Constants.FirebaseDataManager.UPDATE_REQUEST && resultCode == Constants.FirebaseDataManager.UPDATE_RESULT){
             viewModel.updateUser((User) data.getParcelableExtra(Constants.User.USER));                  //On Result from pop up, update the user info
             renderFragment((User) data.getParcelableExtra(Constants.User.USER));                        //Render Fragments based on user information
         }

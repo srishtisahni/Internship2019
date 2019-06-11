@@ -7,6 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.policyfolio.DataClasses.InsuranceProvider;
+import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 
@@ -34,6 +35,9 @@ public interface PolicyFolioDao {
     @Query("SELECT * from InsuranceProvider where type = :type")
     LiveData<List<InsuranceProvider>> getProvidersFromType(int type);   //Fetch Insurance Providers of a certain type
 
+    @Query("SELECT * from Nominee where userId = :id")
+    LiveData<List<Nominee>> getNomineesForUser(String id);              //Fetch Nominees for a particular User
+
     @Insert(onConflict = REPLACE)
     void putUser(User user);                                            //Update or Add user to the local database
 
@@ -48,4 +52,10 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     void putProviders(List<InsuranceProvider> providers);               //Add multiple Insurance Providers to the local database
+
+    @Insert(onConflict = REPLACE)
+    void putNominee(Nominee nominee);                                   //Add a Nominee to the local database
+
+    @Insert(onConflict = REPLACE)
+    void putNominees(List<Nominee> nominees);                           //Add multiple Nominees to the local database
 }

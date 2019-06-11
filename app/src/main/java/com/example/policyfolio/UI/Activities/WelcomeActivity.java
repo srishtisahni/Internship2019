@@ -30,6 +30,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
         viewModel = ViewModelProviders.of(this).get(WelcomeViewModel.class);
         viewModel.initiateRepo(this);
+
         viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<LoggedIn>() {
             @Override
             public void onChanged(@Nullable LoggedIn loggedIn) {
@@ -54,6 +55,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        },3000);
+        },2000);
     }
 }

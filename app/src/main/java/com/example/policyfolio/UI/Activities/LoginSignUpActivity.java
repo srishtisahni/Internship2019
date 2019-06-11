@@ -145,7 +145,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
         viewModel.setGender(facebook.getGender());
         viewModel.setCity(facebook.getLocationName());
         try {
-            viewModel.setBirthDay(Constants.FACEBOOK_DATE_FORMAT.parse(facebook.getBirthday()).getTime());
+            viewModel.setBirthDay(Constants.Facebook.DATE_FORMAT.parse(facebook.getBirthday()).getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             viewModel.setBirthDay(null);

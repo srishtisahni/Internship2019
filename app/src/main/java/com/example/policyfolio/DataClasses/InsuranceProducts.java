@@ -3,6 +3,7 @@ package com.example.policyfolio.DataClasses;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -21,10 +22,15 @@ public class InsuranceProducts {
     private Long providerId;
     private String name;
 
+    @Ignore
     public InsuranceProducts(String id, Long providerId, String name){
         this.id = id;
         this.providerId = providerId;
         this.name = name;
+    }
+
+    public InsuranceProducts(){
+
     }
 
     public String getName() {

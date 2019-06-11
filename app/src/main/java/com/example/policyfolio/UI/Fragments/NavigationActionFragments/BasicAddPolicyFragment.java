@@ -102,7 +102,7 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
 
     private void setUpViews() {
         insurances = getResources().getStringArray(R.array.insurance_type);
-        typeAdapter = new BasicDropdownTextAdapter(getContext(),insurances,this);
+        typeAdapter = new BasicDropdownTextAdapter(getContext(),insurances,this,Constants.DropDownType.INSURANCE_TYPE);
         typeChoice.setAdapter(typeAdapter);
         typeChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
 
@@ -199,14 +199,11 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
                     public void onChanged(List<InsuranceProvider> providers) {
                         BasicAddPolicyFragment.this.providers.clear();
                         BasicAddPolicyFragment.this.providers.addAll(providers);
-                        Log.e("SIZE",BasicAddPolicyFragment.this.providers.size()+"");
                     }
                 });
                 break;
 
             case Constants.DropDownType.INSURANCE_PROVIDER:
-                Log.e("SIZE",providers.size()+"");
-                Log.e("POSITION",providers.get(position).getName()+" "+position);
                 providerText.setText(providers.get(position).getName());
                 providerText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 providerChoice.setVisibility(View.GONE);

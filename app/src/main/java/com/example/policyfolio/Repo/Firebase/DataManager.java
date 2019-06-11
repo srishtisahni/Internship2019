@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.Constants;
 import com.example.policyfolio.DataClasses.InsuranceProvider;
+import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
@@ -40,10 +41,14 @@ public class DataManager {
         return INSTANCE;
     }
 
+    public static void destroyInstance(){
+        INSTANCE = null;
+    }
+
     public LiveData<Boolean> addUser(final User user) {
         //Add User to Firebase Firestore
         final MutableLiveData<Boolean> update = new MutableLiveData<>();
-        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(user.getId())
                 .set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -64,7 +69,7 @@ public class DataManager {
 
     public void fetchUser(String id, final AppDatabase appDatabase) {
         //Updates the local database using the fetched user information from firestore
-        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(id)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -91,9 +96,9 @@ public class DataManager {
 
     public void fetchPolicies(String id, final AppDatabase appDatabase) {
         ////Updates the local database using the fetched policy information from firestore
-        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(id)
-                .collection(Constants.FirebaseDataManagement.POLICIES_COLLECTION)
+                .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -122,7 +127,7 @@ public class DataManager {
     public LiveData<Integer> checkIfUserExistsEmail(String email, final Integer type, final AppDatabase appDatabase) {
         //Checks if an account exists if the same email id
         final MutableLiveData<Integer> result = new MutableLiveData<>();
-        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .whereEqualTo(Constants.User.EMAIL,email)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -159,7 +164,7 @@ public class DataManager {
     public LiveData<Integer> checkIfUserExistsPhone(String phone, final AppDatabase appDatabase) {
         //Checks if an account exists if the same phone number
         final MutableLiveData<Integer> result = new MutableLiveData<>();
-        firebaseFirestore.collection(Constants.FirebaseDataManagement.COLLECTION_USERS)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .whereEqualTo(Constants.User.PHONE,phone)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -194,8 +199,8 @@ public class DataManager {
     }
 
     public void fetchProviders(int type, final AppDatabase appDatabase) {
-        ////Updates the local database using the fetched provider information from firestore
-        firebaseFirestore.collection(Constants.FirebaseDataManagement.PROVIDERS_COLLECTION)
+        //Updates the local database using the fetched provider information from firestore
+        firebaseFirestore.collection(Constants.FirebaseDataManager.PROVIDERS_COLLECTION)
                 .whereEqualTo(Constants.InsuranceProviders.TYPE,type)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -214,6 +219,36 @@ public class DataManager {
                                     return null;
                                 }
                             }.execute(insuranceProviders);
+                        }
+                        else {
+                            Log.e("EXCEPTION", task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
+    public void fetchNominees(String uId, final AppDatabase appDatabase) {
+        //Updates the local database using the fetched nominee information from firestore
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                .document(uId)
+                .collection(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            ArrayList<Nominee> nominees = new ArrayList<>();
+                            for (int i = 0; i < documentSnapshots.size(); i++)
+                                nominees.add(documentSnapshots.get(i).toObject(Nominee.class));
+                            new AsyncTask<List<Nominee>, Void, Void>() {
+                                @Override
+                                protected Void doInBackground(List<Nominee>... arrayLists) {
+                                    List<Nominee> nominees = arrayLists[0];
+                                    appDatabase.policyFolioDao().putNominees(nominees);
+                                    return null;
+                                }
+                            }.execute(nominees);
                         }
                         else {
                             Log.e("EXCEPTION", task.getException().getMessage());

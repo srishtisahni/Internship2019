@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 28
@@ -29,14 +30,13 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[5,6)'
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'de.hdodenhof:circleimageview:3.0.0'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
-    implementation 'com.google.firebase:firebase-storage:16.0.4'
-    implementation 'com.google.firebase:firebase-database:16.0.4'
+    implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
     implementation 'androidx.room:room-runtime:2.1.0-rc01'
+    implementation 'com.google.firebase:firebase-storage:17.0.0'
     implementation 'com.google.firebase:firebase-auth:17.0.0'
-    implementation 'com.google.firebase:firebase-firestore:19.0.1'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.infideap.drawerbehavior:drawer-behavior:0.1.5'
+    implementation 'com.google.firebase:firebase-firestore:19.0.2'
     annotationProcessor 'androidx.room:room-compiler:2.1.0-rc01'
     annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0-rc01'
     testImplementation 'junit:junit:4.12'

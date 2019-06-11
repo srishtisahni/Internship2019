@@ -3,6 +3,7 @@ package com.example.policyfolio.Repo;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -12,12 +13,15 @@ import androidx.lifecycle.Observer;
 
 import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.DataClasses.InsuranceProvider;
+import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
 import com.example.policyfolio.Repo.Firebase.Authentication;
 import com.example.policyfolio.Repo.Firebase.DataManager;
+import com.example.policyfolio.Repo.Firebase.StorageManager;
+import com.example.policyfolio.Repo.InternalStorage.ImageStorage;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,15 +34,19 @@ public class Repository {
     public static Repository INSTANCE;
     private Authentication authentication;
     private DataManager dataManager;
+    private StorageManager storageManager;
     private AppDatabase appDatabase;
     private Cache cache;
+    private ImageStorage imageStorage;
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
         authentication = Authentication.getInstance();
         dataManager = DataManager.getInstance();
+        storageManager = StorageManager.getInstance();
         appDatabase = AppDatabase.getInstance(context);
         cache = Cache.getInstance();
+        imageStorage = ImageStorage.getInstance(context);
     }
 
     //All **UPDATES** on the **LOCAL DATABASE** occur on the background thread
@@ -49,6 +57,10 @@ public class Repository {
             INSTANCE = new Repository(context);
         }
         return INSTANCE;
+    }
+
+    public static void destroyInstance(){
+        INSTANCE = null;
     }
 
     public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
@@ -102,7 +114,7 @@ public class Repository {
     }
 
 
-    public LiveData<User> fetchUser(final String id, final LifecycleOwner owner) {
+    public LiveData<User> fetchUser(String id, final LifecycleOwner owner) {
         final MutableLiveData<User> user = new MutableLiveData<>();
         if(cache.getUser(id) != null)
             user.setValue(cache.getUser(id));                       //Sets the value from cache to speed up process
@@ -111,7 +123,8 @@ public class Repository {
                 @Override
                 protected LiveData<User> doInBackground(String... strings) {
                     String id = strings[0];
-                    LiveData<User> user = appDatabase.policyFolioDao().getUser(id);
+                    LiveData<User> user = appDatabase.policyFolioDao().getUser(id);         //Fetch User from Local Database
+                    dataManager.fetchUser(id,appDatabase);                                  //Uses firestore to update local database
                     return user;
                 }
 
@@ -127,20 +140,20 @@ public class Repository {
                             }
                         }
                     });
-                    dataManager.fetchUser(id,appDatabase);      //Uses firestore to update local database
                 }
             }.execute(id);
         }
         return user;
     }
 
-    public LiveData<List<Policy>> fetchPolicies(final String id, final LifecycleOwner owner) {
+    public LiveData<List<Policy>> fetchPolicies(String id, final LifecycleOwner owner) {
         final MutableLiveData<List<Policy>> policies = new MutableLiveData<>();
         new AsyncTask<String, Void, LiveData<List<Policy>>>() {
             @Override
             protected LiveData<List<Policy>> doInBackground(String... strings) {
                 String id = strings[0];
                 LiveData<List<Policy>> policies = appDatabase.policyFolioDao().getPolicies(id);     //Fetches Policies from the Local Database
+                dataManager.fetchPolicies(id,appDatabase);                                          //Updates the Local Database from Firestore
                 return policies;
             }
 
@@ -154,7 +167,6 @@ public class Repository {
                         cache.addPolicies(result);                                                  //Updates the values in cache
                     }
                 });
-                dataManager.fetchPolicies(id,appDatabase);                                       //Updates the Local Database from Firestore
             }
         }.execute(id);
         return policies;
@@ -173,13 +185,14 @@ public class Repository {
         return dataManager.checkIfUserExistsPhone(phone,appDatabase);        //Checks if the  user with same the phone number exists
     }
 
-    public LiveData<List<InsuranceProvider>> fetchProviders(final int type, final LifecycleOwner owner) {
+    public LiveData<List<InsuranceProvider>> fetchProviders(int type, final LifecycleOwner owner) {
         final MutableLiveData<List<InsuranceProvider>> providers = new MutableLiveData<>();
         new AsyncTask<Integer, Void, LiveData<List<InsuranceProvider>>>() {
             @Override
             protected LiveData<List<InsuranceProvider>> doInBackground(Integer... integers) {
                 Integer type = integers[0];
                 LiveData<List<InsuranceProvider>> providers = appDatabase.policyFolioDao().getProvidersFromType(type);      //Fetch Insurance Providers from the Local Database
+                dataManager.fetchProviders(type,appDatabase);                                                            //Update Local Database from Firestore
                 return providers;
             }
 
@@ -192,9 +205,39 @@ public class Repository {
                         providers.setValue(insuranceProviders);                                                             //Update the values sent to user
                     }
                 });
-                dataManager.fetchProviders(type,appDatabase);                                                            //Update Local Database from Firestore
             }
         }.execute(type);
         return providers;
+    }
+
+    public LiveData<List<Nominee>> fetchNominees(String uId, final LifecycleOwner owner) {
+        final MutableLiveData<List<Nominee>> nominees = new MutableLiveData<>();
+        new AsyncTask<String, Void, LiveData<List<Nominee>>>() {
+            @Override
+            protected LiveData<List<Nominee>> doInBackground(String... strings) {
+                String uId = strings[0];
+                LiveData<List<Nominee>> nominees = appDatabase.policyFolioDao().getNomineesForUser(uId);                //Fetch Nominees from the Local Database
+                dataManager.fetchNominees(uId,appDatabase);                                                         //Update Local Database from Firebase
+                return nominees;
+            }
+
+            @Override
+            protected void onPostExecute(LiveData<List<Nominee>> result) {
+                super.onPostExecute(result);
+                result.observe(owner, new Observer<List<Nominee>>() {
+                    @Override
+                    public void onChanged(List<Nominee> result) {
+                        nominees.setValue(result);                                                                  //Update the values returned to the user
+                    }
+                });
+            }
+        }.execute(uId);
+        return nominees;
+    }
+
+    public LiveData<String> saveImage(Bitmap bmp, String uId, String policyNumber) {
+        cache.saveImage(uId,policyNumber,bmp);
+        imageStorage.saveImage(uId,policyNumber,bmp);
+        return storageManager.saveImage(uId,policyNumber,bmp);
     }
 }

@@ -17,11 +17,13 @@ public class BasicDropdownTextAdapter extends RecyclerView.Adapter<BasicDropdown
     private Context context;
     private String[] values;
     private ParentCallback callback;
+    private int type;
 
-    public BasicDropdownTextAdapter(Context context, String[] values, ParentCallback callback){
+    public BasicDropdownTextAdapter(Context context, String[] values, ParentCallback callback, int type){
         this.context = context;
         this.values = values;
         this.callback = callback;
+        this.type = type;
     }
 
     @NonNull
@@ -40,7 +42,7 @@ public class BasicDropdownTextAdapter extends RecyclerView.Adapter<BasicDropdown
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.setValue(position, Constants.DropDownType.INSURANCE_TYPE);
+                callback.setValue(position, type);
             }
         });
     }

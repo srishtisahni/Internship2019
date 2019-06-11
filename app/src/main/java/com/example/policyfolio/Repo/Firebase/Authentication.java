@@ -51,6 +51,10 @@ public class Authentication {
         return INSTANCE;
     }
 
+    public static void destroyInstance(){
+        INSTANCE = null;
+    }
+
     //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
 
     public void initiateGoogleLogin(String id, Context context) {

@@ -8,12 +8,13 @@ public class Constants {
     public static final String DATABASE_NAME = "policy_folio_database";
     public static final int DATABASE_VERSION = 1;
     public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
-    public static final SimpleDateFormat FACEBOOK_DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy");
+    public static final String IMAGE_DIRECTORY = "Images";
 
     public static class User {
         public static final String EMAIL = "email";
         public static final String USER = "user";
         public static final String PHONE = "phone";
+        public static final String ID = "id";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;
@@ -75,7 +76,7 @@ public class Constants {
         public static final int SIGN_IN_RC = 9001;
     }
 
-    public static class FirebaseDataManagement {
+    public static class FirebaseDataManager {
         public static final String COLLECTION_USERS = "users";
         public static final String POLICIES_COLLECTION = "policies";
         public static final String PROVIDERS_COLLECTION = "insurance_providers";
@@ -117,5 +118,11 @@ public class Constants {
             public static final int SON = 6;
             public static final int DAUGHTER = 7;
         }
+    }
+
+    public static class PermissionAndRequests {
+        public static final int READ_PERMISSION = 101;
+        public static final int PICK_IMAGE_REQUEST = 102;
+        public static final int CAPTURE_IMAGE_REQUEST = 103;
     }
 }
