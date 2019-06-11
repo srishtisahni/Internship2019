@@ -23,20 +23,20 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataManagement {
+public class DataManager {
     
-    private  static DataManagement INSTANCE;
+    private  static DataManager INSTANCE;
     private FirebaseFirestore firebaseFirestore;
-    private DataManagement(){
+    private DataManager(){
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
     //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
 
-    public static DataManagement getInstance() {
+    public static DataManager getInstance() {
         //Singleton Pattern
         if(INSTANCE == null)
-            INSTANCE = new DataManagement();
+            INSTANCE = new DataManager();
         return INSTANCE;
     }
 

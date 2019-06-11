@@ -17,7 +17,7 @@ import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
 import com.example.policyfolio.Repo.Firebase.Authentication;
-import com.example.policyfolio.Repo.Firebase.DataManagement;
+import com.example.policyfolio.Repo.Firebase.DataManager;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,14 +29,14 @@ public class Repository {
     private GraphAPI graphAPI;
     public static Repository INSTANCE;
     private Authentication authentication;
-    private DataManagement dataManagement;
+    private DataManager dataManager;
     private AppDatabase appDatabase;
     private Cache cache;
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
         authentication = Authentication.getInstance();
-        dataManagement = DataManagement.getInstance();
+        dataManager = DataManager.getInstance();
         appDatabase = AppDatabase.getInstance(context);
         cache = Cache.getInstance();
     }
@@ -98,7 +98,7 @@ public class Repository {
                 return null;
             }
         }.execute(user);
-        return dataManagement.addUser(user);                        //Update Firestore Database
+        return dataManager.addUser(user);                        //Update Firestore Database
     }
 
 
@@ -127,7 +127,7 @@ public class Repository {
                             }
                         }
                     });
-                    dataManagement.fetchUser(id,appDatabase);      //Uses firestore to update local database
+                    dataManager.fetchUser(id,appDatabase);      //Uses firestore to update local database
                 }
             }.execute(id);
         }
@@ -154,7 +154,7 @@ public class Repository {
                         cache.addPolicies(result);                                                  //Updates the values in cache
                     }
                 });
-                dataManagement.fetchPolicies(id,appDatabase);                                       //Updates the Local Database from Firestore
+                dataManager.fetchPolicies(id,appDatabase);                                       //Updates the Local Database from Firestore
             }
         }.execute(id);
         return policies;
@@ -166,11 +166,11 @@ public class Repository {
 
     public LiveData<Integer> checkIfUserExistsEmail(String email, Integer type) {
         //Type is used to identify the login Type as Facebook or Email
-        return dataManagement.checkIfUserExistsEmail(email,type,appDatabase);   //Checks if the  user with same the email exists
+        return dataManager.checkIfUserExistsEmail(email,type,appDatabase);   //Checks if the  user with same the email exists
     }
 
     public LiveData<Integer> checkIfUserExistsPhone(String phone) {
-        return dataManagement.checkIfUserExistsPhone(phone,appDatabase);        //Checks if the  user with same the phone number exists
+        return dataManager.checkIfUserExistsPhone(phone,appDatabase);        //Checks if the  user with same the phone number exists
     }
 
     public LiveData<List<InsuranceProvider>> fetchProviders(final int type, final LifecycleOwner owner) {
@@ -192,7 +192,7 @@ public class Repository {
                         providers.setValue(insuranceProviders);                                                             //Update the values sent to user
                     }
                 });
-                dataManagement.fetchProviders(type,appDatabase);                                                            //Update Local Database from Firestore
+                dataManager.fetchProviders(type,appDatabase);                                                            //Update Local Database from Firestore
             }
         }.execute(type);
         return providers;

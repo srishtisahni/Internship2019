@@ -208,7 +208,7 @@ public class Authentication {
         try {
             //Extracting email from user's intent to verify if the account exists
             email = GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class).getEmail();
-            return DataManagement.getInstance().checkIfUserExistsEmail(email, Constants.LoginInInfo.Type.GOOGLE,appDatabase);
+            return DataManager.getInstance().checkIfUserExistsEmail(email, Constants.LoginInInfo.Type.GOOGLE,appDatabase);
         } catch (ApiException e) {
             Log.e("EXCEPTION", e.getMessage());
             MutableLiveData<Integer> nullValue = new MutableLiveData<>();

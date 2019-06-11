@@ -13,6 +13,7 @@ import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 
+//Room Database to store everything Locally
 @Database(entities = {
             User.class,
             Policy.class,
