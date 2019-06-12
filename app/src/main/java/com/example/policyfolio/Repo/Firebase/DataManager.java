@@ -1,17 +1,17 @@
 package com.example.policyfolio.Repo.Firebase;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Util.AppExecutors;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,8 +28,10 @@ public class DataManager {
     
     private  static DataManager INSTANCE;
     private FirebaseFirestore firebaseFirestore;
+    private AppExecutors appExecutors;
     private DataManager(){
         firebaseFirestore = FirebaseFirestore.getInstance();
+        appExecutors = new AppExecutors();
     }
 
     //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
@@ -76,16 +78,14 @@ public class DataManager {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if(task.isSuccessful()){
-                            User user=task.getResult().toObject(User.class);
-                            new AsyncTask<User, Void, Void>() {
+                            final User user=task.getResult().toObject(User.class);
+                            appExecutors.diskIO().execute(new Runnable() {
                                 @Override
-                                protected Void doInBackground(User... users) {
-                                    User user = users[0];
+                                public void run() {
                                     if(user!=null)
-                                        appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
-                                    return null;
+                                        appDatabase.policyFolioDao().putUser(user);
                                 }
-                            }.execute(user);
+                            });
                         }
                         else {
                             Log.e("EXCEPTION",task.getException().getMessage());
@@ -105,17 +105,16 @@ public class DataManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
-                            ArrayList<Policy> policies = new ArrayList<>();
+                            final ArrayList<Policy> policies = new ArrayList<>();
                             for (int i = 0; i < documentSnapshots.size(); i++)
                                 policies.add(documentSnapshots.get(i).toObject(Policy.class));
-                            new AsyncTask<List<Policy>, Void, Void>() {
+                            Log.e("POLICIES",policies.size()+"");
+                            appExecutors.diskIO().execute(new Runnable() {
                                 @Override
-                                protected Void doInBackground(List<Policy>... lists) {
-                                    List<Policy> policies = lists[0];
-                                    appDatabase.policyFolioDao().putPolicies(policies);         //The Local database is updated on the background thread
-                                    return null;
+                                public void run() {
+                                    appDatabase.policyFolioDao().putPolicies(policies);
                                 }
-                            }.execute(policies);
+                            });
                         }
                         else {
                             Log.e("EXCEPTION",task.getException().getMessage());
@@ -136,16 +135,14 @@ public class DataManager {
                         if(task.isSuccessful()){
                             ArrayList<User> users = new ArrayList<User>(task.getResult().toObjects(User.class));
                             if(users.size()>0) {
-                                User user = users.get(0);
-                                new AsyncTask<User, Void, Void>() {
+                                final User user = users.get(0);
+                                appExecutors.diskIO().execute(new Runnable() {
                                     @Override
-                                    protected Void doInBackground(User... users) {
-                                        User user = users[0];
+                                    public void run() {
                                         if(user!=null)
-                                            appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
-                                        return null;
+                                            appDatabase.policyFolioDao().putUser(user);
                                     }
-                                }.execute(user);
+                                });
                                 result.setValue(user.getType());        //Returns the type of the account if it exists
                             }
                             else {
@@ -173,16 +170,14 @@ public class DataManager {
                         if(task.isSuccessful()){
                             ArrayList<User> users = new ArrayList<User>(task.getResult().toObjects(User.class));
                             if(users.size()>0) {
-                                User user = users.get(0);
-                                new AsyncTask<User, Void, Void>() {
+                                final User user = users.get(0);
+                                appExecutors.diskIO().execute(new Runnable() {
                                     @Override
-                                    protected Void doInBackground(User... users) {
-                                        User user = users[0];
+                                    public void run() {
                                         if(user!=null)
-                                            appDatabase.policyFolioDao().putUser(user);         //The Local database is updated on the background thread
-                                        return null;
+                                            appDatabase.policyFolioDao().putUser(user);
                                     }
-                                }.execute(user);
+                                });
                                 result.setValue(user.getType());            //Returns the type of the account if it exists
                             }
                             else {
@@ -208,17 +203,15 @@ public class DataManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
-                            ArrayList<InsuranceProvider> insuranceProviders = new ArrayList<>();
+                            final ArrayList<InsuranceProvider> insuranceProviders = new ArrayList<>();
                             for (int i = 0; i < documentSnapshots.size(); i++)
                                 insuranceProviders.add(documentSnapshots.get(i).toObject(InsuranceProvider.class));
-                            new AsyncTask<List<InsuranceProvider>, Void, Void>() {
+                            appExecutors.diskIO().execute(new Runnable() {
                                 @Override
-                                protected Void doInBackground(List<InsuranceProvider>... lists) {
-                                    List<InsuranceProvider> providers = lists[0];
-                                    appDatabase.policyFolioDao().putProviders(providers);
-                                    return null;
+                                public void run() {
+                                    appDatabase.policyFolioDao().putProviders(insuranceProviders);
                                 }
-                            }.execute(insuranceProviders);
+                            });
                         }
                         else {
                             Log.e("EXCEPTION", task.getException().getMessage());
@@ -238,22 +231,42 @@ public class DataManager {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()){
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
-                            ArrayList<Nominee> nominees = new ArrayList<>();
+                            final ArrayList<Nominee> nominees = new ArrayList<>();
                             for (int i = 0; i < documentSnapshots.size(); i++)
                                 nominees.add(documentSnapshots.get(i).toObject(Nominee.class));
-                            new AsyncTask<List<Nominee>, Void, Void>() {
+                            appExecutors.diskIO().execute(new Runnable() {
                                 @Override
-                                protected Void doInBackground(List<Nominee>... arrayLists) {
-                                    List<Nominee> nominees = arrayLists[0];
+                                public void run() {
                                     appDatabase.policyFolioDao().putNominees(nominees);
-                                    return null;
                                 }
-                            }.execute(nominees);
+                            });
                         }
                         else {
                             Log.e("EXCEPTION", task.getException().getMessage());
                         }
                     }
                 });
+    }
+
+    public LiveData<Boolean> addPolicy(Policy policy) {
+        final MutableLiveData<Boolean> complete = new MutableLiveData<>();
+        //Uploads Policy Information to the firestore database
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                .document(policy.getUserId())
+                .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                .document(policy.getPolicyNumber())
+                .set(policy)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                            complete.setValue(true);                                                //Return true if Policy is added to firestore
+                        else {
+                            complete.setValue(false);
+                            Log.e("EXCEPTION",task.getException().getMessage());
+                        }
+                    }
+                });
+        return complete;
     }
 }

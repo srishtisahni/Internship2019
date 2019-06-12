@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.DataClasses.Nominee;
+import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.Repo.Repository;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public class AddViewModel extends ViewModel {
     private String policyNumber;
     private int premiumFrequency;
     private String photoUrl;
+    private Long dateEpoch;
+    private String premiumAmount;
+    private String coverAmount;
 
     public void initiateRepo(Context context){
         repository = Repository.getInstance(context);
@@ -91,5 +95,34 @@ public class AddViewModel extends ViewModel {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Long getDateEpoch() {
+        return dateEpoch;
+    }
+
+    public void setDateEpoch(Long dateEpoch) {
+        this.dateEpoch = dateEpoch;
+    }
+
+    public String getPremiumAmount() {
+        return premiumAmount;
+    }
+
+    public void setPremiumAmount(String premiumAmount) {
+        this.premiumAmount = premiumAmount;
+    }
+
+    public String getCoverAmount() {
+        return coverAmount;
+    }
+
+    public void setCoverAmount(String coverAmount) {
+        this.coverAmount = coverAmount;
+    }
+
+    public LiveData<Boolean> savePolicy() {
+        Policy policy = new Policy(uId,policyNumber,provider.getId(),dateEpoch,premiumFrequency,premiumAmount,coverAmount,type,photoUrl);
+        return repository.addPolicy(policy);
     }
 }

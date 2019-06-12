@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.LoggedIn;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.WelcomeViewModel;

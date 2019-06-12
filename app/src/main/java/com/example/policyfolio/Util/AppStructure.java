@@ -1,4 +1,4 @@
-package com.example.policyfolio;
+package com.example.policyfolio.Util;
 
 public class AppStructure {
     /*

@@ -1,4 +1,4 @@
-package com.example.policyfolio.UI.Adapters;
+package com.example.policyfolio.Util.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.R;
 

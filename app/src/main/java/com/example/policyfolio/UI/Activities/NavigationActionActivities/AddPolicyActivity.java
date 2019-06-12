@@ -7,21 +7,22 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.AddPolicyCallback;
+import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.UI.Fragments.NavigationActionFragments.AddPolicyDetailsFragment;
 import com.example.policyfolio.UI.Fragments.NavigationActionFragments.BasicAddPolicyFragment;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
@@ -72,7 +73,19 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
 
     @Override
     public void done() {
-
+        fragmentHolder.setAlpha(.4f);
+        progressBar.setVisibility(View.VISIBLE);
+        viewModel.savePolicy().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                fragmentHolder.setAlpha(1f);
+                progressBar.setVisibility(View.GONE);
+                if(!aBoolean)
+                    Toast.makeText(AddPolicyActivity.this,"Error Updating Information",Toast.LENGTH_LONG).show();
+                else
+                    setResult(Constants.PermissionAndRequests.ADD_POLICY_RESULT);
+            }
+        });
     }
 
     @Override

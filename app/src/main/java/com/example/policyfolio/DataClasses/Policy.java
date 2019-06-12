@@ -10,19 +10,6 @@ import androidx.room.PrimaryKey;
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(
-        foreignKeys = {
-                @ForeignKey(
-                        entity = User.class,
-                        parentColumns = "id",
-                        childColumns = "userId",
-                        onDelete = CASCADE
-                ),
-                @ForeignKey(
-                        entity = InsuranceProvider.class,
-                        parentColumns = "id",
-                        childColumns = "insuranceProviderId"
-                ),
-        },
         indices = {
                 @Index("userId"),
                 @Index("insuranceProviderId")
@@ -36,12 +23,10 @@ public class Policy {
     private String policyNumber;
     @NonNull
     private Long insuranceProviderId;
-    private Long startDate;
-    private Long endDate;
     private Long nextDueDate;
     private Integer frequency;
-    private Long premium;
-    private Long sumAssured;
+    private String premium;
+    private String sumAssured;
     @NonNull
     private int type;
     private String documentUrl;
@@ -51,12 +36,10 @@ public class Policy {
     }
 
     @Ignore
-    public Policy(String id, String pNum, Long insuranceProviderId, Long startDate, Long endDate, Long nextDueDate, Integer frequency, Long premium, Long sumAssured, int type, String documentUrl){
+    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl){
         this.userId = id;
         this.policyNumber = pNum;
         this.insuranceProviderId = insuranceProviderId;
-        this.startDate = startDate;
-        this.endDate = endDate;
         this.nextDueDate = nextDueDate;
         this.frequency = frequency;
         this.premium = premium;
@@ -92,13 +75,6 @@ public class Policy {
         this.insuranceProviderId = insuranceProviderId;
     }
 
-    public Long getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Long startDate) {
-        this.startDate = startDate;
-    }
 
     public Long getNextDueDate() {
         return nextDueDate;
@@ -116,28 +92,20 @@ public class Policy {
         this.frequency = frequency;
     }
 
-    public Long getPremium() {
+    public String getPremium() {
         return premium;
     }
 
-    public void setPremium(Long premium) {
+    public void setPremium(String premium) {
         this.premium = premium;
     }
 
-    public Long getSumAssured() {
+    public String getSumAssured() {
         return sumAssured;
     }
 
-    public void setSumAssured(Long sumAssured) {
+    public void setSumAssured(String sumAssured) {
         this.sumAssured = sumAssured;
-    }
-
-    public Long getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Long endDate) {
-        this.endDate = endDate;
     }
 
     @NonNull

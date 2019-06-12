@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.HomeCallback;
+import com.example.policyfolio.Util.CallBackListeners.HomeCallback;
 import com.example.policyfolio.ViewModels.HomeViewModel;
 
 /**

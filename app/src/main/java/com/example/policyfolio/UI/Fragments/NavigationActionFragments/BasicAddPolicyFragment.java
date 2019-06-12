@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +21,12 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.Adapters.BasicDropdownProviderAdapter;
-import com.example.policyfolio.UI.Adapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.UI.CallBackListeners.AddPolicyCallback;
+import com.example.policyfolio.Util.Adapters.BasicDropdownProviderAdapter;
+import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
+import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
 
 import java.util.ArrayList;

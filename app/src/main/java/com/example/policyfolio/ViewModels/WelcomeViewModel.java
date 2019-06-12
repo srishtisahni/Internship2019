@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.LoggedIn;
 import com.example.policyfolio.Repo.Repository;
 

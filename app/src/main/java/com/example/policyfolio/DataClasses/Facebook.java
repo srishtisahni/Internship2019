@@ -1,7 +1,7 @@
 package com.example.policyfolio.DataClasses;
 
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 
 public class Facebook {
     //Fetched Data from Graph API

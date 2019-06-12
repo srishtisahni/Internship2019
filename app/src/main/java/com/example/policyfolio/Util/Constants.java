@@ -1,4 +1,4 @@
-package com.example.policyfolio;
+package com.example.policyfolio.Util;
 
 import java.text.SimpleDateFormat;
 import java.util.logging.Formatter;
@@ -124,5 +124,9 @@ public class Constants {
         public static final int READ_PERMISSION = 101;
         public static final int PICK_IMAGE_REQUEST = 102;
         public static final int CAPTURE_IMAGE_REQUEST = 103;
+        public static final int UPDATE_REQUEST = 104;
+        public static final int UPDATE_RESULT = 105;
+        public static final int ADD_POLICY_REQUEST = 106;
+        public static final int ADD_POLICY_RESULT = 107;
     }
 }

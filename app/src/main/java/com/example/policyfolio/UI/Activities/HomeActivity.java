@@ -6,12 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.Policy;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.AddPolicyActivity;
-import com.example.policyfolio.UI.CallBackListeners.HomeCallback;
+import com.example.policyfolio.Util.CallBackListeners.HomeCallback;
+import com.example.policyfolio.UI.Fragments.HomePoliciesFragment;
 import com.example.policyfolio.UI.Fragments.HomeStartupFragment;
 import com.example.policyfolio.ViewModels.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
@@ -50,7 +51,8 @@ public class HomeActivity extends AppCompatActivity
 
     private TextView name;
 
-    private HomeStartupFragment policyStartupFragment;
+    private HomeStartupFragment homeStartupFragment;
+    private HomePoliciesFragment homePoliciesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +97,7 @@ public class HomeActivity extends AppCompatActivity
             editor.putBoolean(Constants.LoginInInfo.LOGGED_IN,true);
             editor.putInt(Constants.LoginInInfo.TYPE,bundle.getInt(Constants.LoginInInfo.TYPE));
             editor.putString(Constants.LoginInInfo.FIREBASE_UID,bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
-            editor.commit();
+            editor.apply();
             viewModel.setType(bundle.getInt(Constants.LoginInInfo.TYPE));
             viewModel.setUid(bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
         }
@@ -107,7 +109,7 @@ public class HomeActivity extends AppCompatActivity
                         Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
                         intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
                         intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
-                        startActivityForResult(intent, Constants.FirebaseDataManager.UPDATE_REQUEST);
+                        startActivityForResult(intent, Constants.PermissionAndRequests.UPDATE_REQUEST);
                     }
                     else{
                         viewModel.updateUser(user);                                 //Update local user info stored in the view model
@@ -141,11 +143,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void policies() {
+        homePoliciesFragment = new HomePoliciesFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homePoliciesFragment).commit();
     }
 
     private void zeroPolicies() {
-        policyStartupFragment = new HomeStartupFragment(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,policyStartupFragment).commit();
+        homeStartupFragment = new HomeStartupFragment(this);
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, homeStartupFragment).commit();
     }
 
 
@@ -153,7 +157,7 @@ public class HomeActivity extends AppCompatActivity
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
-        startActivity(intent);
+        startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
     private void setUpDrawer() {
@@ -206,9 +210,12 @@ public class HomeActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constants.FirebaseDataManager.UPDATE_REQUEST && resultCode == Constants.FirebaseDataManager.UPDATE_RESULT){
+        if(requestCode == Constants.PermissionAndRequests.UPDATE_REQUEST && resultCode == Constants.PermissionAndRequests.UPDATE_RESULT){
             viewModel.updateUser((User) data.getParcelableExtra(Constants.User.USER));                  //On Result from pop up, update the user info
             renderFragment((User) data.getParcelableExtra(Constants.User.USER));                        //Render Fragments based on user information
+        }
+        if(requestCode == Constants.PermissionAndRequests.ADD_POLICY_REQUEST && resultCode == Constants.PermissionAndRequests.ADD_POLICY_RESULT){
+            viewModel.fetchPolicies(viewModel.getUid(),this);
         }
     }
 

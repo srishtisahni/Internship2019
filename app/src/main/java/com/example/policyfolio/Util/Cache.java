@@ -1,4 +1,4 @@
-package com.example.policyfolio.Repo;
+package com.example.policyfolio.Util;
 
 
 import android.graphics.Bitmap;
@@ -51,5 +51,9 @@ public class Cache {
 
     public void saveImage(String userId, String key, Bitmap bmp) {
         imageMap.put(userId+"_"+key,bmp);
+    }
+
+    public void addPolicy(Policy policy) {
+        policyMap.put(policy.getUserId(),policy);
     }
 }

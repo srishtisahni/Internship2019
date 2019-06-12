@@ -7,11 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = {
-            @ForeignKey(entity = InsuranceProvider.class,
-                    parentColumns = "id",
-                    childColumns = "providerId")
-        },
+@Entity(
         indices = {
             @Index("providerId")
         })

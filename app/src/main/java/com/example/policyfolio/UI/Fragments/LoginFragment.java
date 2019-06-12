@@ -17,10 +17,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.LoginCallback;
+import com.example.policyfolio.Util.CallBackListeners.LoginCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 import com.facebook.login.widget.LoginButton;
 

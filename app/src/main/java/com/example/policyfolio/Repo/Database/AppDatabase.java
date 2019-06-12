@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.InsuranceProducts;
 import com.example.policyfolio.DataClasses.InsuranceProvider;
 import com.example.policyfolio.DataClasses.Nominee;

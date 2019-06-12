@@ -12,10 +12,10 @@ import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.PopUpCallBack;
+import com.example.policyfolio.Util.CallBackListeners.PopUpCallBack;
 import com.example.policyfolio.UI.PopUps.EmailPopUp;
 import com.example.policyfolio.UI.PopUps.InfoPopUp;
 import com.example.policyfolio.ViewModels.PopUpViewModel;
@@ -118,7 +118,7 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(Constants.User.USER,viewModel.getUser());
                     data.putExtras(bundle);
-                    setResult(Constants.FirebaseDataManager.UPDATE_RESULT,data);
+                    setResult(Constants.PermissionAndRequests.UPDATE_RESULT,data);
                     finish();
                 }
                 else {

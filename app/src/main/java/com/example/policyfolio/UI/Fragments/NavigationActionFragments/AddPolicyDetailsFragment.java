@@ -23,7 +23,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -33,12 +32,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.Nominee;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.Adapters.BasicDropdownNomineeAdapter;
-import com.example.policyfolio.UI.Adapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.UI.CallBackListeners.AddPolicyCallback;
+import com.example.policyfolio.Util.Adapters.BasicDropdownNomineeAdapter;
+import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
+import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
 
 import java.util.ArrayList;
@@ -175,7 +174,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
-                hideSoftKeyboard(getActivity());
 
                 premiumFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 premiumFrame.setPadding(0,4,0,4);
@@ -214,7 +212,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
-                hideSoftKeyboard(getActivity());
 
                 final Dialog dialog = new Dialog(getContext());
                 dialog.setContentView(R.layout.date_picker);
@@ -227,6 +224,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year,monthOfYear,dayOfMonth);
                         dateEpoch = calendar.getTimeInMillis();
+                        viewModel.setDateEpoch(dateEpoch);
                         date.setText(Constants.DATE_FORMAT.format(dateEpoch));
                         date.setPadding(0,4,0,4);
                         date.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -248,7 +246,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
-                hideSoftKeyboard(getActivity());
 
                 if(nominees.size()!=0) {
                     nomineeFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -265,7 +262,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
-                hideSoftKeyboard(getActivity());
 
                 callback.addPolicyImage();
             }
@@ -276,7 +272,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
-                hideSoftKeyboard(getActivity());
 
                 callback.clickPolicyImage();
             }
@@ -287,10 +282,14 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
-                hideSoftKeyboard(getActivity());
 
-                //IMPLEMENT CHECKS!!
-                callback.done();
+                if(!(premiumAmount.getText().toString().equals("") || dateEpoch == null || premiumText.getVisibility()==View.GONE || premiumText.getCurrentTextColor()!=getResources().getColor(R.color.colorPrimaryDark))) {
+                    viewModel.setPremiumAmount(premiumAmount.getText().toString());
+                    viewModel.setCoverAmount(coverAmount.getText().toString());
+                    callback.done();
+                }
+                else
+                    Toast.makeText(getContext(),"Information Incomplete",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -311,7 +310,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
     public void setValue(int position, int type) {
         coverAmount.clearFocus();
         premiumAmount.clearFocus();
-        hideSoftKeyboard(getActivity());
         switch (type){
             case Constants.DropDownType.PREMIUM_FREQUENCY:
                 premiumText.setText(premiums[position]);
@@ -331,11 +329,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 viewModel.setNominee(nominees.get(position));
                 break;
         }
-    }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override
@@ -359,15 +352,15 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             clickPolicy.setVisibility(View.GONE);
             optional2.setVisibility(View.GONE);
             optional1.setText("Policy Document");
-//            viewModel.saveImage(bmp).observe(this, new Observer<String>() {
-//                @Override
-//                public void onChanged(String s) {
-//                   if (s != null)
-//                       viewModel.setPhotoUrl(s);
-//                   else
-//                       Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
-//                }
-//            });
+            viewModel.saveImage(bmp).observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                   if (s != null)
+                       viewModel.setPhotoUrl(s);
+                   else
+                       Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
+                }
+            });
         }
         if(requestCode == Constants.PermissionAndRequests.CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data!=null){
             Bitmap bmp = (Bitmap) data.getExtras().get("data");
@@ -376,15 +369,15 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             clickPolicy.setVisibility(View.GONE);
             optional2.setVisibility(View.GONE);
             optional1.setText("Policy Document");
-//                viewModel.saveImage(bmp).observe(this, new Observer<String>() {
-//                    @Override
-//                    public void onChanged(String s) {
-//                        if (s != null)
-//                            viewModel.setPhotoUrl(s);
-//                        else
-//                            Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
-//                    }
-//                });
+                viewModel.saveImage(bmp).observe(this, new Observer<String>() {
+                    @Override
+                    public void onChanged(String s) {
+                        if (s != null)
+                            viewModel.setPhotoUrl(s);
+                        else
+                            Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
+                    }
+                });
         }
     }
 }

@@ -8,10 +8,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Entity(foreignKeys = {
-                @ForeignKey(entity = User.class,
-                        parentColumns = "id",
-                        childColumns = "userId"),},
+@Entity(
         indices = {
                 @Index("userId"),
                 @Index("pfId")

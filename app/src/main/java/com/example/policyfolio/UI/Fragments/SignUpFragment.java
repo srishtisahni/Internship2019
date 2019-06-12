@@ -19,9 +19,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.UI.CallBackListeners.LoginCallback;
+import com.example.policyfolio.Util.CallBackListeners.LoginCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
 
 import java.util.Calendar;

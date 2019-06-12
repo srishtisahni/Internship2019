@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
-import static com.example.policyfolio.Constants.IMAGE_DIRECTORY;
+import static com.example.policyfolio.Util.Constants.IMAGE_DIRECTORY;
 
 public class ImageStorage {
     private static ImageStorage INSTANCE;

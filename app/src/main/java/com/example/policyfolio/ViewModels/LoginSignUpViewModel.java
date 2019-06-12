@@ -10,11 +10,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.Constants;
+import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
-import com.example.policyfolio.UI.CallBackListeners.FragmentViewModelCallback;
+import com.example.policyfolio.Util.CallBackListeners.FragmentViewModelCallback;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
