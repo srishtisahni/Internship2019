@@ -109,13 +109,13 @@ public class Repository {
 
 
     public LiveData<User> fetchUser(final String id) {
-        dataManager.fetchUser(id,appDatabase);
-        return appDatabase.policyFolioDao().getUser(id);
+        dataManager.fetchUser(id,appDatabase);                     //Updates changes from firebase
+        return appDatabase.policyFolioDao().getUser(id);           //Returns Live data from the local database
     }
 
     public LiveData<List<Policy>> fetchPolicies(final String id) {
-        dataManager.fetchPolicies(id,appDatabase);
-        return appDatabase.policyFolioDao().getPolicies(id);
+        dataManager.fetchPolicies(id,appDatabase);                  //Updates changes from firebase
+        return appDatabase.policyFolioDao().getPolicies(id);        //Returns Live Data from Local database
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
@@ -132,28 +132,28 @@ public class Repository {
     }
 
     public LiveData<List<InsuranceProvider>> fetchProviders(final int type) {
-        dataManager.fetchProviders(type,appDatabase);
-        return appDatabase.policyFolioDao().getProvidersFromType(type);
+        dataManager.fetchProviders(type,appDatabase);                           //Updates the local database from firebase
+        return appDatabase.policyFolioDao().getProvidersFromType(type);         //Returns live data from local database
     }
 
     public LiveData<List<Nominee>> fetchNominees(final String uId) {
-        dataManager.fetchNominees(uId,appDatabase);
-        return appDatabase.policyFolioDao().getNomineesForUser(uId);
+        dataManager.fetchNominees(uId,appDatabase);                             //Updates the local database from firebase
+        return appDatabase.policyFolioDao().getNomineesForUser(uId);            //Returns live data from local database
     }
 
     public LiveData<String> saveImage(Bitmap bmp, String uId, String policyNumber) {
-        imageStorage.saveImage(uId,policyNumber,bmp);
-        return storageManager.saveImage(uId,policyNumber,bmp);
+        imageStorage.saveImage(uId,policyNumber,bmp);                           //Saves image in the local storage
+        return storageManager.saveImage(uId,policyNumber,bmp);                  //returns live data containing image URL
     }
 
     public LiveData<Boolean> addPolicy(final Policy policy) {
         appExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                appDatabase.policyFolioDao().putPolicy(policy);
+                appDatabase.policyFolioDao().putPolicy(policy);                 //Adds policy to the local database
             }
         });
-        return dataManager.addPolicy(policy);
+        return dataManager.addPolicy(policy);                                   //Updates policy on firebase
     }
 
 }
