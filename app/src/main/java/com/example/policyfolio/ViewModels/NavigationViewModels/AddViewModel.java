@@ -7,9 +7,9 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.DataClasses.InsuranceProvider;
-import com.example.policyfolio.DataClasses.Nominee;
-import com.example.policyfolio.DataClasses.Policy;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Repository;
 
 import java.util.List;

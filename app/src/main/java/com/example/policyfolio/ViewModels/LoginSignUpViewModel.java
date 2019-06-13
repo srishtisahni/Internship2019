@@ -10,9 +10,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.Facebook;
-import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.Util.CallBackListeners.FragmentViewModelCallback;
 import com.facebook.AccessToken;
@@ -43,7 +43,7 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         repository = Repository.getInstance(context);
     }
 
-    public LiveData<Facebook> fetchFacebookData() {
+    public LiveData<FacebookData> fetchFacebookData() {
         return repository.getFacebookProfile(AccessToken.getCurrentAccessToken());
     }
 

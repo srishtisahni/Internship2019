@@ -18,8 +18,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.CallBackListeners.LoginCallback;
 import com.example.policyfolio.UI.Fragments.EmailPhoneFragment;
@@ -129,7 +129,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
         editor.putBoolean(Constants.LoginInInfo.LOGGED_IN,true);
         editor.putInt(Constants.LoginInInfo.TYPE,bundle.getInt(Constants.LoginInInfo.TYPE));
         editor.putString(Constants.LoginInInfo.FIREBASE_UID,bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
-        editor.commit();
+        editor.apply();
 
         Intent intent = new Intent(LoginSignUpActivity.this,HomeActivity.class);
         intent.putExtras(bundle);
@@ -138,18 +138,18 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
     }
 
     @Override
-    public void FacebookSignUp(final Facebook facebook) {
-        viewModel.setGender(facebook.getGender());
-        viewModel.setCity(facebook.getLocationName());
+    public void FacebookSignUp(final FacebookData facebookData) {
+        viewModel.setGender(facebookData.getGender());
+        viewModel.setCity(facebookData.getLocationName());
         try {
-            viewModel.setBirthDay(Constants.Facebook.DATE_FORMAT.parse(facebook.getBirthday()).getTime());
+            viewModel.setBirthDay(Constants.Facebook.DATE_FORMAT.parse(facebookData.getBirthday()).getTime());
         } catch (ParseException e) {
             e.printStackTrace();
             viewModel.setBirthDay(null);
         }
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.checkIfUserExistsEmail(facebook.getEmail(),Constants.LoginInInfo.Type.FACEBOOK).observe(this, new Observer<Integer>() {
+        viewModel.checkIfUserExistsEmail(facebookData.getEmail(),Constants.LoginInInfo.Type.FACEBOOK).observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if(integer!=null){

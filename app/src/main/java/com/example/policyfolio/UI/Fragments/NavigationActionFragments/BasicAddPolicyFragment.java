@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Adapters.BasicDropdownProviderAdapter;
 import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;

@@ -6,7 +6,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 
 public class PopUpViewModel extends ViewModel {

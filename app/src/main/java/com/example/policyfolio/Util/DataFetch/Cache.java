@@ -1,11 +1,11 @@
-package com.example.policyfolio.Util;
+package com.example.policyfolio.Util.DataFetch;
 
 
 import android.graphics.Bitmap;
 
-import com.example.policyfolio.DataClasses.InsuranceProvider;
-import com.example.policyfolio.DataClasses.Policy;
-import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 
 import java.util.HashMap;
 import java.util.List;

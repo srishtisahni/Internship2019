@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.R;
 
 import java.util.ArrayList;

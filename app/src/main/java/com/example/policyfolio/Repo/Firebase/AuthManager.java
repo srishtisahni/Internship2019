@@ -33,21 +33,21 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-public class Authentication {
+public class AuthManager {
 
-    private static Authentication INSTANCE;
+    private static AuthManager INSTANCE;
     private GoogleSignInOptions gso;
     private GoogleSignInClient client;
     private FirebaseAuth mAuth;
 
-    private Authentication() {
+    private AuthManager() {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public static Authentication getInstance(){
+    public static AuthManager getInstance(){
         //Singleton Pattern
         if(INSTANCE == null)
-            INSTANCE = new Authentication();
+            INSTANCE = new AuthManager();
         return INSTANCE;
     }
 

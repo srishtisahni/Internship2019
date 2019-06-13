@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.LoggedIn;
+import com.example.policyfolio.Repo.Firebase.DataClasses.LogInData;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.WelcomeViewModel;
 
@@ -31,18 +31,18 @@ public class WelcomeActivity extends AppCompatActivity {
         viewModel = ViewModelProviders.of(this).get(WelcomeViewModel.class);
         viewModel.initiateRepo(this);
 
-        viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<LoggedIn>() {
+        viewModel.getLoginStatus(sharedPreferences).observe(this, new Observer<LogInData>() {
             @Override
-            public void onChanged(@Nullable LoggedIn loggedIn) {
-                if(loggedIn==null){
+            public void onChanged(@Nullable LogInData logInData) {
+                if(logInData ==null){
                     intent = new Intent(WelcomeActivity.this,LoginSignUpActivity.class);
                 }
                 else{
                     intent = new Intent(WelcomeActivity.this,HomeActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putBoolean(Constants.LoginInInfo.LOGGED_IN,loggedIn.isLogin());
-                    bundle.putInt(Constants.LoginInInfo.TYPE,loggedIn.getType());
-                    bundle.putString(Constants.LoginInInfo.FIREBASE_UID,loggedIn.getFirebseToken());
+                    bundle.putBoolean(Constants.LoginInInfo.LOGGED_IN, logInData.isLogin());
+                    bundle.putInt(Constants.LoginInInfo.TYPE, logInData.getType());
+                    bundle.putString(Constants.LoginInInfo.FIREBASE_UID, logInData.getFirebaseToken());
                     intent.putExtras(bundle);
                 }
             }

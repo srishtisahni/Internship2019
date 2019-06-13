@@ -1,4 +1,4 @@
-package com.example.policyfolio.DataClasses;
+package com.example.policyfolio.Repo.Database.DataClasses;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -67,13 +67,15 @@ public class User implements Parcelable {
         email = in.readString();
         phone = in.readString();
         name = in.readString();
+        city = in.readString();
         if (in.readByte() == 0) {
             birthday = null;
         } else {
             birthday = in.readLong();
         }
         gender = in.readInt();
-        city = in.readString();
+        firstName = in.readString();
+        lastName = in.readString();
         complete = in.readByte() != 0;
     }
 
@@ -208,5 +210,6 @@ public class User implements Parcelable {
         parcel.writeInt(gender);
         parcel.writeString(firstName);
         parcel.writeString(lastName);
+        parcel.writeByte((byte) (complete ? 1 : 0));
     }
 }

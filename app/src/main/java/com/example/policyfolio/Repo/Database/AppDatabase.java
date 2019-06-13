@@ -7,11 +7,11 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.InsuranceProducts;
-import com.example.policyfolio.DataClasses.InsuranceProvider;
-import com.example.policyfolio.DataClasses.Nominee;
-import com.example.policyfolio.DataClasses.Policy;
-import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProducts;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 
 //Room Database to store everything Locally
 @Database(entities = {

@@ -7,28 +7,28 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.LoggedIn;
+import com.example.policyfolio.Repo.Firebase.DataClasses.LogInData;
 import com.example.policyfolio.Repo.Repository;
 
 public class WelcomeViewModel extends ViewModel {
 
-    private MutableLiveData<LoggedIn> userLoggedIn = new MutableLiveData<>();
+    private MutableLiveData<LogInData> userLoggedIn = new MutableLiveData<>();
     private Repository repository;
 
     public void initiateRepo(Context context) {
         repository = Repository.getInstance(context);
     }
 
-    public MutableLiveData<LoggedIn> getLoginStatus(SharedPreferences sharedPreferences) {
+    public MutableLiveData<LogInData> getLoginStatus(SharedPreferences sharedPreferences) {
         fetchSharedPreference(sharedPreferences);
         return userLoggedIn;
     }
 
     private void fetchSharedPreference(SharedPreferences sharedPreferences){
-        LoggedIn loggedIn = new LoggedIn(sharedPreferences.getBoolean(Constants.LoginInInfo.LOGGED_IN,false),
+        LogInData logInData = new LogInData(sharedPreferences.getBoolean(Constants.LoginInInfo.LOGGED_IN,false),
                 sharedPreferences.getInt(Constants.LoginInInfo.TYPE,-1),sharedPreferences.getString(Constants.LoginInInfo.FIREBASE_UID,null));
-        if(loggedIn.isLogin()){
-            this.userLoggedIn.setValue(loggedIn);
+        if(logInData.isLogin()){
+            this.userLoggedIn.setValue(logInData);
         }
         else {
             this.userLoggedIn.setValue(null);

@@ -1,9 +1,9 @@
-package com.example.policyfolio.DataClasses;
+package com.example.policyfolio.Repo.Facebook.DataClasses;
 
 
 import com.example.policyfolio.Util.Constants;
 
-public class Facebook {
+public class FacebookData {
     //Fetched Data from Graph API
     private long id;
     private String email;
@@ -12,7 +12,7 @@ public class Facebook {
     private String gender;
     private Location location;
 
-    public Facebook(long id, String email, String name, String birthday, String gender, long locationId, String locationName){
+    public FacebookData(long id, String email, String name, String birthday, String gender, long locationId, String locationName){
         this.id = id;
         this.email = email;
         this.name = name;

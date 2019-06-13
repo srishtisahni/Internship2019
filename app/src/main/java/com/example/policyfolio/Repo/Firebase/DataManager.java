@@ -7,11 +7,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.InsuranceProvider;
-import com.example.policyfolio.DataClasses.Nominee;
-import com.example.policyfolio.DataClasses.Policy;
-import com.example.policyfolio.DataClasses.User;
-import com.example.policyfolio.Util.AppExecutors;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
+import com.example.policyfolio.Util.DataFetch.AppExecutors;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

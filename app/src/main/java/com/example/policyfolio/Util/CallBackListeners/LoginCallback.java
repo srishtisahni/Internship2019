@@ -1,9 +1,9 @@
 package com.example.policyfolio.Util.CallBackListeners;
 
-import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
 
 public interface LoginCallback {
-    void FacebookSignUp(Facebook facebook);
+    void FacebookSignUp(FacebookData facebookData);
     void enterEmail();
     void enterPhone();
     void GoogleSignUp();

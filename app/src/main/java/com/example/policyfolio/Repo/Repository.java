@@ -7,22 +7,20 @@ import android.graphics.Bitmap;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
-import com.example.policyfolio.DataClasses.Facebook;
-import com.example.policyfolio.DataClasses.InsuranceProvider;
-import com.example.policyfolio.DataClasses.Nominee;
-import com.example.policyfolio.DataClasses.Policy;
-import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
-import com.example.policyfolio.Repo.Firebase.Authentication;
+import com.example.policyfolio.Repo.Firebase.AuthManager;
 import com.example.policyfolio.Repo.Firebase.DataManager;
 import com.example.policyfolio.Repo.Firebase.StorageManager;
 import com.example.policyfolio.Repo.InternalStorage.ImageStorage;
-import com.example.policyfolio.Util.AppExecutors;
-import com.example.policyfolio.Util.Cache;
+import com.example.policyfolio.Util.DataFetch.AppExecutors;
+import com.example.policyfolio.Util.DataFetch.Cache;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,7 +31,7 @@ public class Repository {
     //Fetches and stores data
     private GraphAPI graphAPI;
     public static Repository INSTANCE;
-    private Authentication authentication;
+    private AuthManager authentication;
     private DataManager dataManager;
     private StorageManager storageManager;
     private AppDatabase appDatabase;
@@ -43,7 +41,7 @@ public class Repository {
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
-        authentication = Authentication.getInstance();
+        authentication = AuthManager.getInstance();
         dataManager = DataManager.getInstance();
         storageManager = StorageManager.getInstance();
         appDatabase = AppDatabase.getInstance(context);
@@ -66,7 +64,7 @@ public class Repository {
         INSTANCE = null;
     }
 
-    public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
+    public LiveData<FacebookData> getFacebookProfile(AccessToken accessToken) {
         return graphAPI.getFacebookProfile(accessToken);    //Fetch Facebook info
     }
 
@@ -143,22 +141,24 @@ public class Repository {
     }
 
     public LiveData<List<Policy>> fetchPolicies(final String id, final LifecycleOwner owner) {
-        final MutableLiveData<List<Policy>> policies = new MutableLiveData<>();
-        appExecutors.mainThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                LiveData<List<Policy>> result = appDatabase.policyFolioDao().getPolicies(id);     //Fetches Policies from the Local Database
-                dataManager.fetchPolicies(id,appDatabase);
-                result.observe(owner, new Observer<List<Policy>>() {
-                    @Override
-                    public void onChanged(List<Policy> result) {
-                        policies.setValue(result);                                                  //Updates the values sent to the user
-                        cache.addPolicies(result);                                                  //Updates the values in cache
-                    }
-                });
-            }
-        });
-        return policies;
+        dataManager.fetchPolicies(id,appDatabase);
+        return appDatabase.policyFolioDao().getPolicies(id);
+//        final MutableLiveData<List<Policy>> policies = new MutableLiveData<>();
+//        appExecutors.mainThread().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                LiveData<List<Policy>> result = appDatabase.policyFolioDao().getPolicies(id);     //Fetches Policies from the Local Database
+//                dataManager.fetchPolicies(id,appDatabase);
+//                result.observe(owner, new Observer<List<Policy>>() {
+//                    @Override
+//                    public void onChanged(List<Policy> result) {
+//                        policies.setValue(result);                                                  //Updates the values sent to the user
+//                        cache.addPolicies(result);                                                  //Updates the values in cache
+//                    }
+//                });
+//            }
+//        });
+//        return policies;
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
@@ -175,21 +175,23 @@ public class Repository {
     }
 
     public LiveData<List<InsuranceProvider>> fetchProviders(final int type, final LifecycleOwner owner) {
-        final MutableLiveData<List<InsuranceProvider>> providers = new MutableLiveData<>();
-        appExecutors.mainThread().execute(new Runnable() {
-            @Override
-            public void run() {
-                LiveData<List<InsuranceProvider>> result = appDatabase.policyFolioDao().getProvidersFromType(type);      //Fetch Insurance Providers from the Local Database
-                dataManager.fetchProviders(type,appDatabase);
-                result.observe(owner, new Observer<List<InsuranceProvider>>() {
-                    @Override
-                    public void onChanged(List<InsuranceProvider> insuranceProviders) {
-                        providers.setValue(insuranceProviders);                                                             //Update the values sent to user
-                    }
-                });
-            }
-        });
-        return providers;
+        dataManager.fetchProviders(type,appDatabase);
+        return appDatabase.policyFolioDao().getProvidersFromType(type);
+//        final MutableLiveData<List<InsuranceProvider>> providers = new MutableLiveData<>();
+//        appExecutors.mainThread().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                LiveData<List<InsuranceProvider>> result = appDatabase.policyFolioDao().getProvidersFromType(type);      //Fetch Insurance Providers from the Local Database
+//                dataManager.fetchProviders(type,appDatabase);
+//                result.observe(owner, new Observer<List<InsuranceProvider>>() {
+//                    @Override
+//                    public void onChanged(List<InsuranceProvider> insuranceProviders) {
+//                        providers.setValue(insuranceProviders);                                                             //Update the values sent to user
+//                    }
+//                });
+//            }
+//        });
+//        return providers;
     }
 
     public LiveData<List<Nominee>> fetchNominees(final String uId, final LifecycleOwner owner) {

@@ -17,8 +17,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.Facebook;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.CallBackListeners.LoginCallback;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
@@ -108,11 +108,11 @@ public class LoginFragment extends Fragment {
             public void onChanged(@Nullable Integer integer) {
                 if(integer!=null){
                     switch (integer){
-                        case Constants.Facebook.Login.LOGGED_IN: viewModel.fetchFacebookData().observe(LoginFragment.this, new Observer<Facebook>() {
+                        case Constants.Facebook.Login.LOGGED_IN: viewModel.fetchFacebookData().observe(LoginFragment.this, new Observer<FacebookData>() {
                             @Override
-                            public void onChanged(@Nullable Facebook facebook) {
-                                if(facebook!=null) {
-                                    callback.FacebookSignUp(facebook);
+                            public void onChanged(@Nullable FacebookData facebookData) {
+                                if(facebookData !=null) {
+                                    callback.FacebookSignUp(facebookData);
                                 }
                                 else
                                     Toast.makeText(getContext(),"Login Error Occurred",Toast.LENGTH_LONG).show();

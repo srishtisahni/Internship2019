@@ -6,7 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.policyfolio.DataClasses.Facebook;
+import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
@@ -41,13 +41,13 @@ public class GraphAPI {
         INSTANCE = null;
     }
 
-    public LiveData<Facebook> getFacebookProfile(AccessToken accessToken) {
+    public LiveData<FacebookData> getFacebookProfile(AccessToken accessToken) {
         //Fetching information from facebook profile of the user
-        final MutableLiveData<Facebook> facebookFetch = new MutableLiveData<>();
+        final MutableLiveData<FacebookData> facebookFetch = new MutableLiveData<>();
         GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
-                Facebook facebook = null;
+                FacebookData facebookData = null;
                 try {
                     long id = object.getLong(ID);
                     String name = object.getString(NAME);
@@ -57,13 +57,13 @@ public class GraphAPI {
                     JSONObject location = object.getJSONObject(LOCATION);
                     long locationId = location.getLong(ID);
                     String locationName = location.getString(NAME);
-                    facebook = new Facebook(id,email,name,birthday,gender,locationId,locationName);
+                    facebookData = new FacebookData(id,email,name,birthday,gender,locationId,locationName);
 
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e("EXCEPTION",e.getMessage());
                 }
-                facebookFetch.setValue(facebook);
+                facebookFetch.setValue(facebookData);
             }
         });
 

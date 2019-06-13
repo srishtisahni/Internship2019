@@ -1,4 +1,4 @@
-package com.example.policyfolio.DataClasses;
+package com.example.policyfolio.Repo.Database.DataClasses;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

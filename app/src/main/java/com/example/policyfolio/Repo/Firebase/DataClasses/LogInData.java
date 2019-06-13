@@ -1,15 +1,15 @@
-package com.example.policyfolio.DataClasses;
+package com.example.policyfolio.Repo.Firebase.DataClasses;
 
-public class LoggedIn {
+public class LogInData {
     //Store Login Info in Shared Preference
     private boolean login;
     private int type;
-    private String firebseToken;
+    private String firebaseToken;
 
-    public LoggedIn(boolean login,int type,String firebseToken){
+    public LogInData(boolean login, int type, String firebseToken){
         this.login = login;
         this.type = type;
-        this.firebseToken = firebseToken;
+        this.firebaseToken = firebseToken;
     }
 
     public boolean isLogin() {
@@ -28,11 +28,11 @@ public class LoggedIn {
         this.type = type;
     }
 
-    public String getFirebseToken() {
-        return firebseToken;
+    public String getFirebaseToken() {
+        return firebaseToken;
     }
 
-    public void setFirebseToken(String firebseToken) {
-        this.firebseToken = firebseToken;
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 }

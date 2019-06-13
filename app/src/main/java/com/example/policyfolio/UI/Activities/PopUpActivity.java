@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.User;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.CallBackListeners.PopUpCallBack;
 import com.example.policyfolio.UI.PopUps.EmailPopUp;

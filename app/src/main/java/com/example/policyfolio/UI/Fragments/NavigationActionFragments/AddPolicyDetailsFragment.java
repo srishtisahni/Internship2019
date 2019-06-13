@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Adapters.BasicDropdownNomineeAdapter;
 import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
