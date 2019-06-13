@@ -39,16 +39,16 @@ public class HomeViewModel extends ViewModel {
         return user.getValue().getId();
     }
 
-    public LiveData<User> fetchUser(LifecycleOwner owner) {
-        return repository.fetchUser(user.getValue().getId(),owner);
+    public LiveData<User> fetchUser() {
+        return repository.fetchUser(user.getValue().getId());
     }
 
     public LiveData<User> getUser() {
         return user;
     }
 
-    public LiveData<List<Policy>> fetchPolicies(String id, LifecycleOwner owner) {
-        return repository.fetchPolicies(id,owner);
+    public LiveData<List<Policy>> fetchPolicies(String id) {
+        return repository.fetchPolicies(id);
     }
 
     public void updateUser(User user) {

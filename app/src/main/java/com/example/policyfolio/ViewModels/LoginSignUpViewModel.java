@@ -108,8 +108,8 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         return repository.phoneSignUp(phone, activity);
     }
 
-    public LiveData<User> fetchUser(String id, LifecycleOwner owner) {
-        return repository.fetchUser(id,owner);
+    public LiveData<User> fetchUser(String id) {
+        return repository.fetchUser(id);
     }
 
     public void setEmail(String email) {

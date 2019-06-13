@@ -6,6 +6,8 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 @Entity(
         indices = {
                 @Index("userId"),
@@ -120,5 +122,19 @@ public class Policy {
 
     public void setDocumentUrl(String documentUrl) {
         this.documentUrl = documentUrl;
+    }
+
+    @Ignore
+    public static Long totalCover(List<Policy> policies){
+        Long cover = Long.valueOf(0);
+        for(int i=0;i<policies.size();i++) {
+            try {
+                cover = cover + Long.parseLong(policies.get(i).getSumAssured());
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return cover;
     }
 }

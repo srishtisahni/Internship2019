@@ -193,7 +193,7 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
                 policyNumber.setVisibility(View.GONE);
                 policyNumber.setText("");
 
-                viewModel.setType(position,this).observe(this, new Observer<List<InsuranceProvider>>() {
+                viewModel.setType(position).observe(this, new Observer<List<InsuranceProvider>>() {
                     @Override
                     public void onChanged(List<InsuranceProvider> providers) {
                         BasicAddPolicyFragment.this.providers.clear();

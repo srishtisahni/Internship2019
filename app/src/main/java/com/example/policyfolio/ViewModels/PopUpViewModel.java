@@ -79,8 +79,8 @@ public class PopUpViewModel extends ViewModel {
         user.setPhone(phone);
     }
 
-    public LiveData<User> fetchUser(String id, LifecycleOwner owner) {
-        return repository.fetchUser(id,owner);
+    public LiveData<User> fetchUser(String id) {
+        return repository.fetchUser(id);
     }
 
     public void updateUser(User user) {

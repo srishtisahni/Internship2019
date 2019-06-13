@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity
             viewModel.setType(bundle.getInt(Constants.LoginInInfo.TYPE));
             viewModel.setUid(bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
         }
-        viewModel.fetchUser(this).observe(this, new Observer<User>() {
+        viewModel.fetchUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User user) {
                 if(user!=null){
@@ -125,7 +125,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void renderFragment(User user) {
-        viewModel.fetchPolicies(user.getId(),this).observe(this, new Observer<List<Policy>>() {
+        viewModel.fetchPolicies(user.getId()).observe(this, new Observer<List<Policy>>() {
             @Override
             public void onChanged(List<Policy> policies) {
                 if(policies!=null){
@@ -215,7 +215,7 @@ public class HomeActivity extends AppCompatActivity
             renderFragment((User) data.getParcelableExtra(Constants.User.USER));                        //Render Fragments based on user information
         }
         if(requestCode == Constants.PermissionAndRequests.ADD_POLICY_REQUEST && resultCode == Constants.PermissionAndRequests.ADD_POLICY_RESULT){
-            viewModel.fetchPolicies(viewModel.getUid(),this);
+            viewModel.fetchPolicies(viewModel.getUid());
         }
     }
 

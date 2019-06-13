@@ -36,9 +36,9 @@ public class AddViewModel extends ViewModel {
         return type;
     }
 
-    public LiveData<List<InsuranceProvider>> setType(int type, LifecycleOwner owner) {
+    public LiveData<List<InsuranceProvider>> setType(int type) {
         this.type = type;
-        return repository.fetchProviders(type,owner);
+        return repository.fetchProviders(type);
     }
 
     public void setProvider(InsuranceProvider provider) {
@@ -65,8 +65,8 @@ public class AddViewModel extends ViewModel {
         this.premiumFrequency = premiumFrequency;
     }
 
-    public LiveData<List<Nominee>> fetchNominees(LifecycleOwner owner) {
-        return repository.fetchNominees(uId,owner);
+    public LiveData<List<Nominee>> fetchNominees() {
+        return repository.fetchNominees(uId);
     }
 
     public String getuId() {

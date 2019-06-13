@@ -297,7 +297,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
     private void setDefaults() {
         insuranceProvider.setText(viewModel.getProvider().getName());
         policyNumber.setText(viewModel.getPolicyNumber());
-        viewModel.fetchNominees(this).observe(this, new Observer<List<Nominee>>() {
+        viewModel.fetchNominees().observe(this, new Observer<List<Nominee>>() {
             @Override
             public void onChanged(List<Nominee> nominees) {
                 AddPolicyDetailsFragment.this.nominees.clear();
