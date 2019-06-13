@@ -19,5 +19,9 @@
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
     <string name="title_activity_add_policy">AddPolicyActivity</string>
+    <string name="number_policies">Number of Policies</string>
+    <string name="total_cover">Total Cover</string>
+    <string name="nextDue">Next Due Date Premium</string>
+    <string name="returns">Returns</string>
 
 </resources>
