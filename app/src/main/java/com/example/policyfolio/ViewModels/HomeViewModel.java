@@ -7,16 +7,19 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
     private int type;
     private MutableLiveData<User> user = new MutableLiveData<>();
+    private ArrayList<Policy> policies = new ArrayList<>();
     private Repository repository;
 
     public void initiateRepo(Context context) {
@@ -53,5 +56,18 @@ public class HomeViewModel extends ViewModel {
 
     public void updateUser(User user) {
         this.user.setValue(user);
+    }
+
+    public void updatePolicies(List<Policy> policies) {
+        this.policies.clear();
+        this.policies.addAll(policies);
+    }
+
+    public ArrayList<Policy> fetchedPolicies() {
+        return policies;
+    }
+
+    public LiveData<List<InsuranceProvider>> fetchProviders() {
+        return repository.fetchAllProviders();
     }
 }

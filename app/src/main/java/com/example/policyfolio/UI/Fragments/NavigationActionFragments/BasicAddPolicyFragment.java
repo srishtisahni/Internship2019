@@ -95,8 +95,15 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
         sellerList = rootView.findViewById(R.id.policy_sellers);
 
         setUpViews();
+        setDefaultType();
 
         return rootView;
+    }
+
+    private void setDefaultType() {
+        int type = getArguments().getInt(Constants.InsuranceProviders.TYPE,-1);
+        if(type!=-1)
+            setValue(type,Constants.DropDownType.INSURANCE_TYPE);
     }
 
     private void setUpViews() {
@@ -198,6 +205,7 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
                     public void onChanged(List<InsuranceProvider> providers) {
                         BasicAddPolicyFragment.this.providers.clear();
                         BasicAddPolicyFragment.this.providers.addAll(providers);
+                        providerAdapter.notifyDataSetChanged();
                     }
                 });
                 break;

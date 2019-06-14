@@ -78,7 +78,7 @@ public class EmailPopUp extends Fragment {
                 }
                 else {
                     next.setEnabled(true);
-                    next.setBackground(getResources().getDrawable(R.drawable.button_background));
+                    next.setBackground(getResources().getDrawable(R.drawable.button_background_green));
                     next.setTextColor(getResources().getColor(R.color.white));
                     error.setVisibility(View.GONE);
                 }

@@ -23,6 +23,7 @@ public class Policy {
     @NonNull
     private Long insuranceProviderId;
     private Long nextDueDate;
+    private Long matureDate;
     private Integer frequency;
     private String premium;
     private String sumAssured;
@@ -35,11 +36,12 @@ public class Policy {
     }
 
     @Ignore
-    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl){
+    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate,Long matureDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl){
         this.userId = id;
         this.policyNumber = pNum;
         this.insuranceProviderId = insuranceProviderId;
         this.nextDueDate = nextDueDate;
+        this.matureDate = matureDate;
         this.frequency = frequency;
         this.premium = premium;
         this.sumAssured = sumAssured;
@@ -74,6 +76,13 @@ public class Policy {
         this.insuranceProviderId = insuranceProviderId;
     }
 
+    public Long getMatureDate() {
+        return matureDate;
+    }
+
+    public void setMatureDate(Long matureDate) {
+        this.matureDate = matureDate;
+    }
 
     public Long getNextDueDate() {
         return nextDueDate;
@@ -125,11 +134,11 @@ public class Policy {
     }
 
     @Ignore
-    public static Long totalCover(List<Policy> policies){
-        Long cover = Long.valueOf(0);
+    public static Double totalCover(List<Policy> policies){
+        Double cover = Double.valueOf(0);
         for(int i=0;i<policies.size();i++) {
             try {
-                cover = cover + Long.parseLong(policies.get(i).getSumAssured());
+                cover = cover + Double.parseDouble(policies.get(i).getSumAssured());
             }
             catch (Exception e){
                 e.printStackTrace();

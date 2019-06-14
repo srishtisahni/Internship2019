@@ -2,6 +2,7 @@ package com.example.policyfolio.UI.Fragments.NavigationActionFragments;
 
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -64,10 +65,16 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
     private EditText premiumAmount;
 
-    private LinearLayout datePickerLayout;
-    private TextView date;
-    private ImageView dateImage;
-    private Long dateEpoch;
+    private LinearLayout premiumDatePickerLayout;
+    private TextView premiumDate;
+    private ImageView premiumDateImage;
+    private Long premiumDateEpoch;
+
+    private LinearLayout matureDatePickerLayout;
+    private TextView matureDate;
+    private ImageView matureDateImage;
+    private Long matureDateEpoch;
+
 
     private FrameLayout nomineeFrame;
     private TextView nomineeText;
@@ -114,9 +121,13 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
         premiumAmount = rootView.findViewById(R.id.premium_amount);
 
-        datePickerLayout = rootView.findViewById(R.id.date_picker);
-        date = rootView.findViewById(R.id.date);
-        dateImage = rootView.findViewById(R.id.date_image);
+        premiumDatePickerLayout = rootView.findViewById(R.id.date_picker);
+        premiumDate = rootView.findViewById(R.id.date);
+        premiumDateImage = rootView.findViewById(R.id.date_image);
+
+        matureDatePickerLayout = rootView.findViewById(R.id.date_picker2);
+        matureDate = rootView.findViewById(R.id.date2);
+        matureDateImage = rootView.findViewById(R.id.date_image2);
 
         nomineeFrame = rootView.findViewById(R.id.nominee_frame);
         nomineeText = rootView.findViewById(R.id.nominee_text);
@@ -133,8 +144,8 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
         done = rootView.findViewById(R.id.done);
 
-        setDefaults();
         setAdapters();
+        setDefaults();
 
         return rootView;
     }
@@ -207,30 +218,59 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             }
         });
 
-        datePickerLayout.setOnClickListener(new View.OnClickListener() {
+        premiumDatePickerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
 
-                final Dialog dialog = new Dialog(getContext());
+                final Dialog dialog = new Dialog(getContext(),R.style.DialogTheme);
                 dialog.setContentView(R.layout.date_picker);
                 dialog.setTitle("");
                 DatePicker datePicker = dialog.findViewById(R.id.date_picker);
                 final Calendar calendar=Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
+                calendar.setTimeInMillis(premiumDateEpoch);
                 datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year,monthOfYear,dayOfMonth);
-                        dateEpoch = calendar.getTimeInMillis();
-                        viewModel.setDateEpoch(dateEpoch);
-                        date.setText(Constants.DATE_FORMAT.format(dateEpoch));
-                        date.setPadding(0,4,0,4);
-                        date.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                        dateImage.setVisibility(View.GONE);
-                        datePickerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                        dialog.dismiss();
+                        premiumDateEpoch = calendar.getTimeInMillis();
+                        viewModel.setPremiumDateEpoch(premiumDateEpoch);
+                        premiumDate.setText(Constants.DATE_FORMAT.format(premiumDateEpoch));
+                        premiumDate.setPadding(0,4,0,4);
+                        premiumDate.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        premiumDateImage.setVisibility(View.GONE);
+                        premiumDatePickerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        matureDatePickerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                coverAmount.clearFocus();
+                premiumAmount.clearFocus();
+
+
+                final Dialog dialog = new Dialog(getContext(),R.style.DialogTheme);
+                dialog.setContentView(R.layout.date_picker);
+                dialog.setTitle("");
+                DatePicker datePicker = dialog.findViewById(R.id.date_picker);
+                final Calendar calendar=Calendar.getInstance();
+                calendar.setTimeInMillis(matureDateEpoch);
+                datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year,monthOfYear,dayOfMonth);
+                        matureDateEpoch = calendar.getTimeInMillis();
+                        viewModel.setMatureDateEpoch(matureDateEpoch);
+                        matureDate.setText(Constants.DATE_FORMAT.format(matureDateEpoch));
+                        matureDate.setPadding(0,4,0,4);
+                        matureDate.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        matureDateImage.setVisibility(View.GONE);
+                        matureDatePickerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     }
                 });
                 dialog.show();
@@ -283,7 +323,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 coverAmount.clearFocus();
                 premiumAmount.clearFocus();
 
-                if(!(premiumAmount.getText().toString().equals("") || dateEpoch == null || premiumText.getVisibility()==View.GONE || premiumText.getCurrentTextColor()!=getResources().getColor(R.color.colorPrimaryDark))) {
+                if(!(premiumAmount.getText().toString().equals("") || premiumDateEpoch == null || premiumText.getVisibility()==View.GONE || premiumText.getCurrentTextColor()!=getResources().getColor(R.color.colorPrimaryDark))) {
                     viewModel.setPremiumAmount(premiumAmount.getText().toString());
                     viewModel.setCoverAmount(coverAmount.getText().toString());
                     callback.done();
@@ -302,8 +342,11 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onChanged(List<Nominee> nominees) {
                 AddPolicyDetailsFragment.this.nominees.clear();
                 AddPolicyDetailsFragment.this.nominees.addAll(nominees);
+                nomineeAdapter.notifyDataSetChanged();
             }
         });
+        premiumDateEpoch = System.currentTimeMillis();
+        matureDateEpoch = System.currentTimeMillis();
     }
 
     @Override

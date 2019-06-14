@@ -128,11 +128,12 @@ public class HomeActivity extends AppCompatActivity
         viewModel.fetchPolicies(user.getId()).observe(this, new Observer<List<Policy>>() {
             @Override
             public void onChanged(List<Policy> policies) {
-                if(policies!=null){
+                if(policies!=null){                                                                 //Rendering multiple policy fragment
+                    viewModel.updatePolicies(policies);
                     if(policies.size()==0)                                                          //If no policies are added yet, render zero policy fragment
                         zeroPolicies();
                     else
-                        policies();                                                                 //Rendering multiple policy fragment
+                        policies();
                 }
                 else {
                     Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_SHORT).show();
@@ -143,8 +144,12 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void policies() {
-        homePoliciesFragment = new HomePoliciesFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homePoliciesFragment).commit();
+        if(homePoliciesFragment==null) {
+            homePoliciesFragment = new HomePoliciesFragment(this);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homePoliciesFragment).commit();
+        }
+        else
+            homePoliciesFragment.updateChanges();
     }
 
     private void zeroPolicies() {
@@ -157,6 +162,14 @@ public class HomeActivity extends AppCompatActivity
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
+    }
+
+    @Override
+    public void addPolicy(int type) {
+        Intent intent = new Intent(this, AddPolicyActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.InsuranceProviders.TYPE,type);
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
@@ -215,7 +228,7 @@ public class HomeActivity extends AppCompatActivity
             renderFragment((User) data.getParcelableExtra(Constants.User.USER));                        //Render Fragments based on user information
         }
         if(requestCode == Constants.PermissionAndRequests.ADD_POLICY_REQUEST && resultCode == Constants.PermissionAndRequests.ADD_POLICY_RESULT){
-            viewModel.fetchPolicies(viewModel.getUid());
+            policies();
         }
     }
 

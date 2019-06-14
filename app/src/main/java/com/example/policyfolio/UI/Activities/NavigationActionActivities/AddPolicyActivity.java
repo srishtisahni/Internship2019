@@ -62,6 +62,7 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
         fragmentHolder.setAlpha(1f);
         progressBar.setVisibility(View.GONE);
         basicAddPolicyFragment = new BasicAddPolicyFragment(this);
+        basicAddPolicyFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,basicAddPolicyFragment).commit();
     }
 
@@ -86,6 +87,7 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
                     setResult(Constants.PermissionAndRequests.ADD_POLICY_RESULT);
             }
         });
+        finish();
     }
 
     @Override

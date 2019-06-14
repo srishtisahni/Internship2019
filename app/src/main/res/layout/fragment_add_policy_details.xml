@@ -153,16 +153,48 @@
                 android:src="@drawable/ic_date_range_black_24dp" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/date_picker2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/text_background_8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/date_picker"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/date_picker"
+            app:layout_constraintTop_toBottomOf="@+id/date_picker">
+
+            <TextView
+                android:id="@+id/date2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="22dp"
+                android:paddingRight="32dp"
+                android:paddingVertical="4dp"
+                android:text="Policy Mature Date"
+                android:textColor="@color/Grey"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/date_image2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginRight="16dp"
+                android:src="@drawable/ic_date_range_black_24dp" />
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/nominee_frame"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/dropdown_item_8dp"
-            app:layout_constraintEnd_toEndOf="@+id/date_picker"
+            app:layout_constraintEnd_toEndOf="@+id/date_picker2"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/date_picker"
-            app:layout_constraintTop_toBottomOf="@+id/date_picker">
+            app:layout_constraintStart_toStartOf="@id/date_picker2"
+            app:layout_constraintTop_toBottomOf="@+id/date_picker2">
 
             <TextView
                 android:id="@+id/nominee_text"
@@ -285,7 +317,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/button_background"
+            android:background="@drawable/button_background_green"
             android:text="Done"
             android:textAllCaps="false"
             android:textColor="@color/white"

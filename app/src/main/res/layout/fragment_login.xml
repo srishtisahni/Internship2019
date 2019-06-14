@@ -78,7 +78,7 @@
             android:layout_width="136dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:background="@drawable/button_background"
+            android:background="@drawable/button_background_green"
             android:text="Log In"
             android:textAllCaps="false"
             android:textColor="@color/white"

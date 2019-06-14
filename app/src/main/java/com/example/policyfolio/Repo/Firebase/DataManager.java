@@ -108,7 +108,6 @@ public class DataManager {
                             final ArrayList<Policy> policies = new ArrayList<>();
                             for (int i = 0; i < documentSnapshots.size(); i++)
                                 policies.add(documentSnapshots.get(i).toObject(Policy.class));
-                            Log.e("POLICIES",policies.size()+"");
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -197,6 +196,32 @@ public class DataManager {
         //Updates the local database using the fetched provider information from firestore
         firebaseFirestore.collection(Constants.FirebaseDataManager.PROVIDERS_COLLECTION)
                 .whereEqualTo(Constants.InsuranceProviders.TYPE,type)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            final ArrayList<InsuranceProvider> insuranceProviders = new ArrayList<>();
+                            for (int i = 0; i < documentSnapshots.size(); i++)
+                                insuranceProviders.add(documentSnapshots.get(i).toObject(InsuranceProvider.class));
+                            appExecutors.diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    appDatabase.policyFolioDao().putProviders(insuranceProviders);
+                                }
+                            });
+                        }
+                        else {
+                            Log.e("EXCEPTION", task.getException().getMessage());
+                        }
+                    }
+                });
+    }
+
+    public void fetchProviders(final AppDatabase appDatabase) {
+        //Updates the local database using the fetched provider information from firestore
+        firebaseFirestore.collection(Constants.FirebaseDataManager.PROVIDERS_COLLECTION)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override

@@ -156,4 +156,8 @@ public class Repository {
         return dataManager.addPolicy(policy);                                   //Updates policy on firebase
     }
 
+    public LiveData<List<InsuranceProvider>> fetchAllProviders() {
+        dataManager.fetchProviders(appDatabase);                           //Updates the local database from firebase
+        return appDatabase.policyFolioDao().getProviders();
+    }
 }

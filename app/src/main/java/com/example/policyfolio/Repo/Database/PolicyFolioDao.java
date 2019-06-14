@@ -32,6 +32,9 @@ public interface PolicyFolioDao {
     @Query("SELECT * from InsuranceProvider where id = :id")
     LiveData<InsuranceProvider> getProvider(Long id);                   //Fetch Insurance Provider based on the provide Id (Self generated long)
 
+    @Query("SELECT * from InsuranceProvider")
+    LiveData<List<InsuranceProvider>> getProviders();                         //Fetch All Insurance Providers
+
     @Query("SELECT * from InsuranceProvider where type = :type")
     LiveData<List<InsuranceProvider>> getProvidersFromType(int type);   //Fetch Insurance Providers of a certain type
 

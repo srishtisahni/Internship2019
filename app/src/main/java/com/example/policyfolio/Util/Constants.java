@@ -24,6 +24,10 @@ public class Constants {
         }
     }
     public static class Policy{
+        public static final long EPOCH_MONTH = 2678400;
+        public static final int DISPLAY_PREMIUM = 0;
+        public static final int DISPLAY_SUM = 1;
+
         public static class Type{
             public static final int LIFE_INSURANCE = 0;
             public static final int AUTO_INSURANCE = 1;

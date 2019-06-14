@@ -4,29 +4,145 @@ package com.example.policyfolio.UI.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.policyfolio.R;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
+import com.example.policyfolio.Util.Adapters.PolicyDisplayAdapter;
+import com.example.policyfolio.Util.Adapters.YellowTextAdapter;
+import com.example.policyfolio.Util.CallBackListeners.HomeCallback;
+import com.example.policyfolio.Util.Constants;
+import com.example.policyfolio.ViewModels.HomeViewModel;
+
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import static com.example.policyfolio.Util.Constants.Policy.Type.APPLIANCE_INSURANCE;
+import static com.example.policyfolio.Util.Constants.Policy.Type.LIFE_INSURANCE;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomePoliciesFragment extends Fragment {
+public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapter.ParentCallback {
+
+    private View rootView;
+
+    private HomeViewModel viewModel;
+
+    private TextView number;
+    private TextView cover;
+    private TextView coverDecimal;
+
+    private RecyclerView dues;
+    private YellowTextAdapter duesAdapter;
+    private RecyclerView returns;
+    private YellowTextAdapter returnsAdapter;
+
+    private RecyclerView policies;
+    private PolicyDisplayAdapter policyDisplayAdapter;
+    private ArrayList<ArrayList<Policy>> typeWisePolicyList;
+
+    private HomeCallback callback;
+    private HashMap<Long, InsuranceProvider> providersHashMap;
 
 
     public HomePoliciesFragment() {
         // Required empty public constructor
     }
 
+    public HomePoliciesFragment(HomeCallback callback) {
+        this.callback = callback;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home_policies, container, false);
+        rootView = inflater.inflate(R.layout.fragment_home_policies, container, false);
+
+        viewModel = ViewModelProviders.of(getActivity()).get(HomeViewModel.class);
+        viewModel.initiateRepo(getContext());
+
+        number = rootView.findViewById(R.id.number);
+        cover = rootView.findViewById(R.id.amount);
+        coverDecimal = rootView.findViewById(R.id.amount_decimal);
+
+        dues = rootView.findViewById(R.id.dues);
+        returns = rootView.findViewById(R.id.returns);
+
+        policies = rootView.findViewById(R.id.policies);
+        typeWisePolicyList = new ArrayList<>();
+        providersHashMap = new HashMap<Long, InsuranceProvider>();
+        policyDisplayAdapter = new PolicyDisplayAdapter(getContext(), typeWisePolicyList, providersHashMap, this);
+
+        policies.setAdapter(policyDisplayAdapter);
+        policies.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+
+        updateChanges();
+
+        return rootView;
     }
 
+    public void updateChanges() {
+        viewModel.fetchProviders().observe(this, new Observer<List<InsuranceProvider>>() {
+            @Override
+            public void onChanged(List<InsuranceProvider> insuranceProviders) {
+                for(int i=0;i<insuranceProviders.size();i++)
+                    providersHashMap.put(insuranceProviders.get(i).getId(),insuranceProviders.get(i));
+                policyDisplayAdapter.notifyDataSetChanged();
+            }
+        });
+        ArrayList<Policy> result = viewModel.fetchedPolicies();
+
+        duesAdapter = new YellowTextAdapter(getContext(),result,providersHashMap, Constants.Policy.DISPLAY_PREMIUM);
+        returnsAdapter = new YellowTextAdapter(getContext(),result,providersHashMap,Constants.Policy.DISPLAY_SUM);
+
+        dues.setAdapter(duesAdapter);
+        returns.setAdapter(returnsAdapter);
+
+        dues.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        returns.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+
+        Double totalCover = Policy.totalCover(result);
+        int cover = (int) Math.floor(totalCover);
+        int coverDecimal = (int) Math.floor((totalCover - cover)*100);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        String moneyString = formatter.format(cover);
+        this.cover.setText(moneyString.substring(1,moneyString.lastIndexOf(".00")));
+        if(coverDecimal/10==0){
+            this.coverDecimal.setText(".0"+coverDecimal);
+        }
+        else {
+            this.coverDecimal.setText("."+coverDecimal);
+        }
+
+        this.number.setText(result.size()+"");
+
+        typeWisePolicyList.clear();
+        for (int i = LIFE_INSURANCE; i <= APPLIANCE_INSURANCE; i++) {
+            typeWisePolicyList.add(new ArrayList<Policy>());
+        }
+        for (int i = 0; i < result.size(); i++) {
+            Policy policy = result.get(i);
+            typeWisePolicyList.get(policy.getType()).add(policy);
+        }
+        policyDisplayAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void add(int type) {
+        callback.addPolicy(type);
+    }
 }

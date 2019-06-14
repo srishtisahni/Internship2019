@@ -3,7 +3,6 @@ package com.example.policyfolio.ViewModels.NavigationViewModels;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -24,9 +23,10 @@ public class AddViewModel extends ViewModel {
     private String policyNumber;
     private int premiumFrequency;
     private String photoUrl;
-    private Long dateEpoch;
+    private Long premiumDateEpoch;
     private String premiumAmount;
     private String coverAmount;
+    private Long matureDateEpoch;
 
     public void initiateRepo(Context context){
         repository = Repository.getInstance(context);
@@ -97,12 +97,20 @@ public class AddViewModel extends ViewModel {
         this.photoUrl = photoUrl;
     }
 
-    public Long getDateEpoch() {
-        return dateEpoch;
+    public Long getPremiumDateEpoch() {
+        return premiumDateEpoch;
     }
 
-    public void setDateEpoch(Long dateEpoch) {
-        this.dateEpoch = dateEpoch;
+    public void setPremiumDateEpoch(Long premiumDateEpoch) {
+        this.premiumDateEpoch = premiumDateEpoch;
+    }
+
+    public Long getMatureDateEpoch() {
+        return matureDateEpoch;
+    }
+
+    public void setMatureDateEpoch(Long matureDateEpoch) {
+        this.matureDateEpoch = matureDateEpoch;
     }
 
     public String getPremiumAmount() {
@@ -122,7 +130,7 @@ public class AddViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> savePolicy() {
-        Policy policy = new Policy(uId,policyNumber,provider.getId(),dateEpoch,premiumFrequency,premiumAmount,coverAmount,type,photoUrl);
+        Policy policy = new Policy(uId,policyNumber,provider.getId(), premiumDateEpoch, matureDateEpoch, premiumFrequency,premiumAmount,coverAmount,type,photoUrl);
         return repository.addPolicy(policy);
     }
 }
