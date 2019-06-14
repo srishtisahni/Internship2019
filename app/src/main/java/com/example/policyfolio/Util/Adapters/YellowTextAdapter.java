@@ -26,6 +26,7 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
     private int type;
 
     public YellowTextAdapter(Context context, ArrayList<Policy> policies, HashMap<Long, InsuranceProvider> providerHashMap,int type){
+        //TODO Set According to Frequency
         this.context = context;
         this.policies = policies;
         this.providerHashMap = providerHashMap;
