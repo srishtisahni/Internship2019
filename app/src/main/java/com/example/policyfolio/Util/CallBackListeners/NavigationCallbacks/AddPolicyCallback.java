@@ -1,4 +1,4 @@
-package com.example.policyfolio.Util.CallBackListeners;
+package com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks;
 
 public interface AddPolicyCallback {
     void next();

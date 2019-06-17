@@ -26,7 +26,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Adapters.BasicDropdownProviderAdapter;
 import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
+import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
 
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package com.example.policyfolio.UI.Fragments.NavigationActionFragments;
 
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -38,7 +37,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Adapters.BasicDropdownNomineeAdapter;
 import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
+import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.NavigationViewModels.AddViewModel;
 
 import java.util.ArrayList;
