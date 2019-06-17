@@ -11,8 +11,13 @@ import com.example.policyfolio.Repo.Repository;
 
 public class PopUpViewModel extends ViewModel {
 
+    //Local User Copy
     private User user = new User();
 
+    //Binded User Live Data
+    private LiveData<User> userLiveData;
+
+    //Repository
     private Repository repository;
 
     public void initiateRepo(Context context) {
@@ -80,7 +85,9 @@ public class PopUpViewModel extends ViewModel {
     }
 
     public LiveData<User> fetchUser(String id) {
-        return repository.fetchUser(id);
+        if(userLiveData == null)
+            userLiveData = repository.fetchUser(id);
+        return userLiveData;
     }
 
     public void updateUser(User user) {

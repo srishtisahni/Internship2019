@@ -8,23 +8,23 @@
         <item
             android:id="@+id/add_policy"
             android:icon="@drawable/ic_note_add_black_24dp"
-            android:title="Add Policy" />
+            android:title="@string/add_policy" />
         <item
             android:id="@+id/renew_policy"
             android:icon="@drawable/ic_autorenew_black_24dp"
-            android:title="Renew Policy" />
+            android:title="@string/renew_policy" />
         <item
             android:id="@+id/claim_support"
             android:icon="@drawable/ic_assignment_late_black_24dp"
-            android:title="Claim Support" />
+            android:title="@string/claim_support" />
         <item
             android:id="@+id/legal_support"
             android:icon="@drawable/ic_business_center_black_24dp"
-            android:title="Legal Support" />
+            android:title="@string/legal_support" />
         <item
             android:id="@+id/nominee_support"
             android:icon="@drawable/ic_group_black_24dp"
-            android:title="Nominee Support" />
+            android:title="@string/nominee_support" />
     </group>
 
     <group android:checkableBehavior="single"
@@ -32,19 +32,19 @@
         <item
             android:id="@+id/promotions"
             android:icon="@drawable/ic_shopping_cart_black_24dp"
-            android:title="Promotions and Offers" />
+            android:title="@string/promotions_and_offers" />
         <item
             android:id="@+id/documents"
             android:icon="@drawable/ic_attach_file_black_24dp"
-            android:title="Document Vault" />
+            android:title="@string/document_vault" />
         <item
             android:id="@+id/faq"
             android:icon="@drawable/ic_speaker_notes_black_24dp"
-            android:title="FAQs" />
+            android:title="@string/faqs" />
         <item
             android:id="@+id/help"
             android:icon="@drawable/ic_live_help_black_24dp"
-            android:title="Need Help" />
+            android:title="@string/need_help" />
     </group>
 
     <group android:checkableBehavior="single"
@@ -52,15 +52,15 @@
             <item
                 android:id="@+id/about_us"
                 android:icon="@drawable/ic_info_outline_black_24dp"
-                android:title="About Us" />
+                android:title="@string/about_us" />
             <item
                 android:id="@+id/legal"
                 android:icon="@drawable/ic_insert_drive_file_black_24dp"
-                android:title="Legal" />
+                android:title="@string/legal" />
             <item
                 android:id="@+id/logout"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
-                android:title="Log Out" />
+                android:title="@string/log_out" />
     </group>
 
 </menu>

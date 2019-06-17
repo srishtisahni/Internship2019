@@ -56,6 +56,8 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
     private HomeCallback callback;
     private HashMap<Long, InsuranceProvider> providersHashMap;
 
+    private ArrayList<Policy> result;
+
 
     public HomePoliciesFragment() {
         // Required empty public constructor
@@ -80,22 +82,34 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
 
         dues = rootView.findViewById(R.id.dues);
         returns = rootView.findViewById(R.id.returns);
-
         policies = rootView.findViewById(R.id.policies);
+
         typeWisePolicyList = new ArrayList<>();
         providersHashMap = new HashMap<Long, InsuranceProvider>();
-        policyDisplayAdapter = new PolicyDisplayAdapter(getContext(), typeWisePolicyList, providersHashMap, this);
+        result = new ArrayList<>();
 
-        policies.setAdapter(policyDisplayAdapter);
-        policies.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-
-        updateChanges();
+        setAdapters();
+        addObservers();
 
         return rootView;
     }
 
-    public void updateChanges() {
-        viewModel.fetchProviders().observe(this, new Observer<List<InsuranceProvider>>() {
+    private void setAdapters() {
+        policyDisplayAdapter = new PolicyDisplayAdapter(getContext(), typeWisePolicyList, providersHashMap, this);
+        duesAdapter = new YellowTextAdapter(getContext(),result,providersHashMap, Constants.Policy.DISPLAY_PREMIUM);
+        returnsAdapter = new YellowTextAdapter(getContext(),result,providersHashMap,Constants.Policy.DISPLAY_SUM);
+
+        dues.setAdapter(duesAdapter);
+        returns.setAdapter(returnsAdapter);
+        policies.setAdapter(policyDisplayAdapter);
+
+        dues.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        returns.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+        policies.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
+    }
+
+    public void addObservers() {
+        viewModel.getProviders().observe(this, new Observer<List<InsuranceProvider>>() {
             @Override
             public void onChanged(List<InsuranceProvider> insuranceProviders) {
                 for(int i=0;i<insuranceProviders.size();i++)
@@ -103,17 +117,17 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
                 policyDisplayAdapter.notifyDataSetChanged();
             }
         });
-        ArrayList<Policy> result = viewModel.fetchedPolicies();
+        viewModel.getPolicies().observe(this, new Observer<List<Policy>>() {
+            @Override
+            public void onChanged(List<Policy> policies) {
+                result.clear();
+                result.addAll(policies);
+                updateChanges();
+            }
+        });
+    }
 
-        duesAdapter = new YellowTextAdapter(getContext(),result,providersHashMap, Constants.Policy.DISPLAY_PREMIUM);
-        returnsAdapter = new YellowTextAdapter(getContext(),result,providersHashMap,Constants.Policy.DISPLAY_SUM);
-
-        dues.setAdapter(duesAdapter);
-        returns.setAdapter(returnsAdapter);
-
-        dues.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-        returns.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-
+    private void updateChanges() {
         Double totalCover = Policy.totalCover(result);
         int cover = (int) Math.floor(totalCover);
         int coverDecimal = (int) Math.floor((totalCover - cover)*100);
@@ -137,7 +151,10 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
             Policy policy = result.get(i);
             typeWisePolicyList.get(policy.getType()).add(policy);
         }
+
         policyDisplayAdapter.notifyDataSetChanged();
+        duesAdapter.notifyDataSetChanged();
+        returnsAdapter.notifyDataSetChanged();
     }
 
 

@@ -13,9 +13,10 @@ public class InsuranceProvider {
     private String name;
     private int type;
     private String photoUrl;
+    private Long lastUpdated;
 
     public InsuranceProvider(){
-
+        setLastUpdated(System.currentTimeMillis());
     }
 
     @Ignore
@@ -24,6 +25,7 @@ public class InsuranceProvider {
         this.name = name;
         this.type = type;
         this.photoUrl = photoUrl;
+        setLastUpdated(System.currentTimeMillis());
     }
 
     @NonNull
@@ -57,5 +59,13 @@ public class InsuranceProvider {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -114,11 +114,7 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                 progressBar.setVisibility(View.GONE);
                 if(aBoolean) {
                     Toast.makeText(PopUpActivity.this, "Information Updated", Toast.LENGTH_LONG).show();
-                    Intent data = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(Constants.User.USER,viewModel.getUser());
-                    data.putExtras(bundle);
-                    setResult(Constants.PermissionAndRequests.UPDATE_RESULT,data);
+                    setResult(Constants.PermissionAndRequests.UPDATE_RESULT);
                     finish();
                 }
                 else {

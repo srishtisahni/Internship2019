@@ -23,5 +23,18 @@
     <string name="total_cover">Total Cover</string>
     <string name="nextDue">Next Due Date Premium</string>
     <string name="returns">Returns</string>
+    <string name="add_policy">Add Policy</string>
+    <string name="renew_policy">Renew Policy</string>
+    <string name="claim_support">Claim Support</string>
+    <string name="legal_support">Legal Support</string>
+    <string name="nominee_support">Nominee Support</string>
+    <string name="promotions_and_offers">Promotions and Offers</string>
+    <string name="document_vault">Document Vault</string>
+    <string name="faqs">FAQs</string>
+    <string name="need_help">Need Help</string>
+    <string name="about_us">About Us</string>
+    <string name="legal">Legal</string>
+    <string name="log_out">Log Out</string>
+    <string name="title_activity_nominee_support">NomineeSupportActivity</string>
 
 </resources>

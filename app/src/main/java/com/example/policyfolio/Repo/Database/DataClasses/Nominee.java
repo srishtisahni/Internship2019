@@ -22,6 +22,7 @@ public class Nominee {
     private String email;
     private String phone;
     private String alternativeNumber;
+    private Long lastUpdated;
 
     @Ignore
     public Nominee(Long id, String userId, String pfId, String name, int relation, String email, String phone, String alternativeNumber){
@@ -33,9 +34,10 @@ public class Nominee {
         this.email = email;
         this.phone = phone;
         this.alternativeNumber = alternativeNumber;
+        setLastUpdated(System.currentTimeMillis());
     }
     public Nominee(){
-
+        setLastUpdated(System.currentTimeMillis());
     }
 
     public String getName() {
@@ -101,5 +103,13 @@ public class Nominee {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

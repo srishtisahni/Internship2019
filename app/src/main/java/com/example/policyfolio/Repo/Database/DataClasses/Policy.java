@@ -30,9 +30,10 @@ public class Policy {
     @NonNull
     private int type;
     private String documentUrl;
+    private Long lastUpdated;
 
     public Policy(){
-
+        setLastUpdated(System.currentTimeMillis());
     }
 
     @Ignore
@@ -47,6 +48,7 @@ public class Policy {
         this.sumAssured = sumAssured;
         this.type = type;
         this.documentUrl = documentUrl;
+        setLastUpdated(System.currentTimeMillis());
     }
 
     @NonNull
@@ -131,6 +133,14 @@ public class Policy {
 
     public void setDocumentUrl(String documentUrl) {
         this.documentUrl = documentUrl;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
     }
 
     @Ignore

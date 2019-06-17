@@ -300,7 +300,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                         case Constants.LoginInInfo.Type.EMAIL:
                             progressBar.setVisibility(View.GONE);
                             fragmentHolder.setAlpha(1f);
-                            addFragment(signUpFragment);
+                            Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
                             break;
                     }
                 }

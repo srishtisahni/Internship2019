@@ -220,4 +220,11 @@ public class AuthManager {
             return nullValue;
         }
     }
+
+    public LiveData<Boolean> logOut(String uid) {
+        MutableLiveData<Boolean> completed = new MutableLiveData<>();
+        mAuth.signOut();
+        completed.setValue(true);
+        return completed;
+    }
 }

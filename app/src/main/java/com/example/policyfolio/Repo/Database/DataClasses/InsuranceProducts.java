@@ -16,16 +16,18 @@ public class InsuranceProducts {
     private String id;
     private Long providerId;
     private String name;
+    private Long lastUpdated;
 
     @Ignore
     public InsuranceProducts(String id, Long providerId, String name){
         this.id = id;
         this.providerId = providerId;
         this.name = name;
+        setLastUpdated(System.currentTimeMillis());
     }
 
     public InsuranceProducts(){
-
+        setLastUpdated(System.currentTimeMillis());
     }
 
     public String getName() {
@@ -50,5 +52,13 @@ public class InsuranceProducts {
 
     public void setProviderId(Long providerId) {
         this.providerId = providerId;
+    }
+
+    public Long getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

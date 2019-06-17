@@ -30,6 +30,7 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     private Repository repository;
 
     private MutableLiveData<Integer> facebookLoginStatus = new MutableLiveData<>();
+    private LiveData<FacebookData> facebookData;
 
     private String email;
     private String phone;
@@ -44,7 +45,9 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     }
 
     public LiveData<FacebookData> fetchFacebookData() {
-        return repository.getFacebookProfile(AccessToken.getCurrentAccessToken());
+        if (facebookData == null)
+            facebookData = repository.getFacebookProfile(AccessToken.getCurrentAccessToken());
+        return facebookData;
     }
 
     public MutableLiveData<Integer> facebookLogin() {
@@ -106,10 +109,6 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
 
     public LiveData<FirebaseUser> signUpPhone(Activity activity) {
         return repository.phoneSignUp(phone, activity);
-    }
-
-    public LiveData<User> fetchUser(String id) {
-        return repository.fetchUser(id);
     }
 
     public void setEmail(String email) {

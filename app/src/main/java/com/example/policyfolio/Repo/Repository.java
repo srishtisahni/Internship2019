@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -19,6 +20,7 @@ import com.example.policyfolio.Repo.Firebase.DataManager;
 import com.example.policyfolio.Repo.Firebase.StorageManager;
 import com.example.policyfolio.Repo.InternalStorage.ImageStorage;
 import com.example.policyfolio.Util.DataFetch.AppExecutors;
+import com.example.policyfolio.Util.DataFetch.Cache;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,6 +37,7 @@ public class Repository {
     private AppDatabase appDatabase;
     private ImageStorage imageStorage;
     private AppExecutors appExecutors;
+    private Cache cache;
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
@@ -44,6 +47,7 @@ public class Repository {
         appDatabase = AppDatabase.getInstance(context);
         imageStorage = ImageStorage.getInstance(context);
         appExecutors = new AppExecutors();
+        cache = Cache.getInstance();
     }
 
     //All **UPDATES** on the **LOCAL DATABASE** occur on the background thread
@@ -109,13 +113,17 @@ public class Repository {
 
 
     public LiveData<User> fetchUser(final String id) {
-        dataManager.fetchUser(id,appDatabase);                     //Updates changes from firebase
-        return appDatabase.policyFolioDao().getUser(id);           //Returns Live data from the local database
+        if(cache.getUser(id) == null)
+            cache.setUser(id, appDatabase.policyFolioDao().getUser(id));    //Updates Cache
+        dataManager.fetchUser(id,appDatabase);                      //Updates changes from firebase
+        return cache.getUser(id);                                   //Returns Live data from cache
     }
 
     public LiveData<List<Policy>> fetchPolicies(final String id) {
+        if(cache.getPolicies(id) == null)
+            cache.setPolicies(id,appDatabase.policyFolioDao().getPolicies(id));     //Updates Cache
         dataManager.fetchPolicies(id,appDatabase);                  //Updates changes from firebase
-        return appDatabase.policyFolioDao().getPolicies(id);        //Returns Live Data from Local database
+        return cache.getPolicies(id);                               //Returns Live Data from Cache
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
@@ -132,13 +140,17 @@ public class Repository {
     }
 
     public LiveData<List<InsuranceProvider>> fetchProviders(final int type) {
+        if(cache.getProviders(type) == null)
+            cache.setProviders(type, appDatabase.policyFolioDao().getProvidersFromType(type));  //Updates Cache
         dataManager.fetchProviders(type,appDatabase);                           //Updates the local database from firebase
-        return appDatabase.policyFolioDao().getProvidersFromType(type);         //Returns live data from local database
+        return cache.getProviders(type);                                        //Returns live data from Cache
     }
 
     public LiveData<List<Nominee>> fetchNominees(final String uId) {
+        if(cache.getNominees(uId) == null)
+            cache.setNominees(uId,appDatabase.policyFolioDao().getNomineesForUser(uId)); //Updates Cache
         dataManager.fetchNominees(uId,appDatabase);                             //Updates the local database from firebase
-        return appDatabase.policyFolioDao().getNomineesForUser(uId);            //Returns live data from local database
+        return cache.getNominees(uId);                                          //Returns live data from Cache
     }
 
     public LiveData<String> saveImage(Bitmap bmp, String uId, String policyNumber) {
@@ -157,7 +169,14 @@ public class Repository {
     }
 
     public LiveData<List<InsuranceProvider>> fetchAllProviders() {
+        if(cache.getAllProviders() == null)
+            cache.setAllProviders(appDatabase.policyFolioDao().getProviders());     //Updates cache
         dataManager.fetchProviders(appDatabase);                           //Updates the local database from firebase
-        return appDatabase.policyFolioDao().getProviders();
+//        Log.e("PROVIDERS",cache.getAllProviders().toString());
+        return cache.getAllProviders();                                    //Returns live data from Cache
+    }
+
+    public LiveData<Boolean> logOut(String uid) {
+        return authentication.logOut(uid);
     }
 }

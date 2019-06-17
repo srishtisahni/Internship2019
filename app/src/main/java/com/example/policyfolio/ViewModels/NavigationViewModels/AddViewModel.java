@@ -11,6 +11,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class AddViewModel extends ViewModel {
@@ -28,6 +29,9 @@ public class AddViewModel extends ViewModel {
     private String coverAmount;
     private Long matureDateEpoch;
 
+    private HashMap<Integer,LiveData<List<InsuranceProvider>>> providers = new HashMap<>();
+    private LiveData<List<Nominee>> nominees;
+
     public void initiateRepo(Context context){
         repository = Repository.getInstance(context);
     }
@@ -38,7 +42,13 @@ public class AddViewModel extends ViewModel {
 
     public LiveData<List<InsuranceProvider>> setType(int type) {
         this.type = type;
-        return repository.fetchProviders(type);
+        return getProviders();
+    }
+
+    private LiveData<List<InsuranceProvider>> getProviders() {
+        if(providers.get(type) == null)
+            providers.put(type,repository.fetchProviders(type));
+        return providers.get(type);
     }
 
     public void setProvider(InsuranceProvider provider) {
@@ -66,7 +76,9 @@ public class AddViewModel extends ViewModel {
     }
 
     public LiveData<List<Nominee>> fetchNominees() {
-        return repository.fetchNominees(uId);
+        if(nominees == null)
+            nominees = repository.fetchNominees(uId);
+        return nominees;
     }
 
     public String getuId() {

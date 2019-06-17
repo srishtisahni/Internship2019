@@ -1,15 +1,12 @@
 package com.example.policyfolio.Repo.Database.DataClasses;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class User implements Parcelable {
+public class User {
     //User Information
     @NonNull
     @PrimaryKey
@@ -24,6 +21,7 @@ public class User implements Parcelable {
     private boolean complete;
     private String firstName;
     private String lastName;
+    private Long lastUpdated;
 
     @Ignore
     public User(String id, String email, String phone, String name, Long birthday, int gender, String city,int type){
@@ -37,6 +35,7 @@ public class User implements Parcelable {
         this.type = type;
         setComplete();
         splitName();
+        setLastUpdated(System.currentTimeMillis());
     }
 
     private void splitName() {
@@ -56,40 +55,13 @@ public class User implements Parcelable {
     public User(String id) {
         this.id = id;
         setComplete();
+        setLastUpdated(System.currentTimeMillis());
     }
 
     public User() {
         setComplete();
+        setLastUpdated(System.currentTimeMillis());
     }
-
-    protected User(Parcel in) {
-        id = in.readString();
-        email = in.readString();
-        phone = in.readString();
-        name = in.readString();
-        city = in.readString();
-        if (in.readByte() == 0) {
-            birthday = null;
-        } else {
-            birthday = in.readLong();
-        }
-        gender = in.readInt();
-        firstName = in.readString();
-        lastName = in.readString();
-        complete = in.readByte() != 0;
-    }
-
-    public static final Creator<User> CREATOR = new Creator<User>() {
-        @Override
-        public User createFromParcel(Parcel in) {
-            return new User(in);
-        }
-
-        @Override
-        public User[] newArray(int size) {
-            return new User[size];
-        }
-    };
 
     @NonNull
     public String getId() {
@@ -194,22 +166,11 @@ public class User implements Parcelable {
         this.complete = email!=null && id!=null && phone!=null && name!=null && birthday!=null && city!=null && type!=null;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public Long getLastUpdated() {
+        return lastUpdated;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(email);
-        parcel.writeString(phone);
-        parcel.writeString(name);
-        parcel.writeString(city);
-        parcel.writeLong(birthday);
-        parcel.writeInt(gender);
-        parcel.writeString(firstName);
-        parcel.writeString(lastName);
-        parcel.writeByte((byte) (complete ? 1 : 0));
+    public void setLastUpdated(Long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -16,7 +16,6 @@ import com.example.policyfolio.UI.Fragments.HomePoliciesFragment;
 import com.example.policyfolio.UI.Fragments.HomeStartupFragment;
 import com.example.policyfolio.ViewModels.HomeViewModel;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 
 import android.view.View;
 import android.widget.FrameLayout;
@@ -54,6 +53,8 @@ public class HomeActivity extends AppCompatActivity
     private HomeStartupFragment homeStartupFragment;
     private HomePoliciesFragment homePoliciesFragment;
 
+    private Toast timeToast;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,21 +73,63 @@ public class HomeActivity extends AppCompatActivity
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         viewModel.initiateRepo(this);
 
+        setUpDrawer();
+        fetchInfo();
+        getUser();
+    }
+
+    private void getUser() {
         viewModel.getUser().observe(this, new Observer<User>() {
             @Override
-            public void onChanged(@Nullable User user) {                    //Update the action bar with the Person's name once the user is fetched
-                if(user.getName()!=null){
-                    fragmentHolder.setAlpha(1f);
-                    progressBar.setVisibility(View.GONE);
-                    getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
-                    name.setText(user.getFirstName());
+            public void onChanged(@Nullable User user) {
+                fragmentHolder.setAlpha(1f);
+                progressBar.setVisibility(View.GONE);
+                if(user!=null){
+                    getTimeToast(user.getLastUpdated());
+                    if(user.getName()!=null){
+                        getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
+                        name.setText(user.getFirstName());
+                    }
+                    if(!user.isComplete()){                                        //If user information is not complete, generate a pop up to fetch information
+                        Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
+                        intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
+                        intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
+                        startActivityForResult(intent, Constants.PermissionAndRequests.UPDATE_REQUEST);
+                    }
+                    else{
+                        renderFragment();                                       //Render UI based on the user info
+                    }
                 }
             }
         });
+    }
 
-        setUpDrawer();
-
-        fetchInfo();
+    private void getTimeToast(Long lastUpdated) {
+        if(timeToast!=null)
+            timeToast.cancel();
+        Long timeDiffernce = System.currentTimeMillis() - lastUpdated;
+        int sec = (int) (timeDiffernce/1000);
+        int minutes = (int) (timeDiffernce/(1000*60));
+        int hours = (int) (timeDiffernce/(1000*60*60));
+        int days = (int) (timeDiffernce/(1000*60*60*24));
+        String time = "";
+        if(days!=0)
+            time = time + days + " days ";
+        if(hours!=0)
+            time = time + hours + " hours";
+        if(minutes!=0)
+            time = time + minutes + " mins ";
+        if(sec!=0)
+            time = time + sec + " secs ";
+        if(time.length()>0) {
+            time = time + "ago";
+            timeToast = Toast.makeText(this,"Updated "+time,Toast.LENGTH_SHORT);
+        }
+        else {
+            timeToast = null;
+        }
+        if(timeToast!=null)
+            timeToast.show();
     }
 
     private void fetchInfo() {
@@ -101,43 +144,28 @@ public class HomeActivity extends AppCompatActivity
             viewModel.setType(bundle.getInt(Constants.LoginInInfo.TYPE));
             viewModel.setUid(bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
         }
-        viewModel.fetchUser().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(@Nullable User user) {
-                if(user!=null){
-                    if(!user.isComplete()){                                        //If user information is not complete, generate a pop up to fetch information
-                        Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
-                        intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
-                        intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
-                        startActivityForResult(intent, Constants.PermissionAndRequests.UPDATE_REQUEST);
-                    }
-                    else{
-                        viewModel.updateUser(user);                                 //Update local user info stored in the view model
-                        renderFragment(user);                                       //Render UI based on the user info
-                    }
-                }
-                else {
-                    Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_SHORT).show();
-                    Snackbar.make(snackBar,"Please Check you Internet Connection and Retry",Snackbar.LENGTH_LONG).show();
-                }
-            }
-        });
     }
 
-    private void renderFragment(User user) {
-        viewModel.fetchPolicies(user.getId()).observe(this, new Observer<List<Policy>>() {
+    private void renderFragment() {
+        fragmentHolder.setAlpha(.4f);
+        progressBar.setVisibility(View.VISIBLE);
+        viewModel.getPolicies().observe(this, new Observer<List<Policy>>() {
             @Override
             public void onChanged(List<Policy> policies) {
+                fragmentHolder.setAlpha(1f);
+                progressBar.setVisibility(View.GONE);
                 if(policies!=null){                                                                 //Rendering multiple policy fragment
-                    viewModel.updatePolicies(policies);
                     if(policies.size()==0)                                                          //If no policies are added yet, render zero policy fragment
                         zeroPolicies();
-                    else
+                    else {
+                        Long time = Long.valueOf(0);
+                        for(int i=0;i<policies.size();i++){
+                            if(time < policies.get(i).getLastUpdated())
+                                time = policies.get(i).getLastUpdated();
+                        }
+                        getTimeToast(time);
                         policies();
-                }
-                else {
-                    Toast.makeText(HomeActivity.this,"Fetching Error Occurred",Toast.LENGTH_SHORT).show();
-                    Snackbar.make(snackBar,"Please Check you Internet Connection and Retry",Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
         });
@@ -148,13 +176,11 @@ public class HomeActivity extends AppCompatActivity
             homePoliciesFragment = new HomePoliciesFragment(this);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homePoliciesFragment).commit();
         }
-        else
-            homePoliciesFragment.updateChanges();
     }
 
     private void zeroPolicies() {
         homeStartupFragment = new HomeStartupFragment(this);
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, homeStartupFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeStartupFragment).commit();
     }
 
 
@@ -214,9 +240,35 @@ public class HomeActivity extends AppCompatActivity
                 item.setChecked(false);
                 addPolicy();
                 break;
+            case R.id.logout:
+                item.setChecked(false);
+                logOut();
+                break;
+            case R.id.nominee_support:
+
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void logOut() {
+        viewModel.logOut().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean){
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.commit();
+
+                    Intent intent = new Intent(HomeActivity.this,LoginSignUpActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(HomeActivity.this,"LogOut Failed",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     @Override
@@ -224,11 +276,10 @@ public class HomeActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constants.PermissionAndRequests.UPDATE_REQUEST && resultCode == Constants.PermissionAndRequests.UPDATE_RESULT){
-            viewModel.updateUser((User) data.getParcelableExtra(Constants.User.USER));                  //On Result from pop up, update the user info
-            renderFragment((User) data.getParcelableExtra(Constants.User.USER));                        //Render Fragments based on user information
+//            renderFragment();                                       //Render Fragments based on user information
         }
         if(requestCode == Constants.PermissionAndRequests.ADD_POLICY_REQUEST && resultCode == Constants.PermissionAndRequests.ADD_POLICY_RESULT){
-            policies();
+//            policies();
         }
     }
 

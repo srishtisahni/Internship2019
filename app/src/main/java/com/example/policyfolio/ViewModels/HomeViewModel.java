@@ -1,6 +1,7 @@
 package com.example.policyfolio.ViewModels;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -17,10 +18,17 @@ import java.util.List;
 
 public class HomeViewModel extends ViewModel {
 
-    private int type;
-    private MutableLiveData<User> user = new MutableLiveData<>();
-    private ArrayList<Policy> policies = new ArrayList<>();
+    //Instance of the Repository
     private Repository repository;
+
+    //Binded Live Data
+    private LiveData<User> user;
+    private LiveData<List<Policy>> policies;
+    private LiveData<List<InsuranceProvider>> providers;
+
+    //Private data information
+    private int type;
+    private String Uid;
 
     public void initiateRepo(Context context) {
         repository = Repository.getInstance(context);
@@ -34,40 +42,34 @@ public class HomeViewModel extends ViewModel {
         return type;
     }
 
-    public void setUid(String firebaseToken) {
-        user.setValue(new User(firebaseToken));
+    public void setUid(String Uid) {
+        this.Uid = Uid;
     }
 
     public String getUid() {
-        return user.getValue().getId();
-    }
-
-    public LiveData<User> fetchUser() {
-        return repository.fetchUser(user.getValue().getId());
+        return Uid;
     }
 
     public LiveData<User> getUser() {
+        if(user == null)
+            user = repository.fetchUser(Uid);
         return user;
     }
 
-    public LiveData<List<Policy>> fetchPolicies(String id) {
-        return repository.fetchPolicies(id);
-    }
-
-    public void updateUser(User user) {
-        this.user.setValue(user);
-    }
-
-    public void updatePolicies(List<Policy> policies) {
-        this.policies.clear();
-        this.policies.addAll(policies);
-    }
-
-    public ArrayList<Policy> fetchedPolicies() {
+    public LiveData<List<Policy>> getPolicies() {
+        if(policies == null)
+            policies = repository.fetchPolicies(Uid);
         return policies;
     }
 
-    public LiveData<List<InsuranceProvider>> fetchProviders() {
-        return repository.fetchAllProviders();
+    public LiveData<List<InsuranceProvider>> getProviders() {
+        if(providers == null)
+            providers = repository.fetchAllProviders();
+//        Log.e("PROVIDERS",providers.toString());
+        return providers;
+    }
+
+    public LiveData<Boolean> logOut() {
+        return repository.logOut(Uid);
     }
 }

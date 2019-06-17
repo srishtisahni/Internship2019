@@ -3,6 +3,7 @@ package com.example.policyfolio.ViewModels;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -19,7 +20,7 @@ public class WelcomeViewModel extends ViewModel {
         repository = Repository.getInstance(context);
     }
 
-    public MutableLiveData<LogInData> getLoginStatus(SharedPreferences sharedPreferences) {
+    public LiveData<LogInData> getLoginStatus(SharedPreferences sharedPreferences) {
         fetchSharedPreference(sharedPreferences);
         return userLoggedIn;
     }
