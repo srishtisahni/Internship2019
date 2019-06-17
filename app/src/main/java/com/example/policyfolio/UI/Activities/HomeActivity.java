@@ -132,6 +132,8 @@ public class HomeActivity extends AppCompatActivity
             timeToast.show();
     }
 
+    //TODO Progress
+
     private void fetchInfo() {
         Bundle bundle = getIntent().getExtras();
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
