@@ -213,6 +213,11 @@ public class Repository {
     }
 
     public void deleteAllNotifications() {
-        appDatabase.policyFolioDao().deleteAllNotifications();
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDatabase.policyFolioDao().deleteAllNotifications();
+            }
+        });
     }
 }

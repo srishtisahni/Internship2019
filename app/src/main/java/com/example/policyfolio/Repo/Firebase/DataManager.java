@@ -34,8 +34,6 @@ public class DataManager {
         appExecutors = new AppExecutors();
     }
 
-    //All **EXCEPTIONS** are printed in error log with the tag "EXCEPTION" along with the exception Message
-
     public static DataManager getInstance() {
         //Singleton Pattern
         if(INSTANCE == null)
@@ -63,7 +61,6 @@ public class DataManager {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         update.setValue(false);
-                        Log.e("EXCEPTION", e.getMessage());
                     }
                 });
         return update;
@@ -86,9 +83,6 @@ public class DataManager {
                                         appDatabase.policyFolioDao().putUser(user);
                                 }
                             });
-                        }
-                        else {
-                            Log.e("EXCEPTION",task.getException().getMessage());
                         }
                     }
                 });
@@ -114,9 +108,6 @@ public class DataManager {
                                     appDatabase.policyFolioDao().putPolicies(policies);
                                 }
                             });
-                        }
-                        else {
-                            Log.e("EXCEPTION",task.getException().getMessage());
                         }
                     }
                 });
@@ -149,7 +140,6 @@ public class DataManager {
                             }
                         }
                         else {
-                            Log.e("EXCEPTION",task.getException().getMessage());
                             result.setValue(null);                      //Returns null in case of an exception
                         }
                     }
@@ -184,7 +174,6 @@ public class DataManager {
                             }
                         }
                         else {
-                            Log.e("EXCEPTION",task.getException().getMessage());
                             result.setValue(null);                          //Returns null in case of an exception
                         }
                     }
@@ -212,9 +201,6 @@ public class DataManager {
                                 }
                             });
                         }
-                        else {
-                            Log.e("EXCEPTION", task.getException().getMessage());
-                        }
                     }
                 });
     }
@@ -237,9 +223,6 @@ public class DataManager {
                                     appDatabase.policyFolioDao().putProviders(insuranceProviders);
                                 }
                             });
-                        }
-                        else {
-                            Log.e("EXCEPTION", task.getException().getMessage());
                         }
                     }
                 });
@@ -266,9 +249,6 @@ public class DataManager {
                                 }
                             });
                         }
-                        else {
-                            Log.e("EXCEPTION", task.getException().getMessage());
-                        }
                     }
                 });
     }
@@ -288,7 +268,6 @@ public class DataManager {
                             complete.setValue(true);                                                //Return true if Policy is added to firestore
                         else {
                             complete.setValue(false);
-                            Log.e("EXCEPTION",task.getException().getMessage());
                         }
                     }
                 });
@@ -311,7 +290,6 @@ public class DataManager {
                                 updated.setValue(true);
                             else {
                                 updated.setValue(false);
-                                Log.e("EXCEPTION", task.getException().getMessage());
                             }
                         }
                     });

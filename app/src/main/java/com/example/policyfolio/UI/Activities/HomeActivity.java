@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
@@ -95,8 +96,6 @@ public class HomeActivity extends AppCompatActivity
         viewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User user) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
                 if(user!=null){
                     getTimeToast(user.getLastUpdated());
                     if(user.getName()!=null){
@@ -132,7 +131,7 @@ public class HomeActivity extends AppCompatActivity
         if(days!=0)
             time = time + days + " days ";
         if(hours!=0)
-            time = time + hours + " hours";
+            time = time + hours + " hours ";
         if(minutes!=0)
             time = time + minutes + " mins ";
         if(sec!=0)
@@ -163,13 +162,9 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void policyUpdate() {
-        fragmentHolder.setAlpha(.4f);
-        progressBar.setVisibility(View.VISIBLE);
         viewModel.getPolicies().observe(this, new Observer<List<Policy>>() {
             @Override
             public void onChanged(List<Policy> policies) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
                 if(policies!=null){                                                                 //Rendering multiple policy fragment
                     if(policies.size()==0)                                                          //If no policies are added yet, render zero policy fragment
                         zeroPoliciesFragment();
@@ -291,6 +286,10 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homePoliciesFragment).commit();
         }
         homePoliciesFragment.setPolicies(policies);
+
+
+        fragmentHolder.setAlpha(1f);
+        progressBar.setVisibility(View.GONE);
     }
 
     private void updatePaidStatus(List<Policy> policies) {
@@ -317,6 +316,10 @@ public class HomeActivity extends AppCompatActivity
     private void zeroPoliciesFragment() {
         homeStartupFragment = new HomeStartupFragment(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeStartupFragment).commit();
+
+
+        fragmentHolder.setAlpha(1f);
+        progressBar.setVisibility(View.GONE);
     }
 
 
@@ -390,36 +393,44 @@ public class HomeActivity extends AppCompatActivity
     private void logOut() {
         fragmentHolder.setAlpha(.4f);
         progressBar.setVisibility(View.VISIBLE);
+        cancelNotifications();
+        viewModel.logOut().observe(HomeActivity.this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                fragmentHolder.setAlpha(1f);
+                progressBar.setVisibility(View.GONE);
+                if(aBoolean){
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+
+                    Intent intent = new Intent(HomeActivity.this,LoginSignUpActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    Toast.makeText(HomeActivity.this,"LogOut Failed",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void cancelNotifications() {
         viewModel.getAllNotificatios().observe(this, new Observer<List<Notifications>>() {
             @Override
             public void onChanged(List<Notifications> notifications) {
-                for(int i=0;i<notifications.size();i++) {
-                    AlarmManager alarm= (AlarmManager) getSystemService(ALARM_SERVICE);
-                    Intent intent=new Intent(HomeActivity.this,PremiumDuesReceiver.class);
-                    PendingIntent pendingIntent=PendingIntent.getBroadcast(HomeActivity.this, (int) notifications.get(i).getId(),intent,PendingIntent.FLAG_NO_CREATE);
-                    if(pendingIntent!=null) {
-                        alarm.cancel(pendingIntent);
+                if(!notifications.isEmpty()) {
+                    for (int i = 0; i < notifications.size(); i++) {
+                        AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+                        Intent intent = new Intent(HomeActivity.this, PremiumDuesReceiver.class);
+                        PendingIntent pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
+                        if (pendingIntent != null) {
+                            alarm.cancel(pendingIntent);
+                        }
                     }
                     viewModel.deleteAllNotifications();
-                    viewModel.logOut().observe(HomeActivity.this, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(Boolean aBoolean) {
-                            fragmentHolder.setAlpha(1f);
-                            progressBar.setVisibility(View.GONE);
-                            if(aBoolean){
-                                SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
-                                SharedPreferences.Editor editor = sharedPreferences.edit();
-                                editor.clear();
-                                editor.commit();
-
-                                Intent intent = new Intent(HomeActivity.this,LoginSignUpActivity.class);
-                                startActivity(intent);
-                            }
-                            else {
-                                Toast.makeText(HomeActivity.this,"LogOut Failed",Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
+                    Log.e("NOTIFICATIONS", "Cancelled");
                 }
             }
         });
