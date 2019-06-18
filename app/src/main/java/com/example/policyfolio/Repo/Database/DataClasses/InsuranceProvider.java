@@ -16,7 +16,7 @@ public class InsuranceProvider {
     private Long lastUpdated;
 
     public InsuranceProvider(){
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     @Ignore
@@ -25,7 +25,7 @@ public class InsuranceProvider {
         this.name = name;
         this.type = type;
         this.photoUrl = photoUrl;
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     @NonNull

@@ -67,7 +67,7 @@ public class InfoPopUp extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_info_pop_up, container, false);
+        rootView = inflater.inflate(R.layout.pop_up_info, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
         viewModel.initiateRepo(getContext());
 
@@ -113,7 +113,7 @@ public class InfoPopUp extends Fragment {
         if(viewModel.getPhone()!= null)
             phone.setText(viewModel.getPhone());
         if (viewModel.getBirthday()!=null) {
-            birthday.setText(Constants.DATE_FORMAT.format(viewModel.getBirthday()));
+            birthday.setText(Constants.Time.DATE_FORMAT.format(viewModel.getBirthday()*1000));
             birthdayEpoch = viewModel.getBirthday();
             birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
@@ -195,16 +195,16 @@ public class InfoPopUp extends Fragment {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                 calendar.set(year,monthOfYear,dayOfMonth);
-                birthdayEpoch = calendar.getTimeInMillis();
-                birthday.setText(Constants.DATE_FORMAT.format(birthdayEpoch));
+                birthdayEpoch = (calendar.getTimeInMillis())/1000;
+                birthday.setText(Constants.Time.DATE_FORMAT.format(birthdayEpoch*1000));
                 birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                dialog.dismiss();
             }
         });
         dialog.show();
     }
 
     private void setGenderAdapter() {
+        //TODO Replace with Recycler View
         genderAdapter =  ArrayAdapter.createFromResource(getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
         genderAdapter.setDropDownViewResource(R.layout.dropdown_sign_up_fragment);
         gender.setAdapter(genderAdapter);

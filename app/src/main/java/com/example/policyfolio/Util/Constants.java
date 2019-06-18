@@ -7,9 +7,15 @@ public class Constants {
     public static final String LOGIN_SHARED_PREFERENCE_KEY = "user_logged_in";
     public static final String DATABASE_NAME = "policy_folio_database";
     public static final int DATABASE_VERSION = 1;
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
     public static final String IMAGE_DIRECTORY = "Images";
 
+    public static class Time{
+        public static final long EPOCH_DAY = 86400;
+        public static final long EPOCH_WEEK = 604800;
+        public static final long EPOCH_MONTH = 2629743;
+
+        public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
+    }
     public static class User {
         public static final String EMAIL = "email";
         public static final String USER = "user";
@@ -24,7 +30,6 @@ public class Constants {
         }
     }
     public static class Policy{
-        public static final long EPOCH_MONTH = 2678400;
         public static final int DISPLAY_PREMIUM = 0;
         public static final int DISPLAY_SUM = 1;
 

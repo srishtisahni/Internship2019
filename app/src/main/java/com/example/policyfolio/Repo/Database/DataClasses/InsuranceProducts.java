@@ -23,11 +23,11 @@ public class InsuranceProducts {
         this.id = id;
         this.providerId = providerId;
         this.name = name;
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     public InsuranceProducts(){
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     public String getName() {

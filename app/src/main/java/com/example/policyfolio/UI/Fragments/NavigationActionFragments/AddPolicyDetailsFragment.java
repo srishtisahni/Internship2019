@@ -233,9 +233,9 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year,monthOfYear,dayOfMonth);
-                        premiumDateEpoch = calendar.getTimeInMillis();
+                        premiumDateEpoch = (calendar.getTimeInMillis())/1000;
                         viewModel.setPremiumDateEpoch(premiumDateEpoch);
-                        premiumDate.setText(Constants.DATE_FORMAT.format(premiumDateEpoch));
+                        premiumDate.setText(Constants.Time.DATE_FORMAT.format(premiumDateEpoch*1000));
                         premiumDate.setPadding(0,4,0,4);
                         premiumDate.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         premiumDateImage.setVisibility(View.GONE);
@@ -263,9 +263,9 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year,monthOfYear,dayOfMonth);
-                        matureDateEpoch = calendar.getTimeInMillis();
+                        matureDateEpoch = (calendar.getTimeInMillis())/1000;
                         viewModel.setMatureDateEpoch(matureDateEpoch);
-                        matureDate.setText(Constants.DATE_FORMAT.format(matureDateEpoch));
+                        matureDate.setText(Constants.Time.DATE_FORMAT.format(matureDateEpoch*1000));
                         matureDate.setPadding(0,4,0,4);
                         matureDate.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         matureDateImage.setVisibility(View.GONE);

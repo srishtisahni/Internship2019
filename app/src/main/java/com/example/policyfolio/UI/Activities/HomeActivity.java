@@ -107,11 +107,11 @@ public class HomeActivity extends AppCompatActivity
     private void getTimeToast(Long lastUpdated) {
         if(timeToast!=null)
             timeToast.cancel();
-        Long timeDiffernce = System.currentTimeMillis() - lastUpdated;
-        int sec = (int) (timeDiffernce/1000);
-        int minutes = (int) (timeDiffernce/(1000*60));
-        int hours = (int) (timeDiffernce/(1000*60*60));
-        int days = (int) (timeDiffernce/(1000*60*60*24));
+        Long timeDiffernce = (System.currentTimeMillis()/1000) - lastUpdated;
+        long days = timeDiffernce/(60*60*24);
+        long hours = (timeDiffernce%(60*60*24))/60*60;
+        long minutes = ((timeDiffernce%(60*60*24))%60*60)/60;
+        long sec = ((timeDiffernce%(60*60*24))%60*60)%60;
         String time = "";
         if(days!=0)
             time = time + days + " days ";
@@ -131,8 +131,6 @@ public class HomeActivity extends AppCompatActivity
         if(timeToast!=null)
             timeToast.show();
     }
-
-    //TODO Progress
 
     private void fetchInfo() {
         Bundle bundle = getIntent().getExtras();

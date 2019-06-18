@@ -34,10 +34,10 @@ public class Nominee {
         this.email = email;
         this.phone = phone;
         this.alternativeNumber = alternativeNumber;
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
     public Nominee(){
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     public String getName() {

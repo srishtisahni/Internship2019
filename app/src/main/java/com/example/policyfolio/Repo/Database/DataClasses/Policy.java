@@ -33,7 +33,7 @@ public class Policy {
     private Long lastUpdated;
 
     public Policy(){
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     @Ignore
@@ -48,7 +48,7 @@ public class Policy {
         this.sumAssured = sumAssured;
         this.type = type;
         this.documentUrl = documentUrl;
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     @NonNull

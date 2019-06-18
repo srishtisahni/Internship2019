@@ -35,7 +35,7 @@ public class User {
         this.type = type;
         setComplete();
         splitName();
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     private void splitName() {
@@ -55,12 +55,12 @@ public class User {
     public User(String id) {
         this.id = id;
         setComplete();
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     public User() {
         setComplete();
-        setLastUpdated(System.currentTimeMillis());
+        setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     @NonNull
