@@ -4,10 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
@@ -25,6 +26,7 @@ import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Repository {
@@ -178,5 +180,39 @@ public class Repository {
 
     public LiveData<Boolean> logOut(String uid) {
         return authentication.logOut(uid);
+    }
+
+    public LiveData<Boolean> updatePolicies(String uid, final List<Policy> policies) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDatabase.policyFolioDao().putPolicies(policies);
+            }
+        });
+        return dataManager.updatePolicies(uid,policies);
+    }
+
+    public LiveData<List<Notifications>> getNotifications(String policyNumber) {
+        if(cache.getNotifications(policyNumber) == null)
+            cache.setNotifications(policyNumber,appDatabase.policyFolioDao().getNotifications(policyNumber));
+        return cache.getNotifications(policyNumber);
+    }
+
+    public LiveData<List<Long>> addNotifications(final ArrayList<Notifications> notifications) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDatabase.policyFolioDao().putNotifications(notifications);
+            }
+        });
+        return appDatabase.policyFolioDao().getNotificationIds(notifications.get(0).getPolicyNumber());
+    }
+
+    public LiveData<List<Notifications>> getAllNotifications() {
+        return appDatabase.policyFolioDao().getAllNotifications();
+    }
+
+    public void deleteAllNotifications() {
+        appDatabase.policyFolioDao().deleteAllNotifications();
     }
 }

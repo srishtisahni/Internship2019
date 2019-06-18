@@ -13,10 +13,15 @@
         android:roundIcon="@mipmap/logo_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name=".Util.Receivers.PremiumDuesReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
         <activity
             android:name=".UI.Activities.NavigationActionActivities.NomineeSupportActivity"
             android:label="@string/title_activity_nominee_support"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UI.Activities.NavigationActionActivities.AddPolicyActivity"
             android:label="@string/title_activity_add_policy"

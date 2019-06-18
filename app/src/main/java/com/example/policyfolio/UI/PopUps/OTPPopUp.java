@@ -20,7 +20,7 @@ public class OTPPopUp extends Fragment {
     public OTPPopUp() {
         // Required empty public constructor
     }
-
+    //TODO Enter OTP
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

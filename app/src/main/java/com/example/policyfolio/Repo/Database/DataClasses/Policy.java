@@ -27,6 +27,7 @@ public class Policy {
     private Integer frequency;
     private String premium;
     private String sumAssured;
+    private Boolean paid;
     @NonNull
     private int type;
     private String documentUrl;
@@ -37,7 +38,7 @@ public class Policy {
     }
 
     @Ignore
-    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate,Long matureDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl){
+    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate,Long matureDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl,Boolean paid){
         this.userId = id;
         this.policyNumber = pNum;
         this.insuranceProviderId = insuranceProviderId;
@@ -48,6 +49,7 @@ public class Policy {
         this.sumAssured = sumAssured;
         this.type = type;
         this.documentUrl = documentUrl;
+        this.paid = paid;
         setLastUpdated(System.currentTimeMillis()/1000);
     }
 
@@ -141,6 +143,14 @@ public class Policy {
 
     public Long getLastUpdated() {
         return lastUpdated;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
     }
 
     @Ignore

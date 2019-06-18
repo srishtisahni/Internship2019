@@ -26,9 +26,18 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
     private int type;
 
     public YellowTextAdapter(Context context, ArrayList<Policy> policies, HashMap<Long, InsuranceProvider> providerHashMap,int type){
-        //TODO Set According to Frequency
         this.context = context;
-        this.policies = policies;
+        this.policies = new ArrayList<>();
+        if(type == Constants.Policy.DISPLAY_PREMIUM) {
+            for (int i = 0; i < policies.size(); i++)
+                if ((!policies.get(i).getPaid()) || (policies.get(i).getNextDueDate() <= (System.currentTimeMillis() / 1000 + Constants.Time.EPOCH_WEEK * 2)))
+                    this.policies.add(policies.get(i));
+        }
+        else {
+            for (int i = 0; i < policies.size(); i++)
+                if ((!policies.get(i).getPaid()) || (policies.get(i).getMatureDate() <= (System.currentTimeMillis() / 1000 + Constants.Time.EPOCH_YEAR)))
+                    this.policies.add(policies.get(i));
+        }
         this.providerHashMap = providerHashMap;
         this.type = type;
     }
@@ -45,13 +54,21 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         InsuranceProvider provider = providerHashMap.get(policies.get(position).getInsuranceProviderId());
+        if(policies.get(position).getPaid()){
+            holder.textView.setTextColor(context.getResources().getColor(R.color.yellow));
+            holder.amount.setTextColor(context.getResources().getColor(R.color.yellow));
+        }
+        else {
+            holder.textView.setTextColor(context.getResources().getColor(R.color.red));
+            holder.amount.setTextColor(context.getResources().getColor(R.color.red));
+        }
         if(provider!=null) {
             if(type==Constants.Policy.DISPLAY_PREMIUM) {
-                holder.textView.setText("- " + Constants.DATE_FORMAT.format(new Date(policies.get(position).getNextDueDate())) + " | " + provider.getName());
+                holder.textView.setText("- " + Constants.Time.DATE_FORMAT.format(new Date(policies.get(position).getNextDueDate()*1000)) + " | " + provider.getName());
                 holder.amount.setText(policies.get(position).getPremium());
             }
             else {
-                holder.textView.setText("- " + Constants.DATE_FORMAT.format(new Date(policies.get(position).getMatureDate())) + " | " + provider.getName());
+                holder.textView.setText("- " + Constants.Time.DATE_FORMAT.format(new Date(policies.get(position).getMatureDate()*1000)) + " | " + provider.getName());
                 holder.amount.setText(policies.get(position).getSumAssured());
             }
         }
@@ -60,6 +77,20 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
     @Override
     public int getItemCount() {
         return policies.size();
+    }
+
+    public void updatePolicies(ArrayList<Policy> policies){
+        this.policies.clear();
+        if(type == Constants.Policy.DISPLAY_PREMIUM) {
+            for (int i = 0; i < policies.size(); i++)
+                if ((!policies.get(i).getPaid()) || (policies.get(i).getNextDueDate() <= (System.currentTimeMillis() / 1000 + Constants.Time.EPOCH_WEEK * 2)))
+                    this.policies.add(policies.get(i));
+        }
+        else {
+            for (int i = 0; i < policies.size(); i++)
+                if ((!policies.get(i).getPaid()) || (policies.get(i).getMatureDate() <= (System.currentTimeMillis() / 1000 + Constants.Time.EPOCH_WEEK * 2)))
+                    this.policies.add(policies.get(i));
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -8,8 +8,10 @@ import androidx.room.Query;
 
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
+import com.example.policyfolio.Util.Constants;
 
 import java.util.List;
 
@@ -41,6 +43,21 @@ public interface PolicyFolioDao {
     @Query("SELECT * from Nominee where userId = :id")
     LiveData<List<Nominee>> getNomineesForUser(String id);              //Fetch Nominees for a particular User
 
+    @Query("SELECT * from Notifications where policyNumber = :policyNumber")
+    LiveData<List<Notifications>> getNotifications(String policyNumber);
+
+    @Query("SELECT * from Notifications")
+    LiveData<List<Notifications>> getAllNotifications();
+
+    @Query("SELECT id from Notifications where policyNumber = :policyNumber")
+    LiveData<List<Long>> getNotificationIds(String policyNumber);
+
+    @Query("DELETE from Notifications where policyNumber = :policyNumber")
+    void deleteNotifications(String policyNumber);                      //Deletes Notifications for a policy
+
+    @Query("DELETE from Notifications")
+    void deleteAllNotifications();                                      //Deletes All Notifications
+
     @Insert(onConflict = REPLACE)
     void putUser(User user);                                            //Update or Add user to the local database
 
@@ -61,4 +78,7 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     void putNominees(List<Nominee> nominees);                           //Add multiple Nominees to the local database
+
+    @Insert(onConflict = REPLACE)
+    List<Long> putNotifications(List<Notifications> notifications);            //Add notifications to database
 }

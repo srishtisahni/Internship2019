@@ -65,6 +65,9 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
 
     public HomePoliciesFragment(HomeCallback callback) {
         this.callback = callback;
+        typeWisePolicyList = new ArrayList<>();
+        providersHashMap = new HashMap<Long, InsuranceProvider>();
+        result = new ArrayList<>();
     }
 
 
@@ -84,12 +87,9 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
         returns = rootView.findViewById(R.id.returns);
         policies = rootView.findViewById(R.id.policies);
 
-        typeWisePolicyList = new ArrayList<>();
-        providersHashMap = new HashMap<Long, InsuranceProvider>();
-        result = new ArrayList<>();
-
         setAdapters();
         addObservers();
+        updateChanges();
 
         return rootView;
     }
@@ -117,17 +117,12 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
                 policyDisplayAdapter.notifyDataSetChanged();
             }
         });
-        viewModel.getPolicies().observe(this, new Observer<List<Policy>>() {
-            @Override
-            public void onChanged(List<Policy> policies) {
-                result.clear();
-                result.addAll(policies);
-                updateChanges();
-            }
-        });
     }
 
-    private void updateChanges() {
+    public void updateChanges() {
+        duesAdapter.updatePolicies(result);
+        returnsAdapter.updatePolicies(result);
+
         Double totalCover = Policy.totalCover(result);
         int cover = (int) Math.floor(totalCover);
         int coverDecimal = (int) Math.floor((totalCover - cover)*100);
@@ -161,5 +156,15 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
     @Override
     public void add(int type) {
         callback.addPolicy(type);
+    }
+
+    public void setPolicies(List<Policy> policies) {
+        if(result == null)
+            result = new ArrayList<>();
+        result.clear();
+        result.addAll(policies);
+
+        if(duesAdapter!=null && returnsAdapter!=null && policyDisplayAdapter!=null)
+            updateChanges();
     }
 }

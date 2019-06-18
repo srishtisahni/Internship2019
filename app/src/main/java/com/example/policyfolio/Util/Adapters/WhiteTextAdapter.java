@@ -38,6 +38,10 @@ public class WhiteTextAdapter extends RecyclerView.Adapter<WhiteTextAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if(policies.get(position).getPaid())
+            holder.textView.setTextColor(context.getResources().getColor(R.color.white));
+        else
+            holder.textView.setTextColor(context.getResources().getColor(R.color.red));
         InsuranceProvider provider = providerHashMap.get(policies.get(position).getInsuranceProviderId());
         if(provider!=null)
             holder.textView.setText((position+1)+". "+provider.getName());

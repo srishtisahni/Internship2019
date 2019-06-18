@@ -294,4 +294,28 @@ public class DataManager {
                 });
         return complete;
     }
+
+    public LiveData<Boolean> updatePolicies(String uid, List<Policy> policies) {
+        final MutableLiveData<Boolean> updated = new MutableLiveData<>();
+        updated.setValue(true);
+        for(int i=0;i<policies.size();i++) {
+            firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                    .document(uid)
+                    .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                    .document(policies.get(i).getPolicyNumber())
+                    .set(policies.get(i))
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful() && !updated.getValue())
+                                updated.setValue(true);
+                            else {
+                                updated.setValue(false);
+                                Log.e("EXCEPTION", task.getException().getMessage());
+                            }
+                        }
+                    });
+        }
+        return updated;
+    }
 }

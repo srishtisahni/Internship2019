@@ -13,6 +13,7 @@ public class Constants {
         public static final long EPOCH_DAY = 86400;
         public static final long EPOCH_WEEK = 604800;
         public static final long EPOCH_MONTH = 2629743;
+        public static final long EPOCH_YEAR = 31556926;
 
         public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yy");
     }
@@ -30,6 +31,7 @@ public class Constants {
         }
     }
     public static class Policy{
+        public static final String UPDATED_SHARED_PREFRENCE = "updated_policy";
         public static final int DISPLAY_PREMIUM = 0;
         public static final int DISPLAY_SUM = 1;
 
@@ -44,7 +46,7 @@ public class Constants {
             public static final int EMPLOYEE_INSURANCE = 7;
             public static final int APPLIANCE_INSURANCE = 8;
         }
-        public static class PREMIUM{
+        public static class Premium{
             public static final int PREMIUM_MONTHLY = 0;
             public static final int PREMIUM_QUATERLY = 1;
             public static final int PREMIUM_BI_ANNUALLY = 2;
@@ -138,5 +140,21 @@ public class Constants {
         public static final int UPDATE_RESULT = 105;
         public static final int ADD_POLICY_REQUEST = 106;
         public static final int ADD_POLICY_RESULT = 107;
+    }
+
+    public class Notification {
+        public static final String ID = "id";
+        public static final String POLICY_NUMBER = "policy_number";
+        public static final String TYPE = "type";
+
+        public static final String DUES_CHANNEL_ID = "dues";
+
+        public class Type {
+            public static final int DAY = 1;
+            public static final int WEEK = 2;
+            public static final int TWO_WEEKS = 3;
+            public static final int MONTH = 4;
+            public static final int TWO_MONTHS = 5;
+        }
     }
 }
