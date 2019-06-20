@@ -8,10 +8,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
 import com.example.policyfolio.R;
+import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.Util.Constants;
 
 public class PremiumDuesReceiver extends BroadcastReceiver {
@@ -19,6 +21,7 @@ public class PremiumDuesReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Repository repository = Repository.getInstance(context);
         long id = intent.getLongExtra(Constants.Notification.ID,-1);
         String policyNumber = intent.getStringExtra(Constants.Notification.POLICY_NUMBER);
         int type = intent.getIntExtra(Constants.Notification.TYPE,-1);
@@ -29,6 +32,8 @@ public class PremiumDuesReceiver extends BroadcastReceiver {
             manager.createNotificationChannel(channel);
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Constants.Notification.DUES_CHANNEL_ID);
+        Log.e("NOTIFICATION",id +" "+policyNumber);
+        repository.deleteNotifications(id);
 
         //TODO Notification Modify Content
         switch (type){

@@ -19,9 +19,13 @@ public class Constants {
     }
     public static class User {
         public static final String EMAIL = "email";
-        public static final String USER = "user";
         public static final String PHONE = "phone";
         public static final String ID = "id";
+        public static final String BIRTHDAY = "birthday";
+        public static final String CITY = "city";
+        public static final String GENDER = "gender";
+        public static final String NAME = "name";
+        public static final String LOGIN_TYPE = "login_type";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;
@@ -113,6 +117,7 @@ public class Constants {
         public static final int INSURANCE_PROVIDER = 1;
         public static final int PREMIUM_FREQUENCY = 2;
         public static final int NOMINEE = 3;
+        public static final int RELATIONSHIPS = 4;
     }
 
     public static class InsuranceProviders {
@@ -120,6 +125,8 @@ public class Constants {
     }
 
     public static class Nominee {
+        public static final String DEFAULT_PFID = "null";
+
         public static class Relation{
             public static final int MOTHER = 0;
             public static final int FATHER = 1;
@@ -140,6 +147,7 @@ public class Constants {
         public static final int UPDATE_RESULT = 105;
         public static final int ADD_POLICY_REQUEST = 106;
         public static final int ADD_POLICY_RESULT = 107;
+        public static final int NOMINEE_DASHBOARD_REQUEST = 108;
     }
 
     public class Notification {
@@ -148,6 +156,7 @@ public class Constants {
         public static final String TYPE = "type";
 
         public static final String DUES_CHANNEL_ID = "dues";
+        public static final String NOTIFICATION_SHARED_PREFERENCE = "Notifications";
 
         public class Type {
             public static final int DAY = 1;

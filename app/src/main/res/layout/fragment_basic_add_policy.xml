@@ -60,7 +60,7 @@
             android:layout_width="180dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:background="@drawable/dropdown_background"
+            android:background="@drawable/dropdown_background_white"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="12dp"
@@ -102,7 +102,7 @@
                 android:id="@+id/insurance_provider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/dropdown_background"
+                android:background="@drawable/dropdown_background_white"
                 android:visibility="gone" />
         </FrameLayout>
 

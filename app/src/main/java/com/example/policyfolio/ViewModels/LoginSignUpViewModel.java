@@ -155,12 +155,12 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
         return repository.checkIfUserExistsEmail(data);
     }
 
-    public LiveData<Integer> checkIfUserExistsEmail(String email,Integer type) {
-        return repository.checkIfUserExistsEmail(email,type);
+    public LiveData<Integer> checkIfUserExistsEmail(String email) {
+        return repository.checkIfUserExistsEmail(email);
     }
 
-    public LiveData<Integer> checkIfUserExistsEmail(Integer type) {
-        return repository.checkIfUserExistsEmail(email,type);
+    public LiveData<Integer> checkIfUserExistsEmail() {
+        return repository.checkIfUserExistsEmail(email);
     }
 
     public LiveData<Integer> checkIfUserExistsPhone() {

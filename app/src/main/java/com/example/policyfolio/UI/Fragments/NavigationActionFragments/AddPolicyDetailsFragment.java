@@ -228,7 +228,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 dialog.setTitle("");
                 DatePicker datePicker = dialog.findViewById(R.id.date_picker);
                 final Calendar calendar=Calendar.getInstance();
-                calendar.setTimeInMillis(premiumDateEpoch);
+                calendar.setTimeInMillis(premiumDateEpoch*1000);
                 datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -258,7 +258,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 dialog.setTitle("");
                 DatePicker datePicker = dialog.findViewById(R.id.date_picker);
                 final Calendar calendar=Calendar.getInstance();
-                calendar.setTimeInMillis(matureDateEpoch);
+                calendar.setTimeInMillis(matureDateEpoch*1000);
                 datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -344,8 +344,8 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 nomineeAdapter.notifyDataSetChanged();
             }
         });
-        premiumDateEpoch = System.currentTimeMillis();
-        matureDateEpoch = System.currentTimeMillis();
+        premiumDateEpoch = System.currentTimeMillis()/1000;
+        matureDateEpoch = System.currentTimeMillis()/1000;
     }
 
     @Override

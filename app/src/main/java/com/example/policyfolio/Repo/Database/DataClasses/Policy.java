@@ -32,13 +32,15 @@ public class Policy {
     private int type;
     private String documentUrl;
     private Long lastUpdated;
+    @NonNull
+    private String nominee;
 
     public Policy(){
         setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     @Ignore
-    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate,Long matureDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl,Boolean paid){
+    public Policy(String id, String pNum, Long insuranceProviderId, Long nextDueDate, Long matureDate, Integer frequency, String premium, String sumAssured, int type, String documentUrl, Boolean paid, String nominee){
         this.userId = id;
         this.policyNumber = pNum;
         this.insuranceProviderId = insuranceProviderId;
@@ -50,6 +52,7 @@ public class Policy {
         this.type = type;
         this.documentUrl = documentUrl;
         this.paid = paid;
+        this.nominee = nominee;
         setLastUpdated(System.currentTimeMillis()/1000);
     }
 
@@ -151,6 +154,15 @@ public class Policy {
 
     public void setPaid(Boolean paid) {
         this.paid = paid;
+    }
+
+    @NonNull
+    public String getNominee() {
+        return nominee;
+    }
+
+    public void setNominee(@NonNull String nominee) {
+        this.nominee = nominee;
     }
 
     @Ignore

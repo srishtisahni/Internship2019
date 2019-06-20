@@ -11,22 +11,22 @@ import androidx.room.PrimaryKey;
         indices = {
                 @Index("userId"),
                 @Index("pfId")
-        })
+        }, primaryKeys = {"userId","email"})
 public class Nominee {
-    @PrimaryKey(autoGenerate = true) @NonNull
-    private Long id;
+    @NonNull
     private String userId;                  //Id of the user the nominee is associated to
+    @NonNull
     private String pfId;                    //Policy Folio Id of the user
     private String name;
     private int relation;
+    @NonNull
     private String email;
     private String phone;
     private String alternativeNumber;
     private Long lastUpdated;
 
     @Ignore
-    public Nominee(Long id, String userId, String pfId, String name, int relation, String email, String phone, String alternativeNumber){
-        this.id = id;
+    public Nominee(String userId, String pfId, String name, int relation, String email, String phone, String alternativeNumber){
         this.userId = userId;
         this.pfId = pfId;
         this.name = name;
@@ -46,15 +46,6 @@ public class Nominee {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @NonNull
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(@NonNull Long id) {
-        this.id = id;
     }
 
     public String getPhone() {
@@ -89,6 +80,7 @@ public class Nominee {
         this.alternativeNumber = alternativeNumber;
     }
 
+    @NonNull
     public String getPfId() {
         return pfId;
     }
@@ -97,6 +89,7 @@ public class Nominee {
         this.pfId = pfId;
     }
 
+    @NonNull
     public String getUserId() {
         return userId;
     }

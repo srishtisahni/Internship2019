@@ -149,7 +149,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
         }
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.checkIfUserExistsEmail(facebookData.getEmail(),Constants.LoginInInfo.Type.FACEBOOK).observe(this, new Observer<Integer>() {
+        viewModel.checkIfUserExistsEmail(facebookData.getEmail()).observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if(integer!=null){
@@ -220,7 +220,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
     public void Login() {
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.checkIfUserExistsEmail(Constants.LoginInInfo.Type.EMAIL).observe(this, new Observer<Integer>() {
+        viewModel.checkIfUserExistsEmail().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if(integer!=null){
@@ -250,10 +250,15 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                                         startHomeActivity(firebaseUser, Constants.LoginInInfo.Type.EMAIL);
                                     }
                                     else {
-                                        Toast.makeText(LoginSignUpActivity.this,"Invalid Email or Password",Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginSignUpActivity.this,"Incorrect Password",Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
+                            break;
+                        default:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            Toast.makeText(LoginSignUpActivity.this,"The account does not Exist",Toast.LENGTH_LONG).show();
                             break;
                     }
                 }
@@ -277,7 +282,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
     public void EmailNext() {
         progressBar.setVisibility(View.VISIBLE);
         fragmentHolder.setAlpha(0.4f);
-        viewModel.checkIfUserExistsEmail(Constants.LoginInInfo.Type.EMAIL).observe(this, new Observer<Integer>() {
+        viewModel.checkIfUserExistsEmail().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if(integer!=null){
@@ -301,6 +306,11 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                             progressBar.setVisibility(View.GONE);
                             fragmentHolder.setAlpha(1f);
                             Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            progressBar.setVisibility(View.GONE);
+                            fragmentHolder.setAlpha(1f);
+                            addFragment(signUpFragment);
                             break;
                     }
                 }

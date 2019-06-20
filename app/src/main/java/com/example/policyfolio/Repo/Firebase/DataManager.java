@@ -113,7 +113,7 @@ public class DataManager {
                 });
     }
 
-    public LiveData<Integer> checkIfUserExistsEmail(String email, final Integer type, final AppDatabase appDatabase) {
+    public LiveData<Integer> checkIfUserExistsEmail(String email, final AppDatabase appDatabase) {
         //Checks if an account exists if the same email id
         final MutableLiveData<Integer> result = new MutableLiveData<>();
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
@@ -136,7 +136,7 @@ public class DataManager {
                                 result.setValue(user.getType());        //Returns the type of the account if it exists
                             }
                             else {
-                                result.setValue(type);                  //Returns the type current login/signUp type if it doesn't
+                                result.setValue(-1);                  //Returns the type current login/signUp type if it doesn't
                             }
                         }
                         else {
@@ -170,7 +170,7 @@ public class DataManager {
                                 result.setValue(user.getType());            //Returns the type of the account if it exists
                             }
                             else {
-                                result.setValue(Constants.LoginInInfo.Type.PHONE);      //Returns the type "PHONE" if it doesn't
+                                result.setValue(-1);      //Returns the type "PHONE" if it doesn't
                             }
                         }
                         else {
@@ -295,5 +295,24 @@ public class DataManager {
                     });
         }
         return updated;
+    }
+
+    public LiveData<Boolean> putNominee(Nominee nominee) {
+        final MutableLiveData<Boolean> result = new MutableLiveData<>();
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                .document(nominee.getUserId())
+                .collection(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                .document(nominee.getEmail())
+                .set(nominee)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                            result.setValue(true);
+                        else
+                            result.setValue(false);
+                    }
+                });
+        return result;
     }
 }

@@ -14,9 +14,6 @@ public class PopUpViewModel extends ViewModel {
     //Local User Copy
     private User user = new User();
 
-    //Binded User Live Data
-    private LiveData<User> userLiveData;
-
     //Repository
     private Repository repository;
 
@@ -82,12 +79,6 @@ public class PopUpViewModel extends ViewModel {
 
     public void setPhone(String phone) {
         user.setPhone(phone);
-    }
-
-    public LiveData<User> fetchUser(String id) {
-        if(userLiveData == null)
-            userLiveData = repository.fetchUser(id);
-        return userLiveData;
     }
 
     public void updateUser(User user) {

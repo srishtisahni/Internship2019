@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -101,6 +102,8 @@ public class InfoPopUp extends Fragment {
                 save();
             }
         });
+
+        setAvailableInfo();
 
         return rootView;
     }

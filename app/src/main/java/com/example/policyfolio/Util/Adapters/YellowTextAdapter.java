@@ -1,6 +1,7 @@
 package com.example.policyfolio.Util.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,9 +89,10 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
         }
         else {
             for (int i = 0; i < policies.size(); i++)
-                if ((!policies.get(i).getPaid()) || (policies.get(i).getMatureDate() <= (System.currentTimeMillis() / 1000 + Constants.Time.EPOCH_WEEK * 2)))
+                if ((!policies.get(i).getPaid()) || (policies.get(i).getMatureDate() <= (System.currentTimeMillis() / 1000 + Constants.Time.EPOCH_YEAR)))
                     this.policies.add(policies.get(i));
         }
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

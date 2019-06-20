@@ -25,7 +25,6 @@ public class HomeViewModel extends ViewModel {
     private LiveData<User> user;
     private LiveData<List<Policy>> policies;
     private LiveData<List<InsuranceProvider>> providers;
-    private HashMap<String,LiveData<List<Notifications>>> notifications = new HashMap<>();
 
     //Private data information
     private int type;
@@ -76,12 +75,6 @@ public class HomeViewModel extends ViewModel {
 
     public LiveData<Boolean> updatePolicies(List<Policy> policies) {
         return repository.updatePolicies(Uid, policies);
-    }
-
-    public LiveData<List<Notifications>> fetchNotifications(String policyNumber) {
-        if(notifications.get(policyNumber) == null)
-            notifications.put(policyNumber,repository.getNotifications(policyNumber));
-        return notifications.get(policyNumber);
     }
 
     public LiveData<List<Long>> addNotifications(Notifications notification, int type) {

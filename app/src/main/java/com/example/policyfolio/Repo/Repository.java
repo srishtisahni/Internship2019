@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -132,9 +133,8 @@ public class Repository {
         return authentication.checkIfUserExistsEmail(data,appDatabase);         //Checks if the  user with same email as his/her google account exists
     }
 
-    public LiveData<Integer> checkIfUserExistsEmail(String email, Integer type) {
-        //Type is used to identify the login Type as Facebook or Email
-        return dataManager.checkIfUserExistsEmail(email,type,appDatabase);   //Checks if the  user with same the email exists
+    public LiveData<Integer> checkIfUserExistsEmail(String email) {
+        return dataManager.checkIfUserExistsEmail(email,appDatabase);   //Checks if the  user with same the email exists
     }
 
     public LiveData<Integer> checkIfUserExistsPhone(String phone) {
@@ -192,20 +192,22 @@ public class Repository {
         return dataManager.updatePolicies(uid,policies);
     }
 
-    public LiveData<List<Notifications>> getNotifications(String policyNumber) {
-        if(cache.getNotifications(policyNumber) == null)
-            cache.setNotifications(policyNumber,appDatabase.policyFolioDao().getNotifications(policyNumber));
-        return cache.getNotifications(policyNumber);
-    }
-
     public LiveData<List<Long>> addNotifications(final ArrayList<Notifications> notifications) {
-        appExecutors.diskIO().execute(new Runnable() {
+        final MutableLiveData<List<Long>> mutableLiveData = new MutableLiveData<>();
+        new AsyncTask<ArrayList<Notifications>, Void, List<Long>>() {
             @Override
-            public void run() {
-                appDatabase.policyFolioDao().putNotifications(notifications);
+            protected List<Long> doInBackground(ArrayList<Notifications>... arrayLists) {
+                ArrayList<Notifications> notifications = arrayLists[0];
+                return appDatabase.policyFolioDao().putNotifications(notifications);
             }
-        });
-        return appDatabase.policyFolioDao().getNotificationIds(notifications.get(0).getPolicyNumber());
+
+            @Override
+            protected void onPostExecute(List<Long> longs) {
+                super.onPostExecute(longs);
+                mutableLiveData.setValue(longs);
+            }
+        }.execute(notifications);
+        return mutableLiveData;
     }
 
     public LiveData<List<Notifications>> getAllNotifications() {
@@ -219,5 +221,24 @@ public class Repository {
                 appDatabase.policyFolioDao().deleteAllNotifications();
             }
         });
+    }
+
+    public void deleteNotifications(final long id) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDatabase.policyFolioDao().deleteNotifications(id);
+            }
+        });
+    }
+
+    public LiveData<Boolean> addNomineeNonExistent(final Nominee nominee) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDatabase.policyFolioDao().putNominee(nominee);
+            }
+        });
+        return dataManager.putNominee(nominee);
     }
 }

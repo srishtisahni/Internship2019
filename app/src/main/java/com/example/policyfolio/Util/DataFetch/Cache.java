@@ -19,7 +19,6 @@ public class Cache {
     private HashMap<String, LiveData<List<Policy>>> policies;
     private HashMap<Integer, LiveData<List<InsuranceProvider>>> providers;
     private LiveData<List<InsuranceProvider>> allProviders;
-    private  HashMap<String, LiveData<List<Notifications>>> notifications;
 
 
     private static Cache INSTANCE;
@@ -36,7 +35,6 @@ public class Cache {
         nominees = new HashMap<>();
         policies = new HashMap<>();
         providers = new HashMap<>();
-        notifications = new HashMap<>();
     }
 
     public static void clearCache(){
@@ -81,13 +79,5 @@ public class Cache {
 
     public void setPolicies(String uId, LiveData<List<Policy>> policies) {
         this.policies.put(uId,policies);
-    }
-
-    public LiveData<List<Notifications>> getNotifications(String policyNumber) {
-        return notifications.get(policyNumber);
-    }
-
-    public void setNotifications(String policyNumber, LiveData<List<Notifications>> notifications) {
-        this.notifications.put(policyNumber,notifications);
     }
 }

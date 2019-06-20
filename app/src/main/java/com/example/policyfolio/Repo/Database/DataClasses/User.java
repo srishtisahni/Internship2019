@@ -154,12 +154,10 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-        this.name = firstName+" "+lastName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-        this.name = firstName+" "+lastName;
     }
 
     private void setComplete() {

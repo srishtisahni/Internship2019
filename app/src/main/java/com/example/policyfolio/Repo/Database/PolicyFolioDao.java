@@ -49,11 +49,11 @@ public interface PolicyFolioDao {
     @Query("SELECT * from Notifications")
     LiveData<List<Notifications>> getAllNotifications();
 
-    @Query("SELECT id from Notifications where policyNumber = :policyNumber")
-    LiveData<List<Long>> getNotificationIds(String policyNumber);
-
     @Query("DELETE from Notifications where policyNumber = :policyNumber")
     void deleteNotifications(String policyNumber);                      //Deletes Notifications for a policy
+
+    @Query("DELETE from Notifications where id = :id")
+    void deleteNotifications(long id);
 
     @Query("DELETE from Notifications")
     void deleteAllNotifications();                                      //Deletes All Notifications
@@ -81,4 +81,5 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     List<Long> putNotifications(List<Notifications> notifications);            //Add notifications to database
+
 }

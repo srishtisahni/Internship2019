@@ -1,7 +1,7 @@
 package com.example.policyfolio.UI.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -61,24 +61,22 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                 break;
             case Constants.PopUps.Type.INFO_POPUP:
                 infoPopUp = new InfoPopUp(this);
-                String id = getIntent().getExtras().getString(Constants.LoginInInfo.FIREBASE_UID,null);
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,infoPopUp).commit();
+                String id = getIntent().getExtras().getString(Constants.User.ID,null);
                 if(id!=null){
-                    progressBar.setVisibility(View.VISIBLE);
-                    popUpHolder.setAlpha(0.5f);
-                    viewModel.fetchUser(id).observe(this, new Observer<User>() {
-                        @Override
-                        public void onChanged(@Nullable User user) {
-                            popUpHolder.setAlpha(1f);
-                            progressBar.setVisibility(View.GONE);
+                    Bundle bundle = getIntent().getExtras();
+                    User user = new User();
+                    user.setBirthday(bundle.getLong(Constants.User.BIRTHDAY));
+                    user.setCity(bundle.getString(Constants.User.CITY));
+                    user.setEmail(bundle.getString(Constants.User.EMAIL));
+                    user.setGender(bundle.getInt(Constants.User.GENDER));
+                    user.setId(bundle.getString(Constants.User.ID));
+                    user.setName(bundle.getString(Constants.User.NAME));
+                    user.setPhone(bundle.getString(Constants.User.PHONE));
+                    user.setType(bundle.getInt(Constants.User.LOGIN_TYPE));
 
-                            if(user!=null) {
-                                viewModel.updateUser(user);
-                                infoPopUp.setAvailableInfo();
-                            }
-                        }
-                    });
+                    viewModel.updateUser(user);
                 }
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,infoPopUp).commit();
                 break;
         }
     }

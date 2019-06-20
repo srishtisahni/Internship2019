@@ -2,7 +2,6 @@ package com.example.policyfolio.UI.Activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
+import com.example.policyfolio.UI.Activities.NavigationActionActivities.NomineeSupportActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
@@ -61,7 +61,11 @@ public class HomeActivity extends AppCompatActivity
 
     private Toast timeToast;
 
+    private SharedPreferences notifications;
+
     private long updatedEpoch;
+
+    private Intent popUpIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +84,8 @@ public class HomeActivity extends AppCompatActivity
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         viewModel.initiateRepo(this);
+
+        notifications = getSharedPreferences(Constants.Notification.NOTIFICATION_SHARED_PREFERENCE,MODE_PRIVATE);
 
         getUpdated();
         setUpDrawer();
@@ -102,11 +108,24 @@ public class HomeActivity extends AppCompatActivity
                         getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
                         name.setText(user.getFirstName());
                     }
-                    if(!user.isComplete()){                                        //If user information is not complete, generate a pop up to fetch information
-                        Intent intent = new Intent(HomeActivity.this,PopUpActivity.class);
-                        intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.INFO_POPUP);
-                        intent.putExtra(Constants.LoginInInfo.FIREBASE_UID,viewModel.getUid());
-                        startActivityForResult(intent, Constants.PermissionAndRequests.UPDATE_REQUEST);
+                    if(!user.isComplete()){
+                        if(popUpIntent == null) {
+                            popUpIntent = new Intent(HomeActivity.this, PopUpActivity.class);
+                            popUpIntent.putExtra(Constants.PopUps.POPUP_TYPE, Constants.PopUps.Type.INFO_POPUP);
+
+                            Bundle bundle = new Bundle();
+                            bundle.putString(Constants.User.ID, user.getId());
+                            bundle.putString(Constants.User.NAME, user.getName());
+                            bundle.putLong(Constants.User.BIRTHDAY, user.getBirthday());
+                            bundle.putInt(Constants.User.GENDER, user.getGender());
+                            bundle.putString(Constants.User.CITY, user.getCity());
+                            bundle.putString(Constants.User.EMAIL, user.getEmail());
+                            bundle.putString(Constants.User.PHONE, user.getPhone());
+                            bundle.putInt(Constants.User.LOGIN_TYPE, user.getType());
+                            popUpIntent.putExtras(bundle);
+
+                            startActivityForResult(popUpIntent, Constants.PermissionAndRequests.UPDATE_REQUEST);
+                        }
                     }
                     else{
                         policyUpdate();                                       //Render UI based on the user info
@@ -185,28 +204,21 @@ public class HomeActivity extends AppCompatActivity
         });
     }
 
-    private void notificationChecker(List<Policy> policies) {
+    private void notificationChecker(final List<Policy> policies) {
         for(int i=0;i<policies.size();i++){
             final Policy policy = policies.get(i);
-            viewModel.fetchNotifications(policy.getPolicyNumber()).observe(this, new Observer<List<Notifications>>() {
-                @Override
-                public void onChanged(List<Notifications> notifications) {
-                    if(notifications.size() == 0){
-                        addNotification(policy);
-                    }
-                }
-            });
+            Boolean added = notifications.getBoolean(policy.getPolicyNumber(),false);
+            if(!added)
+                addNotification(policy);
         }
     }
 
     private void addNotification(Policy policy) {
+        notifications.edit().putBoolean(policy.getPolicyNumber(),true).apply();
+
         final int frequency = policy.getFrequency();
         final long premium = policy.getNextDueDate();
-        final AlarmManager twoMonths = (AlarmManager) getSystemService(ALARM_SERVICE);
-        final AlarmManager oneMonth = (AlarmManager) getSystemService(ALARM_SERVICE);
-        final AlarmManager twoWeeks = (AlarmManager) getSystemService(ALARM_SERVICE);
-        final AlarmManager oneWeek = (AlarmManager) getSystemService(ALARM_SERVICE);
-        final AlarmManager oneDay = (AlarmManager) getSystemService(ALARM_SERVICE);
+        final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         final Intent intent = new Intent(this, PremiumDuesReceiver.class);
         intent.putExtra(Constants.Notification.POLICY_NUMBER,policy.getPolicyNumber());
 
@@ -215,6 +227,7 @@ public class HomeActivity extends AppCompatActivity
         viewModel.addNotifications(notifications,frequency).observe(this, new Observer<List<Long>>() {
             @Override
             public void onChanged(List<Long> longs) {
+                Log.e("SIZE",longs.size()+"");
                 if(longs.size()!=0) {
                     long time;
 
@@ -226,13 +239,16 @@ public class HomeActivity extends AppCompatActivity
                     intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.DAY);
                     time = (premium - Constants.Time.EPOCH_DAY) * 1000;
                     if (time > System.currentTimeMillis())
-                        oneDay.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) dayId, intent, 0));
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) dayId, intent, 0));
+                    else
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), PendingIntent.getBroadcast(HomeActivity.this, (int) dayId, intent, 0));
 
                     intent.putExtra(Constants.Notification.ID, weekId);
                     intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.WEEK);
                     time = (premium - Constants.Time.EPOCH_WEEK) * 1000;
+
                     if (time > System.currentTimeMillis())
-                        oneWeek.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) weekId, intent, 0));
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) weekId, intent, 0));
 
                     switch (frequency) {
                         case Constants.Policy.Premium.PREMIUM_ANNUALLY:
@@ -241,14 +257,14 @@ public class HomeActivity extends AppCompatActivity
                             intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.MONTH);
                             time = (premium - Constants.Time.EPOCH_MONTH) * 1000;
                             if (time > System.currentTimeMillis())
-                                oneMonth.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) oneMonthId, intent, 0));
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) oneMonthId, intent, 0));
 
                             twoMonthsId = longs.get(3);
                             intent.putExtra(Constants.Notification.ID, twoMonthsId);
                             intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.TWO_MONTHS);
                             time = (premium - Constants.Time.EPOCH_MONTH * 2) * 1000;
                             if (time > System.currentTimeMillis())
-                                twoMonths.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) twoMonthsId, intent, 0));
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) twoMonthsId, intent, 0));
                             break;
                         case Constants.Policy.Premium.PREMIUM_BI_ANNUALLY:
                             oneMonthId = longs.get(2);
@@ -256,7 +272,7 @@ public class HomeActivity extends AppCompatActivity
                             intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.MONTH);
                             time = (premium - Constants.Time.EPOCH_MONTH) * 1000;
                             if (time > System.currentTimeMillis())
-                                oneMonth.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) oneMonthId, intent, 0));
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) oneMonthId, intent, 0));
                             break;
                         case Constants.Policy.Premium.PREMIUM_MONTHLY:
                             twoWeeksId = longs.get(2);
@@ -264,7 +280,7 @@ public class HomeActivity extends AppCompatActivity
                             intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.TWO_WEEKS);
                             time = (premium - Constants.Time.EPOCH_WEEK * 2) * 1000;
                             if (time > System.currentTimeMillis())
-                                twoWeeks.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) twoWeeksId, intent, 0));
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) twoWeeksId, intent, 0));
                             break;
                         case Constants.Policy.Premium.PREMIUM_QUATERLY:
                             oneMonthId = longs.get(2);
@@ -272,7 +288,7 @@ public class HomeActivity extends AppCompatActivity
                             intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.MONTH);
                             time = (premium - Constants.Time.EPOCH_MONTH) * 1000;
                             if (time > System.currentTimeMillis())
-                                oneMonth.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) oneMonthId, intent, 0));
+                                alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) oneMonthId, intent, 0));
                             break;
                     }
                 }
@@ -286,7 +302,6 @@ public class HomeActivity extends AppCompatActivity
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homePoliciesFragment).commit();
         }
         homePoliciesFragment.setPolicies(policies);
-
 
         fragmentHolder.setAlpha(1f);
         progressBar.setVisibility(View.GONE);
@@ -316,7 +331,6 @@ public class HomeActivity extends AppCompatActivity
     private void zeroPoliciesFragment() {
         homeStartupFragment = new HomeStartupFragment(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeStartupFragment).commit();
-
 
         fragmentHolder.setAlpha(1f);
         progressBar.setVisibility(View.GONE);
@@ -384,10 +398,18 @@ public class HomeActivity extends AppCompatActivity
                 logOut();
                 break;
             case R.id.nominee_support:
-
+                item.setChecked(false);
+                nomineeDashboard();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void nomineeDashboard() {
+        Intent intent = new Intent(this, NomineeSupportActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
     }
 
     private void logOut() {
@@ -417,6 +439,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void cancelNotifications() {
+        notifications.edit().clear().apply();
         viewModel.getAllNotificatios().observe(this, new Observer<List<Notifications>>() {
             @Override
             public void onChanged(List<Notifications> notifications) {
@@ -441,7 +464,7 @@ public class HomeActivity extends AppCompatActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == Constants.PermissionAndRequests.UPDATE_REQUEST && resultCode == Constants.PermissionAndRequests.UPDATE_RESULT){
-//            policyUpdate();                                       //Render Fragments based on user information
+            popUpIntent = null;                                  //Render Fragments based on user information
         }
         if(requestCode == Constants.PermissionAndRequests.ADD_POLICY_REQUEST && resultCode == Constants.PermissionAndRequests.ADD_POLICY_RESULT){
 //            policies();

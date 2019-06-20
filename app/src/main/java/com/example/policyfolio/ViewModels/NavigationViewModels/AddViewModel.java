@@ -142,7 +142,7 @@ public class AddViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> savePolicy() {
-        Policy policy = new Policy(uId,policyNumber,provider.getId(), premiumDateEpoch, matureDateEpoch, premiumFrequency,premiumAmount,coverAmount,type,photoUrl,true);
+        Policy policy = new Policy(uId,policyNumber,provider.getId(), premiumDateEpoch, matureDateEpoch, premiumFrequency,premiumAmount,coverAmount,type,photoUrl,true,nominee.getId());
         return repository.addPolicy(policy);
     }
 }
