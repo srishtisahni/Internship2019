@@ -138,19 +138,38 @@
         app:layout_constraintStart_toStartOf="@+id/birthday"
         app:layout_constraintTop_toBottomOf="@+id/birthday" />
 
-    <Spinner
+    <LinearLayout
         android:id="@+id/gender"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/dropdown_item_32dp"
-        android:popupBackground="@drawable/dropdown_background_white"
-        android:padding="6dp"
-        android:textSize="16sp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/birthday"
         app:layout_constraintStart_toStartOf="@+id/birthday"
         app:layout_constraintTop_toBottomOf="@+id/birthday"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/gender_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dropdown_item_32dp"
+            android:gravity="center"
+            android:padding="6dp"
+            android:text="Gender"
+            android:textColor="@color/Grey"
+            android:textSize="16sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gender_choice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/dropdown_background_white"
+            android:padding="6dp"
+            android:visibility="gone" />
+    </LinearLayout>
 
 
     <EditText

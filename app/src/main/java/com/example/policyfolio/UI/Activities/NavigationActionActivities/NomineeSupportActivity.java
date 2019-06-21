@@ -1,6 +1,7 @@
 package com.example.policyfolio.UI.Activities.NavigationActionActivities;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.example.policyfolio.UI.Fragments.NavigationActionFragments.AddNomineeFragment;
@@ -10,7 +11,6 @@ import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.Nomine
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.view.View;
@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.HomeViewModel;
 import com.example.policyfolio.ViewModels.NavigationViewModels.NomineeViewModel;
 
 public class NomineeSupportActivity extends AppCompatActivity implements NomineeCallback {
@@ -79,32 +78,43 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
         fragmentHolder.setAlpha(0.4f);
         progressBar.setVisibility(View.VISIBLE);
 
-        viewModel.checkIfUserExists().observe(this, new Observer<Integer>() {
+        viewModel.addNominee().observe(this, new Observer<Boolean>() {
             @Override
-            public void onChanged(Integer type) {
-                if(type == -1){
-                    Toast.makeText(NomineeSupportActivity.this,"pfRepo User does not Exist",Toast.LENGTH_LONG).show();
-                    viewModel.addNomineeNonExisting().observe(NomineeSupportActivity.this, new Observer<Boolean>() {
-                        @Override
-                        public void onChanged(Boolean aBoolean) {
-                            fragmentHolder.setAlpha(1f);
-                            progressBar.setVisibility(View.GONE);
-
-                            if(aBoolean) {
-                                getSupportFragmentManager().beginTransaction().remove(addNomineeFragment);
-                                addNomineeFragment = null;
-                            }
-                            else {
-                                Toast.makeText(NomineeSupportActivity.this,"Failed to add Nominee",Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                }
-                else {
-                    //TODO UPLOAD EXISTING NOMINEE
-                    viewModel.addNomineeExisting();
+            public void onChanged(Boolean aBoolean) {
+                fragmentHolder.setAlpha(1f);
+                progressBar.setVisibility(View.GONE);
+                if (aBoolean) {
+                    getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
+                    addNomineeFragment = null;
+                } else {
+                    Toast.makeText(NomineeSupportActivity.this, "Please check your internet connection and retry", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(addNomineeFragment!=null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("Exit")
+                    .setMessage("Do you want to exit without saving the nominee")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
+                            addNomineeFragment = null;
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.show();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

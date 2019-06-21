@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +20,10 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.CallBackListeners.PopUpCallBack;
@@ -32,7 +34,7 @@ import java.util.Calendar;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InfoPopUp extends Fragment {
+public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
 
     private PopUpCallBack callback;
     private PopUpViewModel viewModel;
@@ -42,7 +44,8 @@ public class InfoPopUp extends Fragment {
     private EditText email;
     private EditText phone;
     private TextView birthday;
-    private Spinner gender;
+    private TextView genderText;
+    private RecyclerView genderChoice;
     private EditText city;
     private Button save;
 
@@ -53,7 +56,8 @@ public class InfoPopUp extends Fragment {
     private TextView cityError;
 
     private Long birthdayEpoch;
-    private ArrayAdapter<CharSequence> genderAdapter;
+    private BasicDropdownTextAdapter genderAdapter;
+    private String[] genderArray;
     private int genderSelection;
 
     public InfoPopUp() {
@@ -76,7 +80,8 @@ public class InfoPopUp extends Fragment {
         email = rootView.findViewById(R.id.email);
         phone = rootView.findViewById(R.id.phone);
         birthday = rootView.findViewById(R.id.birthday);
-        gender = rootView.findViewById(R.id.gender);
+        genderText = rootView.findViewById(R.id.gender_text);
+        genderChoice = rootView.findViewById(R.id.gender_choice);
         city = rootView.findViewById(R.id.city);
         save = rootView.findViewById(R.id.save);
 
@@ -120,7 +125,7 @@ public class InfoPopUp extends Fragment {
             birthdayEpoch = viewModel.getBirthday();
             birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         }
-        gender.setSelection(viewModel.getGender());
+        setValue(viewModel.getGender(),Constants.DropDownType.GENDER);
         if(viewModel.getCity()!=null)
             city.setText(viewModel.getCity());
     }
@@ -207,33 +212,33 @@ public class InfoPopUp extends Fragment {
     }
 
     private void setGenderAdapter() {
-        //TODO Replace with Recycler View
-        genderAdapter =  ArrayAdapter.createFromResource(getContext(), R.array.gender_array, android.R.layout.simple_spinner_item);
-        genderAdapter.setDropDownViewResource(R.layout.dropdown_sign_up_fragment);
-        gender.setAdapter(genderAdapter);
+        genderSelection = 0;
+        genderArray = getResources().getStringArray(R.array.gender_array);
+        genderAdapter = new BasicDropdownTextAdapter(getContext(),genderArray,this,Constants.DropDownType.GENDER);
+        genderChoice.setAdapter(genderAdapter);
+        genderChoice.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
-        gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        genderText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                gender.setSelection(i);
-                genderSelection = i;
-                if(i!=0)
-                    ((TextView) gender.getChildAt(0)).setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                else
-                    ((TextView) gender.getChildAt(0)).setTextColor(getResources().getColor(R.color.borderGrey));
-                ((TextView) gender.getChildAt(0)).setGravity(Gravity.CENTER);
-                ((TextView) gender.getChildAt(0)).setTextSize(16);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-                gender.setSelection(0);
-                genderSelection = 0;
-                ((TextView) gender.getChildAt(0)).setTextColor(getResources().getColor(R.color.borderGrey));
-                ((TextView) gender.getChildAt(0)).setGravity(Gravity.CENTER);
-                ((TextView) gender.getChildAt(0)).setTextSize(16);
+            public void onClick(View v) {
+                genderText.setVisibility(View.GONE);
+                genderChoice.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    @Override
+    public void setValue(int position, int type) {
+        if(type == Constants.DropDownType.GENDER){
+            genderSelection = position;
+            if(genderSelection == 0)
+                genderText.setTextColor(getResources().getColor(R.color.Grey));
+            else
+                genderText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            genderText.setText(genderArray[genderSelection]);
+            genderText.setVisibility(View.VISIBLE);
+            genderChoice.setVisibility(View.GONE);
+        }
     }
 
 }

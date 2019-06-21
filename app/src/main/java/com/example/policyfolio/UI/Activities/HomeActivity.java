@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity
                     getTimeToast(user.getLastUpdated());
                     if(user.getName()!=null){
                         getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
-                        name.setText(user.getFirstName());
+                        name.setText(user.getName());
                     }
                     if(!user.isComplete()){
                         if(popUpIntent == null) {
@@ -208,7 +208,7 @@ public class HomeActivity extends AppCompatActivity
         for(int i=0;i<policies.size();i++){
             final Policy policy = policies.get(i);
             Boolean added = notifications.getBoolean(policy.getPolicyNumber(),false);
-            if(!added)
+            if(!added && policy.getUserId().equals(viewModel.getUid()))
                 addNotification(policy);
         }
     }

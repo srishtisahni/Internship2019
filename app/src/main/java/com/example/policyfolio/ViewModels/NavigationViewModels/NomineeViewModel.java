@@ -81,15 +81,7 @@ public class NomineeViewModel extends ViewModel {
         this.alternateNumber = alternateNumber;
     }
 
-    public LiveData<Integer> checkIfUserExists() {
-        return repository.checkIfUserExistsEmail(email);
-    }
-
-    public LiveData<Boolean> addNomineeNonExisting() {
-        return repository.addNomineeNonExistent(new Nominee(uId, Constants.Nominee.DEFAULT_PFID, name, relation, email, phone, alternateNumber));
-    }
-
-    public LiveData<Boolean> addNomineeExisting() {
-        return null;
+    public LiveData<Boolean> addNominee() {
+        return repository.addNominee(new Nominee(uId,Constants.Nominee.DEFAULT_PFID,name,relation,email,phone,alternateNumber));
     }
 }

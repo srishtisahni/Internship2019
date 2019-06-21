@@ -232,13 +232,7 @@ public class Repository {
         });
     }
 
-    public LiveData<Boolean> addNomineeNonExistent(final Nominee nominee) {
-        appExecutors.diskIO().execute(new Runnable() {
-            @Override
-            public void run() {
-                appDatabase.policyFolioDao().putNominee(nominee);
-            }
-        });
-        return dataManager.putNominee(nominee);
+    public LiveData<Boolean> addNominee(Nominee nominee) {
+        return dataManager.addNominee(nominee,appDatabase);
     }
 }

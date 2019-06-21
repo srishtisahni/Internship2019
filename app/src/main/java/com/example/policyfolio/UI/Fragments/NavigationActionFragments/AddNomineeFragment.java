@@ -8,8 +8,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,7 +68,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
         phone = rootView.findViewById(R.id.phone);
         alternativePhone = rootView.findViewById(R.id.alt_phone);
 
-        relation = rootView.findViewById(R.id.relation);
+        relation = rootView.findViewById(R.id.relation_text);
         relationChoice = rootView.findViewById(R.id.relation_choice);
 
         relations = getResources().getStringArray(R.array.relationship_array);
@@ -82,6 +84,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
     }
 
     private void setListeners() {
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -177,19 +180,20 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = AddNomineeFragment.this.email.toString();
-                String name = AddNomineeFragment.this.name.toString();
-                String phone = AddNomineeFragment.this.phone.toString();
-                String alternativePhone = AddNomineeFragment.this.alternativePhone.toString();
+                String e = email.getText().toString();
+                String n = name.getText().toString();
+                String p = phone.getText().toString();
+                String aP = alternativePhone.getText().toString();
 
-                if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches())
+                Log.e("DETAILS",e + " " + p + " " + n + " " + aP);
+
+                if(!android.util.Patterns.EMAIL_ADDRESS.matcher(e).matches())
                     Toast.makeText(getContext(),"Enter a valid email address",Toast.LENGTH_LONG).show();
-
-                if(email.length()>0 && phone.length()>0 && name.length()>0 && relation.getCurrentTextColor()==getResources().getColor(R.color.colorPrimaryDark)){
-                    viewModel.setEmail(email);
-                    viewModel.setAlternateNumber(alternativePhone);
-                    viewModel.setName(name);
-                    viewModel.setPhone(phone);
+                else if(email.length()>0 && phone.length()>0 && name.length()>0 && relation.getCurrentTextColor()==getResources().getColor(R.color.colorPrimaryDark)){
+                    viewModel.setEmail(e);
+                    viewModel.setAlternateNumber(aP);
+                    viewModel.setName(n);
+                    viewModel.setPhone(p);
                     callback.done();
                 }
                 else {
@@ -204,6 +208,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
         if(type == Constants.DropDownType.RELATIONSHIPS){
             relation.setText(relations[position]);
             relation.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            relation.setBackgroundColor(getResources().getColor(android.R.color.transparent));
             relation.setVisibility(View.VISIBLE);
             relationChoice.setVisibility(View.GONE);
             viewModel.setRelation(position);

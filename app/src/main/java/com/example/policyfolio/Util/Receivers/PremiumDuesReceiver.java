@@ -59,8 +59,6 @@ public class PremiumDuesReceiver extends BroadcastReceiver {
                 break;
         }
         builder.setSmallIcon(R.drawable.notification_icon);
-        //TODO Intents After Payment Fragment
-//        builder.setContentIntent(pendingIntent);
         builder.setAutoCancel(true);
 
         Notification notification=builder.build();

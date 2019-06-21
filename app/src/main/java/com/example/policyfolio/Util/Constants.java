@@ -118,6 +118,7 @@ public class Constants {
         public static final int PREMIUM_FREQUENCY = 2;
         public static final int NOMINEE = 3;
         public static final int RELATIONSHIPS = 4;
+        public static final int GENDER = 5;
     }
 
     public static class InsuranceProviders {
