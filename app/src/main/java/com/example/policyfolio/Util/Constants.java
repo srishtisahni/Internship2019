@@ -38,6 +38,7 @@ public class Constants {
         public static final String UPDATED_SHARED_PREFRENCE = "updated_policy";
         public static final int DISPLAY_PREMIUM = 0;
         public static final int DISPLAY_SUM = 1;
+        public static final String NOMINEE = "nominee";
 
         public static class Type{
             public static final int LIFE_INSURANCE = 0;
@@ -127,6 +128,8 @@ public class Constants {
 
     public static class Nominee {
         public static final String DEFAULT_PFID = "null";
+        public static final String EMAIL = "email";
+        public static final String PFID = "pfId";
 
         public static class Relation{
             public static final int MOTHER = 0;
@@ -149,6 +152,7 @@ public class Constants {
         public static final int ADD_POLICY_REQUEST = 106;
         public static final int ADD_POLICY_RESULT = 107;
         public static final int NOMINEE_DASHBOARD_REQUEST = 108;
+        public static final int HELP_REQUEST = 109;
     }
 
     public class Notification {

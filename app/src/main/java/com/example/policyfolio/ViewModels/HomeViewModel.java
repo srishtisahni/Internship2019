@@ -65,7 +65,6 @@ public class HomeViewModel extends ViewModel {
     public LiveData<List<InsuranceProvider>> getProviders() {
         if(providers == null)
             providers = repository.fetchAllProviders();
-//        Log.e("PROVIDERS",providers.toString());
         return providers;
     }
 

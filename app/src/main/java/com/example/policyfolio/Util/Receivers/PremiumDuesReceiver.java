@@ -18,10 +18,11 @@ import com.example.policyfolio.Util.Constants;
 
 public class PremiumDuesReceiver extends BroadcastReceiver {
 
-
+    private Repository repository;
     @Override
     public void onReceive(Context context, Intent intent) {
-        Repository repository = Repository.getInstance(context);
+        repository = Repository.getInstance(context);
+
         long id = intent.getLongExtra(Constants.Notification.ID,-1);
         String policyNumber = intent.getStringExtra(Constants.Notification.POLICY_NUMBER);
         int type = intent.getIntExtra(Constants.Notification.TYPE,-1);

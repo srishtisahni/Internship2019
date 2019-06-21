@@ -13,10 +13,15 @@
         android:roundIcon="@mipmap/logo_circle"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".UI.Activities.NavigationActionActivities.HelpActivity"
+            android:label="@string/title_activity_help"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
         <receiver
             android:name=".Util.Receivers.PremiumDuesReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false" />
 
         <activity
             android:name=".UI.Activities.NavigationActionActivities.NomineeSupportActivity"

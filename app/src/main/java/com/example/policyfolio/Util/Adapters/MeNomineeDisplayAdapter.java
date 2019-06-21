@@ -1,17 +1,23 @@
 package com.example.policyfolio.Util.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.R;
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -19,13 +25,15 @@ import java.util.HashMap;
 public class MeNomineeDisplayAdapter extends RecyclerView.Adapter<MeNomineeDisplayAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<User> user;
+    private ArrayList<User> users;
     private HashMap<String, ArrayList<Policy>> policies;
+    private HashMap<Long, InsuranceProvider> providerHashMap;
 
-    public MeNomineeDisplayAdapter(Context context,ArrayList<User> user,HashMap<String, ArrayList<Policy>> policies){
+    public MeNomineeDisplayAdapter(Context context, ArrayList<User> users, HashMap<String, ArrayList<Policy>> policies, HashMap<Long, InsuranceProvider> providerHashMap){
         this.context = context;
-        this.user = user;
+        this.users = users;
         this.policies = policies;
+        this.providerHashMap = providerHashMap;
     }
 
     @NonNull
@@ -39,17 +47,46 @@ public class MeNomineeDisplayAdapter extends RecyclerView.Adapter<MeNomineeDispl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Log.e("SIZES",users.size()+" "+policies.size());
+        User user = users.get(position);
+        ArrayList<Policy> policyArrayList = policies.get(user.getId());
 
+        Log.e("ARRAY",policyArrayList+"");
+
+        holder.name.setText(user.getName());
+        if(policyArrayList!=null) {
+            Double totalCover = Policy.totalCover(policyArrayList);
+            int cover = (int) Math.floor(totalCover);
+
+            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            String moneyString = formatter.format(cover);
+
+            holder.amount.setText(moneyString.substring(1,moneyString.lastIndexOf(".00")));
+
+            WhiteTextAdapter whiteTextAdapter = new WhiteTextAdapter(context,policyArrayList,providerHashMap);
+            holder.policies.setAdapter(whiteTextAdapter);
+            holder.policies.setLayoutManager(new LinearLayoutManager(context,RecyclerView.VERTICAL,false));
+        }
+        else
+            holder.amount.setText("");
     }
 
     @Override
     public int getItemCount() {
-        return user.size();
+        return users.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        ImageView image;
+        TextView name;
+        TextView amount;
+        RecyclerView policies;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            image = itemView.findViewById(R.id.image);
+            name = itemView.findViewById(R.id.name);
+            amount = itemView.findViewById(R.id.amount);
+            policies = itemView.findViewById(R.id.policies);
         }
     }
 }

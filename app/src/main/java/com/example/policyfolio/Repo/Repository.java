@@ -174,7 +174,6 @@ public class Repository {
         if(cache.getAllProviders() == null)
             cache.setAllProviders(appDatabase.policyFolioDao().getProviders());     //Updates cache
         dataManager.fetchProviders(appDatabase);                           //Updates the local database from firebase
-//        Log.e("PROVIDERS",cache.getAllProviders().toString());
         return cache.getAllProviders();                                    //Returns live data from Cache
     }
 
@@ -234,5 +233,14 @@ public class Repository {
 
     public LiveData<Boolean> addNominee(Nominee nominee) {
         return dataManager.addNominee(nominee,appDatabase);
+    }
+
+    public LiveData<List<Policy>> fetchPoliciesForNominee(String email, String userId) {
+        dataManager.fetchPoliciesForNominee(email,userId,appDatabase);
+        return appDatabase.policyFolioDao().getPoliciesForNominee(userId,email);
+    }
+
+    public LiveData<ArrayList<User>> fetchNomineeUsers(String uId) {
+        return dataManager.fetchNomineeUsers(uId);
     }
 }

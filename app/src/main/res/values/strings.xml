@@ -37,5 +37,6 @@
     <string name="log_out">Log Out</string>
     <string name="title_activity_nominee_support">NomineeSupportActivity</string>
     <string name="manage_policy">Manage Policy</string>
+    <string name="title_activity_help">HelpActivity</string>
 
 </resources>

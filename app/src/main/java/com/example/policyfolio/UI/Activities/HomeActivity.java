@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
+import com.example.policyfolio.UI.Activities.NavigationActionActivities.HelpActivity;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.NomineeSupportActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
@@ -401,9 +402,19 @@ public class HomeActivity extends AppCompatActivity
                 item.setChecked(false);
                 nomineeDashboard();
                 break;
+            case R.id.help:
+                item.setChecked(false);
+                getHelp();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void getHelp() {
+        Intent intent = new Intent(this, HelpActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
     }
 
     private void nomineeDashboard() {

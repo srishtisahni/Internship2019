@@ -54,7 +54,33 @@ public class DataManager {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        update.setValue(true);              //Returns true if the user is added to firestore, false otherwise
+                        if(user.getEmail()!=null){
+                            firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                                    .whereEqualTo(Constants.Nominee.EMAIL,user.getEmail())
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if(task.isSuccessful()){
+                                                List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                                                final ArrayList<Nominee> nominees = new ArrayList<>();
+                                                for (int i = 0; i < documentSnapshots.size(); i++) {
+                                                    nominees.add(documentSnapshots.get(i).toObject(Nominee.class));
+                                                    nominees.get(i).setPfId(user.getId());
+                                                    firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                                                            .document(nominees.get(i).getUserId())
+                                                            .collection(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                                                            .document(nominees.get(i).getEmail())
+                                                            .set(nominees.get(i));
+                                                }
+                                            }
+                                            else {
+                                                Log.e("ERROR", task.getException().getMessage());
+                                            }
+                                        }
+                                    });
+                        }
+                        update.setValue(true);                                                      //Returns true if the user is added to firestore, false otherwise
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -338,5 +364,64 @@ public class DataManager {
                     }
                 });
         return result;
+    }
+
+    public LiveData<ArrayList<User>> fetchNomineeUsers(String uId) {
+        final MutableLiveData<ArrayList<User>> result = new MutableLiveData<>();
+        firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                .whereEqualTo(Constants.Nominee.PFID,uId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            final ArrayList<User> users = new ArrayList<>();
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            for (int i = 0; i < documentSnapshots.size(); i++){
+                                String userId = documentSnapshots.get(i).toObject(Nominee.class).getUserId();
+                                firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                                        .document(userId)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                if(task.isSuccessful()){
+                                                    User user = task.getResult().toObject(User.class);
+                                                    users.add(user);
+                                                    result.setValue(users);
+                                                }
+                                            }
+                                        });
+                            }
+                            result.setValue(users);
+                        }
+                    }
+                });
+        return result;
+    }
+
+    public void fetchPoliciesForNominee(String email, String userId, final AppDatabase appDatabase) {
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
+                .document(userId)
+                .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                .whereEqualTo(Constants.Policy.NOMINEE,email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            final ArrayList<Policy> policies = new ArrayList<>();
+                            for (int i = 0; i < documentSnapshots.size(); i++)
+                                policies.add(documentSnapshots.get(i).toObject(Policy.class));
+                            appExecutors.diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    appDatabase.policyFolioDao().putPolicies(policies);
+                                }
+                            });
+                        }
+                    }
+                });
     }
 }

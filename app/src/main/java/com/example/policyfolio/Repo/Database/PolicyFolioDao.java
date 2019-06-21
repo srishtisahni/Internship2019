@@ -11,7 +11,6 @@ import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
-import com.example.policyfolio.Util.Constants;
 
 import java.util.List;
 
@@ -30,6 +29,9 @@ public interface PolicyFolioDao {
 
     @Query("SELECT * from Policy where userId = :userId")
     LiveData<List<Policy>> getPolicies(String userId);                  //Fetch Policies belonging to a particular user
+
+    @Query("SELECT * from Policy where userId = :userId AND nominee = :email")
+    LiveData<List<Policy>> getPoliciesForNominee(String userId, String email);
 
     @Query("SELECT * from InsuranceProvider where id = :id")
     LiveData<InsuranceProvider> getProvider(Long id);                   //Fetch Insurance Provider based on the provide Id (Self generated long)
@@ -81,5 +83,4 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     List<Long> putNotifications(List<Notifications> notifications);            //Add notifications to database
-
 }

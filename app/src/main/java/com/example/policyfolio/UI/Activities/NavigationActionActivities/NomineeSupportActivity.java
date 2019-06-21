@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.UI.Fragments.NavigationActionFragments.AddNomineeFragment;
 import com.example.policyfolio.UI.Fragments.NavigationActionFragments.NomineeDashboardFragment;
 import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NomineeCallback;
@@ -86,6 +87,7 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
                 if (aBoolean) {
                     getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
                     addNomineeFragment = null;
+                    getSupportActionBar().setTitle("Nominee Dashboard");
                 } else {
                     Toast.makeText(NomineeSupportActivity.this, "Please check your internet connection and retry", Toast.LENGTH_LONG).show();
                 }
@@ -102,6 +104,7 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            getSupportActionBar().setTitle("Nominee Dashboard");
                             getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
                             addNomineeFragment = null;
                         }

@@ -1,22 +1,31 @@
 package com.example.policyfolio.ViewModels.NavigationViewModels;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Policy;
+import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.Util.Constants;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class NomineeViewModel extends ViewModel {
 
     private Repository repository;
     private LiveData<List<Nominee>> nominees;
+    private HashMap<String, LiveData<List<Policy>>> policies = new HashMap<>();
+    private LiveData<List<InsuranceProvider>> providers;
 
     private String uId;
+    private String uEmail;
     private int relation;
     private String email;
     private String name;
@@ -81,7 +90,35 @@ public class NomineeViewModel extends ViewModel {
         this.alternateNumber = alternateNumber;
     }
 
+    public String getuEmail() {
+        return uEmail;
+    }
+
+    public void setuEmail(String uEmail) {
+        this.uEmail = uEmail;
+    }
+
     public LiveData<Boolean> addNominee() {
         return repository.addNominee(new Nominee(uId,Constants.Nominee.DEFAULT_PFID,name,relation,email,phone,alternateNumber));
+    }
+
+    public LiveData<List<Policy>> getPoliciesForNominee(String userId) {
+        if(policies.get(userId) == null)
+            policies.put(userId,repository.fetchPoliciesForNominee(uEmail,userId));
+        return policies.get(userId);
+    }
+
+    public LiveData<List<InsuranceProvider>> getProviders() {
+        if(providers == null)
+            providers = repository.fetchAllProviders();
+        return providers;
+    }
+
+    public LiveData<ArrayList<User>> fetchNomineeUsers() {
+        return repository.fetchNomineeUsers(uId);
+    }
+
+    public LiveData<User> fetchUser() {
+        return repository.fetchUser(uId);
     }
 }
