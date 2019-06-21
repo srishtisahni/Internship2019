@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:background="@color/white"
     tools:context=".UI.Fragments.NavigationActionFragments.NomineeDashboardFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -54,8 +54,10 @@
             app:layout_constraintTop_toBottomOf="@+id/nominees" />
 
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_marginTop="16dp"
             android:background="@drawable/list_background"
             android:orientation="vertical"
@@ -69,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Policies you are nominees of"
+                android:text="@string/policies_you_are_nominees_of"
                 android:textColor="@color/white" />
 
             <androidx.recyclerview.widget.RecyclerView

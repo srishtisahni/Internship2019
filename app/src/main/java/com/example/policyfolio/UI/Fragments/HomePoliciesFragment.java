@@ -115,6 +115,8 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
                 for(int i=0;i<insuranceProviders.size();i++)
                     providersHashMap.put(insuranceProviders.get(i).getId(),insuranceProviders.get(i));
                 policyDisplayAdapter.notifyDataSetChanged();
+                duesAdapter.notifyDataSetChanged();
+                returnsAdapter.notifyDataSetChanged();
             }
         });
     }

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
@@ -45,10 +46,12 @@ public class NomineeDashboardFragment extends Fragment {
     private ArrayList<Nominee> nomineesList;
 
     private RecyclerView nomineesMe;
-    private ArrayList<User> meNomineeUsers;
+    private HashMap<String, User> meNomineeUsers;
     private HashMap<String, ArrayList<Policy>> meNomineePolicies;
     private MeNomineeDisplayAdapter meNomineeDisplayAdapter;
     private HashMap<Long, InsuranceProvider> providersHashMap;
+
+    private LinearLayout meNomineeLayout;
 
     private Button addNominees;
 
@@ -74,9 +77,11 @@ public class NomineeDashboardFragment extends Fragment {
         nomineesList = new ArrayList<>();
 
         nomineesMe = rootView.findViewById(R.id.me_nominees);
-        meNomineeUsers = new ArrayList<>();
+        meNomineeUsers = new HashMap<>();
         meNomineePolicies = new HashMap<>();
         providersHashMap = new HashMap<>();
+
+        meNomineeLayout = rootView.findViewById(R.id.linearLayout);
 
         addNominees = rootView.findViewById(R.id.add_nominee);
         addNominees.setOnClickListener(new View.OnClickListener() {
@@ -111,16 +116,15 @@ public class NomineeDashboardFragment extends Fragment {
         });
         viewModel.fetchUser().observe(this, new Observer<User>() {
             @Override
-            public void onChanged(User user) {
+            public void onChanged(final User user) {
                 if(user!=null){
                     viewModel.setuEmail(user.getEmail());
                     viewModel.fetchNomineeUsers().observe(NomineeDashboardFragment.this, new Observer<ArrayList<User>>() {
                         @Override
-                        public void onChanged(ArrayList<User> users) {
+                        public void onChanged(final ArrayList<User> users) {
                             meNomineeUsers.clear();
-                            meNomineeUsers.addAll(users);
                             meNomineePolicies.clear();
-                            for(int i=0;i<meNomineeUsers.size();i++){
+                            for(int i=0;i<users.size();i++){
                                 viewModel.getPoliciesForNominee(users.get(i).getId()).observe(NomineeDashboardFragment.this, new Observer<List<Policy>>() {
                                     @Override
                                     public void onChanged(List<Policy> policies) {
@@ -129,7 +133,16 @@ public class NomineeDashboardFragment extends Fragment {
                                                 String id = policies.get(0).getUserId();
                                                 meNomineePolicies.put(id,new ArrayList<Policy>());
                                                 meNomineePolicies.get(id).addAll(policies);
+                                                for(int i=0;i<users.size();i++)
+                                                    if(id.equals(users.get(i).getId())) {
+                                                        meNomineeUsers.put(users.get(i).getId(),users.get(i));
+                                                        break;
+                                                    }
                                                 meNomineeDisplayAdapter.notifyDataSetChanged();
+                                                if(meNomineeUsers.size()>0)
+                                                    meNomineeLayout.setVisibility(View.VISIBLE);
+                                                else
+                                                    meNomineeLayout.setVisibility(View.GONE);
                                             }
                                         }
                                     }

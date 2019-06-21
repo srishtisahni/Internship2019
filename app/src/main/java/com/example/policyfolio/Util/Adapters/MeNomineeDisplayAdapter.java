@@ -1,6 +1,7 @@
 package com.example.policyfolio.Util.Adapters;
 
 import android.content.Context;
+import android.media.CamcorderProfile;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +26,11 @@ import java.util.HashMap;
 public class MeNomineeDisplayAdapter extends RecyclerView.Adapter<MeNomineeDisplayAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<User> users;
+    private HashMap<String, User> users;
     private HashMap<String, ArrayList<Policy>> policies;
     private HashMap<Long, InsuranceProvider> providerHashMap;
 
-    public MeNomineeDisplayAdapter(Context context, ArrayList<User> users, HashMap<String, ArrayList<Policy>> policies, HashMap<Long, InsuranceProvider> providerHashMap){
+    public MeNomineeDisplayAdapter(Context context, HashMap<String, User> users, HashMap<String, ArrayList<Policy>> policies, HashMap<Long, InsuranceProvider> providerHashMap){
         this.context = context;
         this.users = users;
         this.policies = policies;
@@ -47,11 +48,9 @@ public class MeNomineeDisplayAdapter extends RecyclerView.Adapter<MeNomineeDispl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Log.e("SIZES",users.size()+" "+policies.size());
-        User user = users.get(position);
+        ArrayList<User> usersList = new ArrayList<>(users.values());
+        User user = usersList.get(position);
         ArrayList<Policy> policyArrayList = policies.get(user.getId());
-
-        Log.e("ARRAY",policyArrayList+"");
 
         holder.name.setText(user.getName());
         if(policyArrayList!=null) {
