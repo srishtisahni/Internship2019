@@ -42,8 +42,7 @@ public class TrackClaimFragment extends Fragment implements TrackClaimCallback {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_track_claim, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(ClaimViewModel.class);
         viewModel.initiateRepo(getContext());

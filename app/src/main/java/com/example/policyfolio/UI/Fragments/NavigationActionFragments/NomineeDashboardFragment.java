@@ -62,8 +62,7 @@ public class NomineeDashboardFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_nominee_dashboard, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(NomineeViewModel.class);
         viewModel.initiateRepo(getContext());

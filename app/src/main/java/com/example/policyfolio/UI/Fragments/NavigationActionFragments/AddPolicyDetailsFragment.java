@@ -103,8 +103,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_policy_details, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(AddViewModel.class);
         viewModel.initiateRepo(getContext());

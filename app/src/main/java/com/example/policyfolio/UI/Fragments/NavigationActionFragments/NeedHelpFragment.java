@@ -56,8 +56,7 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_need_help, container, false);
         viewModel = ViewModelProviders.of(getActivity()).get(HelpViewModel.class);
         viewModel.initiateRepo(getContext());
