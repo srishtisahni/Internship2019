@@ -89,14 +89,15 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(query.getText().toString().length() < 50){
-                    Toast.makeText(getContext(),"The query should be atleast 50 characters long",Toast.LENGTH_LONG).show();
-                }
-                else if(viewModel.getType() != -1){
+                if(viewModel.getType() == -1){
                     Toast.makeText(getContext(),"Choose a valid Category",Toast.LENGTH_LONG).show();
+                }
+                else if(query.getText().toString().length() < 50){
+                    Toast.makeText(getContext(),"The query should be atleast 50 characters long",Toast.LENGTH_LONG).show();
                 }
                 else {
                     viewModel.setQuery(query.getText().toString());
+                    submit.setEnabled(false);
                     callback.save();
                 }
             }
@@ -111,5 +112,9 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
             textType.setText(queryTypes[position]);
             viewModel.setType(position);
         }
+    }
+
+    public void enableButton() {
+        submit.setEnabled(true);
     }
 }

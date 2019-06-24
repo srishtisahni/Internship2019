@@ -79,7 +79,7 @@
         android:layout_marginBottom="48dp"
         android:background="@drawable/text_background_8dp"
         android:gravity="top"
-        android:hint="Type your Query here"
+        android:hint="Type your Query here \n (Atleast 50 characters)"
         android:padding="8dp"
         android:textColor="@color/Grey"
         android:textSize="14sp"

@@ -12,6 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -55,11 +56,16 @@ public class HelpActivity extends AppCompatActivity implements NeedHelpCallback 
 
     @Override
     public void save() {
+        progressBar.setVisibility(View.VISIBLE);
+        fragmentHolder.setAlpha(0.4f);
         viewModel.saveQuery().observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
+                progressBar.setVisibility(View.GONE);
+                fragmentHolder.setAlpha(1f);
                 if(s == null){
                     Toast.makeText(HelpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
+                    needHelpFragment.enableButton();
                 }
                 else {
                     setResult(Constants.PermissionAndRequests.HELP_RESULT);

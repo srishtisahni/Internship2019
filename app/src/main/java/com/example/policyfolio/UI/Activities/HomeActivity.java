@@ -137,8 +137,6 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void getTimeToast(Long lastUpdated) {
-        if(timeToast!=null)
-            timeToast.cancel();
         Long timeDifference = (System.currentTimeMillis()/1000) - lastUpdated;
         long days = timeDifference/(60*60*24);
         timeDifference = timeDifference%(60*60*24);
@@ -158,13 +156,14 @@ public class HomeActivity extends AppCompatActivity
             time = time + sec + " secs ";
         if(time.length()>0) {
             time = time + "ago";
-            timeToast = Toast.makeText(this,"Updated "+time,Toast.LENGTH_SHORT);
+            if(timeToast == null) {
+                timeToast = Toast.makeText(this, "Updated " + time, Toast.LENGTH_SHORT);
+                timeToast.show();
+            }
+            else {
+                timeToast.setText("Updated " + time);
+            }
         }
-        else {
-            timeToast = null;
-        }
-        if(timeToast!=null)
-            timeToast.show();
     }
 
     private void fetchInfo() {
@@ -433,10 +432,8 @@ public class HomeActivity extends AppCompatActivity
                 fragmentHolder.setAlpha(1f);
                 progressBar.setVisibility(View.GONE);
                 if(aBoolean){
-                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.apply();
+                    getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE).edit().clear().apply();
+                    getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
 
                     Intent intent = new Intent(HomeActivity.this,LoginSignUpActivity.class);
                     startActivity(intent);

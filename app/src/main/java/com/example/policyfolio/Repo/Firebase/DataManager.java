@@ -107,8 +107,10 @@ public class DataManager {
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
-                                    if(user!=null)
+                                    if(user!=null) {
+                                        user.setLastUpdated(System.currentTimeMillis()/1000);
                                         appDatabase.policyFolioDao().putUser(user);
+                                    }
                                 }
                             });
                         }
@@ -128,8 +130,10 @@ public class DataManager {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
                             final ArrayList<Policy> policies = new ArrayList<>();
-                            for (int i = 0; i < documentSnapshots.size(); i++)
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
                                 policies.add(documentSnapshots.get(i).toObject(Policy.class));
+                                policies.get(i).setLastUpdated(System.currentTimeMillis()/1000);
+                            }
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -220,8 +224,10 @@ public class DataManager {
                         if(task.isSuccessful()){
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
                             final ArrayList<InsuranceProvider> insuranceProviders = new ArrayList<>();
-                            for (int i = 0; i < documentSnapshots.size(); i++)
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
                                 insuranceProviders.add(documentSnapshots.get(i).toObject(InsuranceProvider.class));
+                                insuranceProviders.get(i).setLastUpdated(System.currentTimeMillis()/1000);
+                            }
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -243,8 +249,10 @@ public class DataManager {
                         if(task.isSuccessful()){
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
                             final ArrayList<InsuranceProvider> insuranceProviders = new ArrayList<>();
-                            for (int i = 0; i < documentSnapshots.size(); i++)
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
                                 insuranceProviders.add(documentSnapshots.get(i).toObject(InsuranceProvider.class));
+                                insuranceProviders.get(i).setLastUpdated(System.currentTimeMillis()/1000);
+                            }
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -268,8 +276,10 @@ public class DataManager {
                         if(task.isSuccessful()){
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
                             final ArrayList<Nominee> nominees = new ArrayList<>();
-                            for (int i = 0; i < documentSnapshots.size(); i++)
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
                                 nominees.add(documentSnapshots.get(i).toObject(Nominee.class));
+                                nominees.get(i).setLastUpdated(System.currentTimeMillis()/1000);
+                            }
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
@@ -414,8 +424,10 @@ public class DataManager {
                         if (task.isSuccessful()) {
                             List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
                             final ArrayList<Policy> policies = new ArrayList<>();
-                            for (int i = 0; i < documentSnapshots.size(); i++)
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
                                 policies.add(documentSnapshots.get(i).toObject(Policy.class));
+                                policies.get(i).setLastUpdated(System.currentTimeMillis()/1000);
+                            }
                             appExecutors.diskIO().execute(new Runnable() {
                                 @Override
                                 public void run() {
