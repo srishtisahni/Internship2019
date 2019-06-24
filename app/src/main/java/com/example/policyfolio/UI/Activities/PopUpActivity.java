@@ -116,7 +116,7 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
                     finish();
                 }
                 else {
-                    Toast.makeText(PopUpActivity.this, "System Error Occurred", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PopUpActivity.this, "Unable to update Information", Toast.LENGTH_LONG).show();
                 }
             }
         });

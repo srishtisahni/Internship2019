@@ -89,7 +89,7 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
                     addNomineeFragment = null;
                     getSupportActionBar().setTitle("Nominee Dashboard");
                 } else {
-                    Toast.makeText(NomineeSupportActivity.this, "Please check your internet connection and retry", Toast.LENGTH_LONG).show();
+                    Toast.makeText(NomineeSupportActivity.this, "Unable to add Nominee.", Toast.LENGTH_LONG).show();
                 }
             }
         });

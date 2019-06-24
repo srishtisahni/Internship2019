@@ -18,6 +18,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
 import com.example.policyfolio.Repo.Firebase.AuthManager;
+import com.example.policyfolio.Repo.Firebase.DataClasses.Query;
 import com.example.policyfolio.Repo.Firebase.DataManager;
 import com.example.policyfolio.Repo.Firebase.StorageManager;
 import com.example.policyfolio.Repo.InternalStorage.ImageStorage;
@@ -242,5 +243,9 @@ public class Repository {
 
     public LiveData<ArrayList<User>> fetchNomineeUsers(String uId) {
         return dataManager.fetchNomineeUsers(uId);
+    }
+
+    public LiveData<String> saveQuery(Query query) {
+        return dataManager.saveQuery(query);
     }
 }

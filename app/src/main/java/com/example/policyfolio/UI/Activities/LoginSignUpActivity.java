@@ -110,7 +110,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                         }
                     }
                     else {
-                        Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                        fragmentHolder.setAlpha(1f);
+                        Toast.makeText(LoginSignUpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -188,7 +190,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                     }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    fragmentHolder.setAlpha(1f);
+                    Toast.makeText(LoginSignUpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -263,7 +267,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                     }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    fragmentHolder.setAlpha(1f);
+                    Toast.makeText(LoginSignUpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -315,7 +321,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                     }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    fragmentHolder.setAlpha(1f);
+                    Toast.makeText(LoginSignUpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -361,7 +369,9 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                     }
                 }
                 else {
-                    Toast.makeText(LoginSignUpActivity.this,"Please check your internet connection and try again",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
+                    fragmentHolder.setAlpha(1f);
+                    Toast.makeText(LoginSignUpActivity.this,"SignUp Failed",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -379,6 +389,8 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                     addUser(firebaseUser,Constants.LoginInInfo.Type.EMAIL);
                 }
                 else {
+                    progressBar.setVisibility(View.GONE);
+                    fragmentHolder.setAlpha(1f);
                     Toast.makeText(LoginSignUpActivity.this,"Email Sign Up Failed",Toast.LENGTH_LONG).show();
                 }
             }
@@ -392,7 +404,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                 progressBar.setVisibility(View.GONE);
                 fragmentHolder.setAlpha(1f);
                 if(!aBoolean)
-                    Toast.makeText(LoginSignUpActivity.this,"Information couldn't be updated.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginSignUpActivity.this,"Unable to update Information.",Toast.LENGTH_LONG).show();
                 else {
                     startHomeActivity(firebaseUser, type);
                 }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.Repo.Firebase.DataClasses.Query;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -55,7 +57,7 @@ public class DataManager {
                     @Override
                     public void onSuccess(Void aVoid) {
                         if(user.getEmail()!=null){
-                            firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                            firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.COLLECTION_NOMINEE)
                                     .whereEqualTo(Constants.Nominee.EMAIL,user.getEmail())
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -69,7 +71,7 @@ public class DataManager {
                                                     nominees.get(i).setPfId(user.getId());
                                                     firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                                                             .document(nominees.get(i).getUserId())
-                                                            .collection(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                                                            .collection(Constants.FirebaseDataManager.COLLECTION_NOMINEE)
                                                             .document(nominees.get(i).getEmail())
                                                             .set(nominees.get(i));
                                                 }
@@ -118,7 +120,7 @@ public class DataManager {
         ////Updates the local database using the fetched policy information from firestore
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(id)
-                .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                .collection(Constants.FirebaseDataManager.COLLECTION_POLICIES)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -209,7 +211,7 @@ public class DataManager {
 
     public void fetchProviders(int type, final AppDatabase appDatabase) {
         //Updates the local database using the fetched provider information from firestore
-        firebaseFirestore.collection(Constants.FirebaseDataManager.PROVIDERS_COLLECTION)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_PROVIDERS)
                 .whereEqualTo(Constants.InsuranceProviders.TYPE,type)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -233,7 +235,7 @@ public class DataManager {
 
     public void fetchProviders(final AppDatabase appDatabase) {
         //Updates the local database using the fetched provider information from firestore
-        firebaseFirestore.collection(Constants.FirebaseDataManager.PROVIDERS_COLLECTION)
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_PROVIDERS)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -258,7 +260,7 @@ public class DataManager {
         //Updates the local database using the fetched nominee information from firestore
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(uId)
-                .collection(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                .collection(Constants.FirebaseDataManager.COLLECTION_NOMINEE)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -284,7 +286,7 @@ public class DataManager {
         //Uploads Policy Information to the firestore database
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(policy.getUserId())
-                .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                .collection(Constants.FirebaseDataManager.COLLECTION_POLICIES)
                 .document(policy.getPolicyNumber())
                 .set(policy)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -306,7 +308,7 @@ public class DataManager {
         for(int i=0;i<policies.size();i++) {
             firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                     .document(uid)
-                    .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                    .collection(Constants.FirebaseDataManager.COLLECTION_POLICIES)
                     .document(policies.get(i).getPolicyNumber())
                     .set(policies.get(i))
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -345,7 +347,7 @@ public class DataManager {
                             });
                             firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                                     .document(nominee.getUserId())
-                                    .collection(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+                                    .collection(Constants.FirebaseDataManager.COLLECTION_NOMINEE)
                                     .document(nominee.getEmail())
                                     .set(nominee)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -368,7 +370,7 @@ public class DataManager {
 
     public LiveData<ArrayList<User>> fetchNomineeUsers(String uId) {
         final MutableLiveData<ArrayList<User>> result = new MutableLiveData<>();
-        firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.NOMINEE_COLLECTION)
+        firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.COLLECTION_NOMINEE)
                 .whereEqualTo(Constants.Nominee.PFID,uId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -403,7 +405,7 @@ public class DataManager {
     public void fetchPoliciesForNominee(String email, String userId, final AppDatabase appDatabase) {
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_USERS)
                 .document(userId)
-                .collection(Constants.FirebaseDataManager.POLICIES_COLLECTION)
+                .collection(Constants.FirebaseDataManager.COLLECTION_POLICIES)
                 .whereEqualTo(Constants.Policy.NOMINEE,email)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -423,5 +425,24 @@ public class DataManager {
                         }
                     }
                 });
+    }
+
+    public LiveData<String> saveQuery(Query query) {
+        final MutableLiveData<String> result = new MutableLiveData<>();
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_QUERIES)
+                .add(query)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        if(task.getResult()!=null) {
+                            String id = task.getResult().getId();
+                            result.setValue(id);
+                        }
+                        else {
+                            result.setValue(null);
+                        }
+                    }
+                });
+        return result;
     }
 }

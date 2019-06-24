@@ -139,22 +139,22 @@ public class HomeActivity extends AppCompatActivity
     private void getTimeToast(Long lastUpdated) {
         if(timeToast!=null)
             timeToast.cancel();
-        Long timeDiffernce = (System.currentTimeMillis()/1000) - lastUpdated;
-        long days = timeDiffernce/(60*60*24);
-        timeDiffernce = timeDiffernce%(60*60*24);
-        long hours = timeDiffernce/(60*60);
-        timeDiffernce = timeDiffernce%(60*60);
-        long minutes = timeDiffernce/60;
-        timeDiffernce = timeDiffernce%60;
-        long sec = timeDiffernce;
+        Long timeDifference = (System.currentTimeMillis()/1000) - lastUpdated;
+        long days = timeDifference/(60*60*24);
+        timeDifference = timeDifference%(60*60*24);
+        long hours = timeDifference/(60*60);
+        timeDifference = timeDifference%(60*60);
+        long minutes = timeDifference/60;
+        timeDifference = timeDifference%60;
+        long sec = timeDifference;
         String time = "";
         if(days!=0)
             time = time + days + " days ";
-        if(hours!=0)
+        else if(hours!=0)
             time = time + hours + " hours ";
-        if(minutes!=0)
+        else if(minutes!=0)
             time = time + minutes + " mins ";
-        if(sec!=0)
+        else if(sec!=0)
             time = time + sec + " secs ";
         if(time.length()>0) {
             time = time + "ago";
@@ -474,11 +474,17 @@ public class HomeActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == Constants.PermissionAndRequests.UPDATE_REQUEST && resultCode == Constants.PermissionAndRequests.UPDATE_RESULT){
-            popUpIntent = null;                                  //Render Fragments based on user information
-        }
-        if(requestCode == Constants.PermissionAndRequests.ADD_POLICY_REQUEST && resultCode == Constants.PermissionAndRequests.ADD_POLICY_RESULT){
-//            policies();
+        switch (requestCode){
+            case Constants.PermissionAndRequests.UPDATE_REQUEST:
+                if(resultCode == Constants.PermissionAndRequests.UPDATE_RESULT)
+                    popUpIntent = null;                                  //Render Fragments based on user information
+                break;
+            case Constants.PermissionAndRequests.ADD_POLICY_REQUEST:
+                break;
+            case Constants.PermissionAndRequests.HELP_REQUEST:
+                if(resultCode == Constants.PermissionAndRequests.HELP_RESULT)
+                    Toast.makeText(this,"We will get back on your query as soon as possible",Toast.LENGTH_LONG).show();
+                break;
         }
     }
 

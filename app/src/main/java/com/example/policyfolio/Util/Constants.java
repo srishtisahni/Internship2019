@@ -95,10 +95,11 @@ public class Constants {
 
     public static class FirebaseDataManager {
         public static final String COLLECTION_USERS = "users";
-        public static final String POLICIES_COLLECTION = "policies";
-        public static final String PROVIDERS_COLLECTION = "insurance_providers";
-        public static final String PRODUCTS_COLLECTION = "insurance_products";
-        public static final String NOMINEE_COLLECTION = "nominees";
+        public static final String COLLECTION_POLICIES = "policies";
+        public static final String COLLECTION_PROVIDERS = "insurance_providers";
+        public static final String COLLECTION_PRODUCTS = "insurance_products";
+        public static final String COLLECTION_NOMINEE = "nominees";
+        public static final String COLLECTION_QUERIES = "queries";
 
         public static final int UPDATE_REQUEST = 1001;
         public static final int UPDATE_RESULT = 1002;
@@ -120,6 +121,7 @@ public class Constants {
         public static final int NOMINEE = 3;
         public static final int RELATIONSHIPS = 4;
         public static final int GENDER = 5;
+        public static final int QUERY = 6;
     }
 
     public static class InsuranceProviders {
@@ -153,9 +155,10 @@ public class Constants {
         public static final int ADD_POLICY_RESULT = 107;
         public static final int NOMINEE_DASHBOARD_REQUEST = 108;
         public static final int HELP_REQUEST = 109;
+        public static final int HELP_RESULT = 201;
     }
 
-    public class Notification {
+    public static class Notification {
         public static final String ID = "id";
         public static final String POLICY_NUMBER = "policy_number";
         public static final String TYPE = "type";
@@ -163,12 +166,23 @@ public class Constants {
         public static final String DUES_CHANNEL_ID = "dues";
         public static final String NOTIFICATION_SHARED_PREFERENCE = "Notifications";
 
-        public class Type {
+        public static class Type {
             public static final int DAY = 1;
             public static final int WEEK = 2;
             public static final int TWO_WEEKS = 3;
             public static final int MONTH = 4;
             public static final int TWO_MONTHS = 5;
+        }
+    }
+
+    public static class Query{
+        public static class Type{
+            public static final int CLAIMS = 0;
+            public static final int LEGAL_MATTER = 1;
+            public static final int CASE_FILING = 2;
+            public static final int DISPUTE_HANDLING = 3;
+            public static final int BUY_NEW = 4;
+            public static final int USAGE = 5;
         }
     }
 }

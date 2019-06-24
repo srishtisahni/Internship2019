@@ -82,7 +82,7 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
                 fragmentHolder.setAlpha(1f);
                 progressBar.setVisibility(View.GONE);
                 if(!aBoolean)
-                    Toast.makeText(AddPolicyActivity.this,"Error Updating Information",Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddPolicyActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
                 else
                     setResult(Constants.PermissionAndRequests.ADD_POLICY_RESULT);
             }
