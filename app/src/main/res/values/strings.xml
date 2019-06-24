@@ -39,5 +39,11 @@
     <string name="manage_policy">Manage Policy</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="policies_you_are_nominees_of">Policies you are nominees of</string>
+    <string name="title_activity_promotions">PromotionsActivity</string>
+    <string name="title_activity_claim_support">ClaimSupportActivity</string>
+    <string name="claim_assistance_is_just_a_few_clicks_away">Claim Assistance is just a few clicks away</string>
+    <string name="claim_assistance">Claim Assistance</string>
+    <string name="track_claim">Track Claim</string>
+    <string name="call_for_assistance">Call for Assistance</string>
 
 </resources>

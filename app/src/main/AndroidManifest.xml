@@ -14,9 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".UI.Activities.NavigationActionActivities.ClaimSupportActivity"
+            android:label="@string/title_activity_claim_support"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".UI.Activities.NavigationActionActivities.PromotionsActivity"
+            android:label="@string/title_activity_promotions"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".UI.Activities.NavigationActionActivities.HelpActivity"
             android:label="@string/title_activity_help"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".Util.Receivers.PremiumDuesReceiver"

@@ -1,5 +1,7 @@
 package com.example.policyfolio.UI.Activities.NavigationActionActivities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.example.policyfolio.UI.Fragments.NavigationActionFragments.NeedHelpFragment;
@@ -41,6 +43,7 @@ public class HelpActivity extends AppCompatActivity implements NeedHelpCallback 
         viewModel = ViewModelProviders.of(this).get(HelpViewModel.class);
         viewModel.initiateRepo(this);
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
+        viewModel.setType(getIntent().getIntExtra(Constants.Query.TYPE,-1));
 
         progressBar = findViewById(R.id.progress_bar);
         fragmentHolder = findViewById(R.id.fragment_holder);
@@ -73,5 +76,29 @@ public class HelpActivity extends AppCompatActivity implements NeedHelpCallback 
                 }
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(needHelpFragment!=null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                    .setTitle("Exit")
+                    .setMessage("Do you want to exit?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            HelpActivity.super.onBackPressed();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+            builder.show();
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 }

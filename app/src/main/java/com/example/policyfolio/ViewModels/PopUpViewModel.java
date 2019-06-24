@@ -11,11 +11,8 @@ import com.example.policyfolio.Repo.Repository;
 
 public class PopUpViewModel extends ViewModel {
 
-    //Local User Copy
-    private User user = new User();
-
-    //Repository
     private Repository repository;
+    private User user = new User();
 
     public void initiateRepo(Context context) {
         repository = Repository.getInstance(context);

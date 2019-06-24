@@ -1,4 +1,4 @@
-package com.example.policyfolio.Util.Adapters;
+package com.example.policyfolio.Util.ListAdapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

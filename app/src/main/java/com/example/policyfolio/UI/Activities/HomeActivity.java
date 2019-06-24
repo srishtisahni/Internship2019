@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
+import com.example.policyfolio.UI.Activities.NavigationActionActivities.ClaimSupportActivity;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.HelpActivity;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.NomineeSupportActivity;
+import com.example.policyfolio.UI.Activities.NavigationActionActivities.PromotionsActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
@@ -405,9 +407,29 @@ public class HomeActivity extends AppCompatActivity
                 item.setChecked(false);
                 getHelp();
                 break;
+            case R.id.promotions:
+                item.setChecked(false);
+                promotions();
+                break;
+            case R.id.claim_support:
+                item.setChecked(false);
+                claimSupport();
+                break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void claimSupport() {
+        Intent intent = new Intent(this, ClaimSupportActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
+    }
+
+    private void promotions() {
+        Intent intent = new Intent(this, PromotionsActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
     }
 
     private void getHelp() {

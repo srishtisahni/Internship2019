@@ -4,13 +4,11 @@ package com.example.policyfolio.UI.Fragments.NavigationActionFragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +20,11 @@ import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
-import com.example.policyfolio.Util.Adapters.MeNomineeDisplayAdapter;
-import com.example.policyfolio.Util.Adapters.NomineeDisplayAdapter;
+import com.example.policyfolio.Util.ListAdapters.MeNomineeDisplayAdapter;
+import com.example.policyfolio.Util.ListAdapters.NomineeDisplayAdapter;
 import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NomineeCallback;
-import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.HomeViewModel;
 import com.example.policyfolio.ViewModels.NavigationViewModels.NomineeViewModel;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

@@ -1,8 +1,6 @@
-package com.example.policyfolio.Util.Adapters;
+package com.example.policyfolio.Util.ListAdapters;
 
 import android.content.Context;
-import android.media.CamcorderProfile;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

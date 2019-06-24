@@ -54,10 +54,6 @@
                 android:icon="@drawable/ic_info_outline_black_24dp"
                 android:title="@string/about_us" />
             <item
-                android:id="@+id/legal"
-                android:icon="@drawable/ic_insert_drive_file_black_24dp"
-                android:title="@string/legal" />
-            <item
                 android:id="@+id/logout"
                 android:icon="@drawable/ic_exit_to_app_black_24dp"
                 android:title="@string/log_out" />

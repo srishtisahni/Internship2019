@@ -121,11 +121,11 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
         if(addPolicyDetailsFragment == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this)
                     .setTitle("Exit")
-                    .setMessage("Do you want to exit without saving the policy")
+                    .setMessage("Do you want to exit without saving the Policy?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            finish();
+                            AddPolicyActivity.super.onBackPressed();
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override

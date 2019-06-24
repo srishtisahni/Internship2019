@@ -1,4 +1,4 @@
-package com.example.policyfolio.Util.Adapters;
+package com.example.policyfolio.Util.ListAdapters;
 
 import android.content.Context;
 import android.content.res.TypedArray;

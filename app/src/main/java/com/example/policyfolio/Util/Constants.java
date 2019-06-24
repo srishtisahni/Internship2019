@@ -1,5 +1,7 @@
 package com.example.policyfolio.Util;
 
+import android.content.Intent;
+
 import java.text.SimpleDateFormat;
 import java.util.logging.Formatter;
 
@@ -156,6 +158,8 @@ public class Constants {
         public static final int NOMINEE_DASHBOARD_REQUEST = 108;
         public static final int HELP_REQUEST = 109;
         public static final int HELP_RESULT = 201;
+        public static final int PROMOTIONS_REQUEST = 202;
+        public static final int CLAIMS_REQUEST = 203;
     }
 
     public static class Notification {
@@ -176,6 +180,8 @@ public class Constants {
     }
 
     public static class Query{
+        public static final String TYPE = "type";
+
         public static class Type{
             public static final int CLAIMS = 0;
             public static final int LEGAL_MATTER = 1;
@@ -184,5 +190,9 @@ public class Constants {
             public static final int BUY_NEW = 4;
             public static final int USAGE = 5;
         }
+    }
+
+    public class Claims {
+        public static final String NUMBER = "+91 78271 42153";
     }
 }

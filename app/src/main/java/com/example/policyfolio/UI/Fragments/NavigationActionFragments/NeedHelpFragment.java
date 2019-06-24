@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.Util.Adapters.BasicDropdownTextAdapter;
+import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NeedHelpCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.NavigationViewModels.HelpViewModel;
@@ -39,6 +41,7 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
 
     private EditText query;
     private Button submit;
+    private TextView wordCount;
 
     private NeedHelpCallback callback;
 
@@ -66,6 +69,7 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
 
         query = rootView.findViewById(R.id.query);
         submit = rootView.findViewById(R.id.submit);
+        wordCount = rootView.findViewById(R.id.word_count);
 
         setUpAdapterAndListeners();
 
@@ -73,7 +77,8 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
     }
 
     private void setUpAdapterAndListeners() {
-        viewModel.setType(-1);
+        if(viewModel.getType() != -1)
+            textType.setText(queryTypes[viewModel.getType()]);
         typeAdapter = new BasicDropdownTextAdapter(getContext(),queryTypes,this, Constants.DropDownType.QUERY);
         typeChoice.setAdapter(typeAdapter);
         typeChoice.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
@@ -83,6 +88,30 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
             public void onClick(View v) {
                 typeChoice.setVisibility(View.VISIBLE);
                 textType.setVisibility(View.GONE);
+            }
+        });
+
+        query.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.toString().length()<50)
+                    wordCount.setTextColor(getResources().getColor(R.color.red));
+                else
+                    wordCount.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                wordCount.setText("" + s.toString().length());
+                if(s.toString().length() == 0)
+                    wordCount.setVisibility(View.GONE);
+                else wordCount.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
