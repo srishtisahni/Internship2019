@@ -38,5 +38,6 @@
     <string name="title_activity_nominee_support">NomineeSupportActivity</string>
     <string name="manage_policy">Manage Policy</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="policies_you_are_nominees_of">Policies you are nominees of</string>
 
 </resources>
