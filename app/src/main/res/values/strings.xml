@@ -45,5 +45,6 @@
     <string name="claim_assistance">Claim Assistance</string>
     <string name="track_claim">Track Claim</string>
     <string name="call_for_assistance">Call for Assistance</string>
+    <string name="title_activity_document">DocumentActivity</string>
 
 </resources>

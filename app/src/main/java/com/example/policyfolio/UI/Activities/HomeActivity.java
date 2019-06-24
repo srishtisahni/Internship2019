@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.ClaimSupportActivity;
+import com.example.policyfolio.UI.Activities.NavigationActionActivities.DocumentActivity;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.HelpActivity;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.NomineeSupportActivity;
 import com.example.policyfolio.UI.Activities.NavigationActionActivities.PromotionsActivity;
@@ -392,32 +393,35 @@ public class HomeActivity extends AppCompatActivity
 
         switch (id){
             case R.id.add_policy:
-                item.setChecked(false);
                 addPolicy();
                 break;
             case R.id.logout:
-                item.setChecked(false);
                 logOut();
                 break;
             case R.id.nominee_support:
-                item.setChecked(false);
                 nomineeDashboard();
                 break;
             case R.id.help:
-                item.setChecked(false);
                 getHelp();
                 break;
             case R.id.promotions:
-                item.setChecked(false);
                 promotions();
                 break;
             case R.id.claim_support:
-                item.setChecked(false);
                 claimSupport();
+                break;
+            case R.id.documents:
+                documentVault();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void documentVault() {
+        Intent intent = new Intent(this, DocumentActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
     }
 
     private void claimSupport() {

@@ -160,6 +160,7 @@ public class Constants {
         public static final int HELP_RESULT = 201;
         public static final int PROMOTIONS_REQUEST = 202;
         public static final int CLAIMS_REQUEST = 203;
+        public static final int DOCUMENTS_REQUEST = 204;
     }
 
     public static class Notification {
