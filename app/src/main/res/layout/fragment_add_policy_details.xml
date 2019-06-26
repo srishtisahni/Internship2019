@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     android:background="@color/white"
-    tools:context=".UI.Fragments.NavigationActionFragments.AddPolicyDetailsFragment">
+    tools:context=".UI.Fragments.AddPolicy.AddPolicyDetailsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

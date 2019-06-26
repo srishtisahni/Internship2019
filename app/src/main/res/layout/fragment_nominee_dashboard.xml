@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".UI.Fragments.NavigationActionFragments.NomineeDashboardFragment">
+    tools:context=".UI.Fragments.Nominee.NomineeDashboardFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

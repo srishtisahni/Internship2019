@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UI.Activities.NavigationActionActivities.NomineeSupportActivity"
+    tools:context=".UI.Activities.NomineeSupportActivity"
     tools:showIn="@layout/activity_nominee_support">
 
     <FrameLayout

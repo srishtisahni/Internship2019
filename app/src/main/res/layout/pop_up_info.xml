@@ -6,7 +6,7 @@
     android:layout_width="wrap_content"
     android:focusableInTouchMode="true"
     android:layout_height="wrap_content"
-    tools:context=".UI.Fragments.EmailPhoneFragment">
+    tools:context=".UI.Fragments.LoginSignUp.EmailPhoneFragment">
 
     <EditText
         android:id="@+id/name"

@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.Activities.NavigationActionActivities.DocumentActivity"
+            android:name=".UI.Activities.DocumentActivity"
             android:label="@string/title_activity_document"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".UI.Activities.NavigationActionActivities.ClaimSupportActivity"
+            android:name=".UI.Activities.ClaimSupportActivity"
             android:label="@string/title_activity_claim_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.NavigationActionActivities.PromotionsActivity"
+            android:name=".UI.Activities.PromotionsActivity"
             android:label="@string/title_activity_promotions"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.NavigationActionActivities.HelpActivity"
+            android:name=".UI.Activities.HelpActivity"
             android:label="@string/title_activity_help"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -36,11 +36,11 @@
             android:exported="false" />
 
         <activity
-            android:name=".UI.Activities.NavigationActionActivities.NomineeSupportActivity"
+            android:name=".UI.Activities.NomineeSupportActivity"
             android:label="@string/title_activity_nominee_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.NavigationActionActivities.AddPolicyActivity"
+            android:name=".UI.Activities.AddPolicyActivity"
             android:label="@string/title_activity_add_policy"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
