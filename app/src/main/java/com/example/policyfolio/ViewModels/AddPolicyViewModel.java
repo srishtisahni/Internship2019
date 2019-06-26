@@ -14,7 +14,7 @@ import com.example.policyfolio.Repo.Repository;
 import java.util.HashMap;
 import java.util.List;
 
-public class AddViewModel extends ViewModel {
+public class AddPolicyViewModel extends ViewModel {
     private Repository repository;
 
     private int type;

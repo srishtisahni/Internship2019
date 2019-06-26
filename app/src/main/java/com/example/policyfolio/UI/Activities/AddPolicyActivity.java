@@ -25,12 +25,12 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.UI.Fragments.AddPolicy.AddPolicyDetailsFragment;
 import com.example.policyfolio.UI.Fragments.AddPolicy.BasicAddPolicyFragment;
-import com.example.policyfolio.ViewModels.AddViewModel;
+import com.example.policyfolio.ViewModels.AddPolicyViewModel;
 
 public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCallback {
 
 
-    private AddViewModel viewModel;
+    private AddPolicyViewModel viewModel;
 
     private FrameLayout fragmentHolder;
     private ProgressBar progressBar;
@@ -47,7 +47,7 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
         getSupportActionBar().setTitle("Add Policy");
         getSupportActionBar().setIcon(getResources().getDrawable(R.drawable.add_icon));
 
-        viewModel = ViewModelProviders.of(this).get(AddViewModel.class);
+        viewModel = ViewModelProviders.of(this).get(AddPolicyViewModel.class);
         viewModel.initiateRepo(this);
 
         viewModel.setUid(getIntent().getStringExtra(Constants.User.ID));
@@ -125,6 +125,7 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //TODO Delete Image
                             AddPolicyActivity.super.onBackPressed();
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {

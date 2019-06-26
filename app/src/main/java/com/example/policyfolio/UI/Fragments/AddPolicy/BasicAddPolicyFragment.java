@@ -27,7 +27,7 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownProviderAdapter;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
-import com.example.policyfolio.ViewModels.AddViewModel;
+import com.example.policyfolio.ViewModels.AddPolicyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ import java.util.List;
 public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTextAdapter.ParentCallback, BasicDropdownProviderAdapter.ParentCallback {
 
     private View rootView;
-    private AddViewModel viewModel;
+    private AddPolicyViewModel viewModel;
 
     private TextView typeValue;
     private RecyclerView typeChoice;
@@ -74,7 +74,7 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_basic_add_policy, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(AddViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(AddPolicyViewModel.class);
         viewModel.initiateRepo(getContext());
 
         typeValue = rootView.findViewById(R.id.policy_type);
