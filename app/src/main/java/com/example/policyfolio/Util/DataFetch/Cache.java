@@ -6,9 +6,9 @@ import androidx.lifecycle.LiveData;
 
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
-import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
+import com.example.policyfolio.Repo.Database.DataClasses.Documents;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +19,7 @@ public class Cache {
     private HashMap<String, LiveData<List<Policy>>> policies;
     private HashMap<Integer, LiveData<List<InsuranceProvider>>> providers;
     private LiveData<List<InsuranceProvider>> allProviders;
+    private HashMap<String, LiveData<Documents>> documents;
 
 
     private static Cache INSTANCE;
@@ -35,6 +36,7 @@ public class Cache {
         nominees = new HashMap<>();
         policies = new HashMap<>();
         providers = new HashMap<>();
+        documents = new HashMap<>();
     }
 
     public static void clearCache(){
@@ -79,5 +81,13 @@ public class Cache {
 
     public void setPolicies(String uId, LiveData<List<Policy>> policies) {
         this.policies.put(uId,policies);
+    }
+
+    public LiveData<Documents> getDocuments(String uId) {
+        return this.documents.get(uId);
+    }
+
+    public void setDocuments(String uId, LiveData<Documents> documents) {
+        this.documents.put(uId,documents);
     }
 }

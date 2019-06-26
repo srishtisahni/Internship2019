@@ -5,7 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import com.example.policyfolio.UI.Fragments.Help.NeedHelpFragment;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NeedHelpCallback;
+import com.example.policyfolio.Util.CallBackListeners.NeedHelpCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.HelpViewModel;
 

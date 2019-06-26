@@ -102,11 +102,13 @@ public class HomeActivity extends AppCompatActivity
             public void onChanged(@Nullable User user) {
                 if(user!=null){
                     getTimeToast(user.getLastUpdated());
+                    viewModel.setType(user.getType());
                     if(user.getName()!=null){
                         getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
                         name.setText(user.getName());
                     }
                     if(!user.isComplete()){
+                        viewModel.addDocumentsVault();
                         if(popUpIntent == null) {
                             popUpIntent = new Intent(HomeActivity.this, PopUpActivity.class);
                             popUpIntent.putExtra(Constants.PopUps.POPUP_TYPE, Constants.PopUps.Type.INFO_POPUP);

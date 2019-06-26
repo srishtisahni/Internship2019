@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/white"
     tools:context=".UI.Fragments.Nominee.NomineeDashboardFragment">
 
@@ -57,7 +59,7 @@
             android:visibility="gone"
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/list_background"
             android:orientation="vertical"

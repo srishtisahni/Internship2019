@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.policyfolio.UI.Fragments.Nominee.AddNomineeFragment;
 import com.example.policyfolio.UI.Fragments.Nominee.NomineeDashboardFragment;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NomineeCallback;
+import com.example.policyfolio.Util.CallBackListeners.NomineeCallback;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

@@ -1,14 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="32dp"
+    android:orientation="vertical"
     tools:context=".UI.Fragments.Document.DocumentFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
+        android:id="@+id/adhaar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
 
-</FrameLayout>
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/upload_adhaar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/text_background_8dp"
+                android:paddingVertical="16dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:text="@string/adhaar_card"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload"/>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:padding="4dp"
+            app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            android:visibility="gone"
+            android:id="@+id/adhaar_card"
+            app:cardCornerRadius="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="20sp"
+                android:paddingVertical="16dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:textColor="@color/white"
+                android:text="@string/adhaar_card"/>
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/passport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/upload_passport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/text_background_8dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/passport"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:padding="4dp"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/passport_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/passport"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/pan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/upload_pan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/text_background_8dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/pan_card"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:padding="4dp"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/pan_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/pan_card"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/voter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/upload_voter"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/text_background_8dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/voter_id"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:padding="4dp"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/voter_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/voter_id"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/driving"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/upload_driving"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/text_background_8dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/driving_license"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:padding="4dp"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/driving_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/driving_license"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/ration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp">
+
+        <LinearLayout
+            android:padding="4dp"
+            android:id="@+id/upload_ration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginRight="48dp"
+            android:layout_marginEnd="48dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/text_background_8dp"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/ration_card"
+                android:textSize="18sp" />
+
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/upload" />
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:padding="4dp"
+            app:cardUseCompatPadding="true"
+            android:id="@+id/ration_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/colorPrimaryDark"
+            app:cardCornerRadius="8dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="32dp"
+                android:paddingStart="32dp"
+                android:paddingVertical="16dp"
+                android:text="@string/ration_card"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+    </FrameLayout>
+
+</LinearLayout>

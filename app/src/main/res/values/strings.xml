@@ -46,5 +46,11 @@
     <string name="track_claim">Track Claim</string>
     <string name="call_for_assistance">Call for Assistance</string>
     <string name="title_activity_document">DocumentActivity</string>
+    <string name="adhaar_card">Adhaar Card</string>
+    <string name="passport">Passport</string>
+    <string name="pan_card">PAN Card</string>
+    <string name="voter_id">Voter ID</string>
+    <string name="driving_license">Driving License</string>
+    <string name="ration_card">Ration Card</string>
 
 </resources>

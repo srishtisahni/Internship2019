@@ -3,9 +3,11 @@ package com.example.policyfolio.Repo.Database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Index;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.example.policyfolio.Repo.Database.DataClasses.Documents;
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
@@ -45,6 +47,9 @@ public interface PolicyFolioDao {
     @Query("SELECT * from Nominee where userId = :id")
     LiveData<List<Nominee>> getNomineesForUser(String id);              //Fetch Nominees for a particular User
 
+    @Query("SELECT * from Documents where userId = :uId")
+    LiveData<Documents> getDocuments(String uId);
+
     @Query("SELECT * from Notifications where policyNumber = :policyNumber")
     LiveData<List<Notifications>> getNotifications(String policyNumber);
 
@@ -83,4 +88,7 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     List<Long> putNotifications(List<Notifications> notifications);            //Add notifications to database
+
+    @Insert(onConflict = REPLACE)
+    void putDocuments(Documents documents);
 }

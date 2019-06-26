@@ -22,7 +22,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Util.ListAdapters.MeNomineeDisplayAdapter;
 import com.example.policyfolio.Util.ListAdapters.NomineeDisplayAdapter;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NomineeCallback;
+import com.example.policyfolio.Util.CallBackListeners.NomineeCallback;
 import com.example.policyfolio.ViewModels.NomineeViewModel;
 
 import java.util.ArrayList;

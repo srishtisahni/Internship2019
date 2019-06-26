@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NomineeCallback;
+import com.example.policyfolio.Util.CallBackListeners.NomineeCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.NomineeViewModel;
 
@@ -84,6 +84,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
 
     private void setListeners() {
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        alternativePhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

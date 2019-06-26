@@ -18,6 +18,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Database.AppDatabase;
 import com.example.policyfolio.Repo.Facebook.GraphAPI;
 import com.example.policyfolio.Repo.Firebase.AuthManager;
+import com.example.policyfolio.Repo.Database.DataClasses.Documents;
 import com.example.policyfolio.Repo.Firebase.DataClasses.Query;
 import com.example.policyfolio.Repo.Firebase.DataManager;
 import com.example.policyfolio.Repo.Firebase.StorageManager;
@@ -247,5 +248,22 @@ public class Repository {
 
     public LiveData<String> saveQuery(Query query) {
         return dataManager.saveQuery(query);
+    }
+
+    public LiveData<Documents> fetchDocument(String uId) {
+        dataManager.fetchDocuments(uId,appDatabase);
+        if(cache.getDocuments(uId) == null)
+            cache.setDocuments(uId,appDatabase.policyFolioDao().getDocuments(uId));
+        return cache.getDocuments(uId);
+    }
+
+    public void addDocumentsVault(final Documents documents) {
+        appExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                appDatabase.policyFolioDao().putDocuments(documents);
+            }
+        });
+        dataManager.addDocuments(documents);
     }
 }

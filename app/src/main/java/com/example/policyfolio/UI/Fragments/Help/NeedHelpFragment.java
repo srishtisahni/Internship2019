@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.NeedHelpCallback;
+import com.example.policyfolio.Util.CallBackListeners.NeedHelpCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.HelpViewModel;
 

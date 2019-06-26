@@ -37,7 +37,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownNomineeAdapter;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.AddPolicyCallback;
+import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.AddViewModel;
 
 import java.util.ArrayList;

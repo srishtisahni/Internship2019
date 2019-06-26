@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.TrackClaimCallback;
+import com.example.policyfolio.Util.CallBackListeners.TrackClaimCallback;
 import com.example.policyfolio.Util.PagerAdapters.ClaimPagerAdapter;
 import com.example.policyfolio.ViewModels.ClaimViewModel;
 import com.google.android.material.tabs.TabLayout;

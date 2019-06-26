@@ -84,7 +84,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                                     @Override
                                     public void onChanged(@Nullable FirebaseUser firebaseUser) {
                                         if(firebaseUser!=null){
-                                            addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
                                         }
                                         else {
                                             Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
@@ -106,6 +106,19 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                                 progressBar.setVisibility(View.GONE);
                                 fragmentHolder.setAlpha(1f);
                                 Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        if(firebaseUser!=null){
+                                            addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                        }
+                                        else {
+                                            Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
                                 break;
                         }
                     }
@@ -167,7 +180,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                                 @Override
                                 public void onChanged(@Nullable FirebaseUser firebaseUser) {
                                     if(firebaseUser!=null){
-                                        addUser(firebaseUser,Constants.LoginInInfo.Type.FACEBOOK);
+                                        startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.FACEBOOK);
                                     }
                                     else {
                                         Toast.makeText(LoginSignUpActivity.this,"Facebook Login Failed",Toast.LENGTH_LONG).show();
@@ -186,6 +199,19 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                             fragmentHolder.setAlpha(1f);
                             LoginManager.getInstance().logOut();
                             Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            viewModel.facebookFirebaseUser().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    if(firebaseUser!=null){
+                                        addUser(firebaseUser,Constants.LoginInInfo.Type.FACEBOOK);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginSignUpActivity.this,"Facebook Login Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                             break;
                     }
                 }
@@ -353,7 +379,7 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                                 @Override
                                 public void onChanged(@Nullable FirebaseUser firebaseUser) {
                                     if(firebaseUser!=null){
-                                        addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                        startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
                                     }
                                     else {
                                         Toast.makeText(LoginSignUpActivity.this,"Phone Sign Up Failed",Toast.LENGTH_LONG).show();
@@ -365,6 +391,19 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
                             progressBar.setVisibility(View.GONE);
                             fragmentHolder.setAlpha(1f);
                             Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                            break;
+                        default:
+                            viewModel.signUpPhone(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    if(firebaseUser!=null){
+                                        addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                    }
+                                    else {
+                                        Toast.makeText(LoginSignUpActivity.this,"Phone Sign Up Failed",Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                             break;
                     }
                 }

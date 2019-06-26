@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.AddPolicyCallback;
+import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.UI.Fragments.AddPolicy.AddPolicyDetailsFragment;
 import com.example.policyfolio.UI.Fragments.AddPolicy.BasicAddPolicyFragment;
 import com.example.policyfolio.ViewModels.AddViewModel;

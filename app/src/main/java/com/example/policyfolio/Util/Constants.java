@@ -102,6 +102,7 @@ public class Constants {
         public static final String COLLECTION_PRODUCTS = "insurance_products";
         public static final String COLLECTION_NOMINEE = "nominees";
         public static final String COLLECTION_QUERIES = "queries";
+        public static final String COLLECTION_DOCUMENTS = "documents";
 
         public static final int UPDATE_REQUEST = 1001;
         public static final int UPDATE_RESULT = 1002;
@@ -193,7 +194,16 @@ public class Constants {
         }
     }
 
-    public class Claims {
+    public static class Claims {
         public static final String NUMBER = "+91 78271 42153";
+    }
+
+    public static class Documents {
+        public static final int ADHAAR = 1;
+        public static final int PASSPORT = 2;
+        public static final int PAN = 3;
+        public static final int VOTER_ID = 4;
+        public static final int DRIVING_LICENSE = 5;
+        public static final int RATION_CARD = 6;
     }
 }

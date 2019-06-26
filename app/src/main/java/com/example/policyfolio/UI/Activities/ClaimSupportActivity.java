@@ -8,7 +8,7 @@ import com.example.policyfolio.UI.Fragments.Claim.OnGoingFragment;
 import com.example.policyfolio.UI.Fragments.Claim.ResolvedFragment;
 import com.example.policyfolio.UI.Fragments.Claim.ClaimDashboardFragment;
 import com.example.policyfolio.UI.Fragments.Claim.TrackClaimFragment;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.ClaimCallback;
+import com.example.policyfolio.Util.CallBackListeners.ClaimCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.ClaimViewModel;
 

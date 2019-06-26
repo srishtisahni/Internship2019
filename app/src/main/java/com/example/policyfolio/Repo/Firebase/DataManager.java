@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.Repo.Database.DataClasses.Documents;
 import com.example.policyfolio.Repo.Firebase.DataClasses.Query;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
@@ -456,5 +457,40 @@ public class DataManager {
                     }
                 });
         return result;
+    }
+
+    public void fetchDocuments(String uId, final AppDatabase appDatabase) {
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_DOCUMENTS)
+                .document(uId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()){
+                            final Documents documents = task.getResult().toObject(Documents.class);
+                            appExecutors.diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    appDatabase.policyFolioDao().putDocuments(documents);
+                                }
+                            });
+                        }
+                    }
+                });
+    }
+
+    public void addDocuments(Documents documents) {
+        firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_DOCUMENTS)
+                .document(documents.getUserId())
+                .set(documents)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful())
+                            Log.e("DOCUMENT VAULT","Vault Initiated");
+                        else
+                            Log.e("DOCUMENT VAULT", "Unable to Initiate Vault");
+                    }
+                });
     }
 }

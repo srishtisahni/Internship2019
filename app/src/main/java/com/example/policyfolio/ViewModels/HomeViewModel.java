@@ -5,12 +5,15 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.policyfolio.Repo.Database.DataClasses.Documents;
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.Util.Constants;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,6 +72,9 @@ public class HomeViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> logOut() {
+        if(type == Constants.LoginInInfo.Type.FACEBOOK) {
+            LoginManager.getInstance().logOut();
+        }
         return repository.logOut(Uid);
     }
 
@@ -92,5 +98,9 @@ public class HomeViewModel extends ViewModel {
 
     public void deleteAllNotifications() {
         repository.deleteAllNotifications();
+    }
+
+    public void addDocumentsVault() {
+        repository.addDocumentsVault(new Documents(Uid,null,null,null,null,null,null));
     }
 }

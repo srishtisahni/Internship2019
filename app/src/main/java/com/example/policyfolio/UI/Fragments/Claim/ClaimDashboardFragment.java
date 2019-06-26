@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.Util.CallBackListeners.NavigationCallbacks.ClaimCallback;
+import com.example.policyfolio.Util.CallBackListeners.ClaimCallback;
 import com.example.policyfolio.ViewModels.ClaimViewModel;
 
 /**
