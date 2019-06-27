@@ -40,6 +40,7 @@ import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
 import com.example.policyfolio.ViewModels.AddPolicyViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -393,7 +394,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             clickPolicy.setVisibility(View.GONE);
             optional2.setVisibility(View.GONE);
             optional1.setText("Policy Document");
-            viewModel.setBitmap(bmp);
+            viewModel.setBitmap(reducedImage(bmp));
         }
         if(requestCode == Constants.PermissionAndRequests.CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data!=null){
             Bitmap bmp = (Bitmap) data.getExtras().get("data");
@@ -402,7 +403,19 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             clickPolicy.setVisibility(View.GONE);
             optional2.setVisibility(View.GONE);
             optional1.setText("Policy Document");
-            viewModel.setBitmap(bmp);
+            viewModel.setBitmap(reducedImage(bmp));
         }
+    }
+
+    private Bitmap reducedImage(Bitmap bmp) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        int currSize = stream.toByteArray().length;
+        if(currSize > Constants.Documents.ONE_MEGABYTE) {
+            int width = (int) ((bmp.getWidth() * Constants.Documents.ONE_MEGABYTE)/currSize);
+            int height = (int) ((bmp.getHeight() * Constants.Documents.ONE_MEGABYTE)/currSize);
+            bmp = Bitmap.createScaledBitmap(bmp, width, height, true);
+        }
+        return bmp;
     }
 }

@@ -8,10 +8,12 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
 import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
+import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.Util.Constants;
+import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ public class NomineeViewModel extends ViewModel {
     private String name;
     private String phone;
     private String alternateNumber;
+    private int loginType;
 
     public void initiateRepo(Context context){
         repository = Repository.getInstance(context);
@@ -120,5 +123,29 @@ public class NomineeViewModel extends ViewModel {
 
     public LiveData<User> fetchUser() {
         return repository.fetchUser(uId);
+    }
+
+    public int getLoginType() {
+        return loginType;
+    }
+
+    public void setLoginType(int loginType) {
+        this.loginType = loginType;
+    }
+
+
+    public LiveData<List<Notifications>> getAllNotificatios() {
+        return repository.getAllNotifications();
+    }
+
+    public void deleteAllNotifications() {
+        repository.deleteAllNotifications();
+    }
+
+    public LiveData<Boolean> logOut() {
+        if (loginType == Constants.LoginInInfo.Type.FACEBOOK) {
+            LoginManager.getInstance().logOut();
+        }
+        return repository.logOut(uId);
     }
 }

@@ -27,6 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,9 +50,7 @@ public class HomeActivity extends AppCompatActivity
     private ProgressBar progressBar;
     private DrawerLayout drawer;
     private Toolbar toolbar;
-    private FrameLayout snackBar;
     private NavigationView navigationView;
-
     private TextView name;
 
     private HomeStartupFragment homeStartupFragment;
@@ -72,7 +71,6 @@ public class HomeActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar);
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);
-        snackBar = findViewById(R.id.snackbar_action);
         drawer = findViewById(R.id.drawer_layout);
         name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
         navigationView = findViewById(R.id.nav_view);
@@ -348,6 +346,8 @@ public class HomeActivity extends AppCompatActivity
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
@@ -356,6 +356,8 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
         intent.putExtra(Constants.InsuranceProviders.TYPE,type);
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
@@ -368,10 +370,12 @@ public class HomeActivity extends AppCompatActivity
         toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (drawer.isDrawerVisible(GravityCompat.START)) {
-                    drawer.closeDrawer(GravityCompat.START);
-                } else {
-                    drawer.openDrawer(GravityCompat.START);
+                if(progressBar.getVisibility() == View.GONE) {
+                    if (drawer.isDrawerVisible(GravityCompat.START)) {
+                        drawer.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawer.openDrawer(GravityCompat.START);
+                    }
                 }
             }
         });
@@ -392,7 +396,7 @@ public class HomeActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
 
         switch (id){
@@ -425,30 +429,40 @@ public class HomeActivity extends AppCompatActivity
     private void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
     }
 
     private void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
     }
 
     private void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
     }
 
     private void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
     }
 
     private void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.NAME,name.getText().toString());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
     }
 

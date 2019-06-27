@@ -9,11 +9,23 @@ import androidx.room.PrimaryKey;
 public class Documents {
     @PrimaryKey @NonNull
     private String userId;
+
+    private String adhaarNumber;
     private String adhaarLink;
+
+    private String passportNumber;
     private String passportLink;
+
+    private String panNumber;
     private String panLink;
+
+    private String voterIdNumber;
     private String voterIdLink;
+
+    private String drivingLicenseNumber;
     private String drivingLicenseLink;
+
+    private String rationCardNumber;
     private String rationCardLink;
 
     public Documents(){
@@ -21,13 +33,27 @@ public class Documents {
     }
 
     @Ignore
-    public Documents(String userId, String adhaarLink, String passportLink, String panLink, String voterIdLink, String drivingLicenseLink, String rationCardLink){
+    public Documents(String userId, String adhaarNumber, String adhaarLink, String passportNumber, String passportLink,
+                     String panNumber, String panLink, String voterIdNumber, String voterIdLink, String drivingLicenseNumber,
+                     String drivingLicenseLink, String rationCardNumber, String rationCardLink){
         this.userId = userId;
+
+        this.adhaarNumber = adhaarNumber;
         this.adhaarLink = adhaarLink;
+
+        this.passportNumber = passportNumber;
         this.passportLink = passportLink;
+
+        this.panNumber = panNumber;
         this.panLink = panLink;
+
+        this.voterIdNumber = voterIdNumber;
         this.voterIdLink = voterIdLink;
+
+        this.drivingLicenseNumber = drivingLicenseNumber;
         this.drivingLicenseLink = drivingLicenseLink;
+
+        this.rationCardNumber = rationCardNumber;
         this.rationCardLink = rationCardLink;
     }
 
@@ -86,5 +112,53 @@ public class Documents {
 
     public void setVoterIdLink(String voterIdLink) {
         this.voterIdLink = voterIdLink;
+    }
+
+    public String getAdhaarNumber() {
+        return adhaarNumber;
+    }
+
+    public void setAdhaarNumber(String adhaarNumber) {
+        this.adhaarNumber = adhaarNumber;
+    }
+
+    public String getDrivingLicenseNumber() {
+        return drivingLicenseNumber;
+    }
+
+    public void setDrivingLicenseNumber(String drivingLicenseNumber) {
+        this.drivingLicenseNumber = drivingLicenseNumber;
+    }
+
+    public String getPanNumber() {
+        return panNumber;
+    }
+
+    public void setPanNumber(String panNumber) {
+        this.panNumber = panNumber;
+    }
+
+    public String getPassportNumber() {
+        return passportNumber;
+    }
+
+    public void setPassportNumber(String passportNumber) {
+        this.passportNumber = passportNumber;
+    }
+
+    public String getRationCardNumber() {
+        return rationCardNumber;
+    }
+
+    public void setRationCardNumber(String rationCardNumber) {
+        this.rationCardNumber = rationCardNumber;
+    }
+
+    public String getVoterIdNumber() {
+        return voterIdNumber;
+    }
+
+    public void setVoterIdNumber(String voterIdNumber) {
+        this.voterIdNumber = voterIdNumber;
     }
 }

@@ -32,6 +32,8 @@ import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.DocumentViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -91,32 +93,32 @@ public class SelectedDocumentFragment extends Fragment {
             case Constants.Documents.ADHAAR:
                 cardText.setText(getResources().getString(R.string.adhaar_card));
                 textUpload = "Upload " + getResources().getString(R.string.adhaar_card) + " Here.";
-                cardHint =  getResources().getString(R.string.adhaar_card) + " Number.";
+                cardHint =  getResources().getString(R.string.adhaar_card) + " Number";
                 break;
             case Constants.Documents.PASSPORT:
                 cardText.setText(getResources().getString(R.string.passport));
                 textUpload = "Upload " + getResources().getString(R.string.passport) + " Here.";
-                cardHint =  getResources().getString(R.string.passport) + " Number.";
+                cardHint =  getResources().getString(R.string.passport) + " Number";
                 break;
             case Constants.Documents.PAN:
                 cardText.setText(getResources().getString(R.string.pan_card));
                 textUpload = "Upload " + getResources().getString(R.string.pan_card) + " Here.";
-                cardHint =  getResources().getString(R.string.pan_card) + " Number.";
+                cardHint =  getResources().getString(R.string.pan_card) + " Number";
                 break;
             case Constants.Documents.VOTER_ID:
                 cardText.setText(getResources().getString(R.string.voter_id));
                 textUpload = "Upload " + getResources().getString(R.string.voter_id) + " Here.";
-                cardHint =  getResources().getString(R.string.voter_id) + " Number.";
+                cardHint =  getResources().getString(R.string.voter_id) + " Number";
                 break;
             case Constants.Documents.DRIVING_LICENSE:
                 cardText.setText(getResources().getString(R.string.driving_license));
                 textUpload = "Upload " + getResources().getString(R.string.driving_license) + " Here.";
-                cardHint =  getResources().getString(R.string.driving_license) + " Number.";
+                cardHint =  getResources().getString(R.string.driving_license) + " Number";
                 break;
             case Constants.Documents.RATION_CARD:
                 cardText.setText(getResources().getString(R.string.ration_card));
                 textUpload = "Upload " + getResources().getString(R.string.ration_card) + " Here.";
-                cardHint =  getResources().getString(R.string.ration_card) + " Number.";
+                cardHint =  getResources().getString(R.string.ration_card) + " Number";
                 break;
         }
         uploadText.setText(textUpload);
@@ -135,6 +137,34 @@ public class SelectedDocumentFragment extends Fragment {
                         photo.setImageBitmap(bitmap);
                         uploadText.setVisibility(View.GONE);
                         photo.setOnClickListener(null);
+                        photo.setScaleY(1f);
+                        photo.setScaleX(1f);
+                        switch (type){
+                            case Constants.Documents.ADHAAR:
+                                if(viewModel.getLocalCopy().getAdhaarNumber() != null)
+                                    cardNumber.setText(viewModel.getLocalCopy().getAdhaarNumber());
+                                break;
+                            case Constants.Documents.PASSPORT:
+                                if(viewModel.getLocalCopy().getPassportNumber() != null)
+                                    cardNumber.setText(viewModel.getLocalCopy().getPassportNumber());
+                                break;
+                            case Constants.Documents.PAN:
+                                if(viewModel.getLocalCopy().getPanNumber() != null)
+                                    cardNumber.setText(viewModel.getLocalCopy().getPanNumber());
+                                break;
+                            case Constants.Documents.VOTER_ID:
+                                if(viewModel.getLocalCopy().getVoterIdNumber() != null)
+                                    cardNumber.setText(viewModel.getLocalCopy().getVoterIdNumber());
+                                break;
+                            case Constants.Documents.DRIVING_LICENSE:
+                                if(viewModel.getLocalCopy().getDrivingLicenseNumber() != null)
+                                    cardNumber.setText(viewModel.getLocalCopy().getDrivingLicenseNumber());
+                                break;
+                            case Constants.Documents.RATION_CARD:
+                                if(viewModel.getLocalCopy().getRationCardNumber() != null)
+                                    cardNumber.setText(viewModel.getLocalCopy().getRationCardNumber());
+                                break;
+                        }
                     }
                 }
             });
@@ -157,6 +187,7 @@ public class SelectedDocumentFragment extends Fragment {
                 uploadText.setVisibility(View.VISIBLE);
                 viewModel.setImage(null,type);
                 done.setVisibility(View.VISIBLE);
+                cardNumber.setText("");
             }
         });
         edit.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +200,27 @@ public class SelectedDocumentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if(cardNumber.getText().toString().length()>0 || uploaded) {
+                    String card = cardNumber.getText().toString();
+                    switch (type){
+                        case Constants.Documents.ADHAAR:
+                            viewModel.getLocalCopy().setAdhaarNumber(card);
+                            break;
+                        case Constants.Documents.PASSPORT:
+                            viewModel.getLocalCopy().setPassportNumber(card);
+                            break;
+                        case Constants.Documents.PAN:
+                            viewModel.getLocalCopy().setPanNumber(card);
+                            break;
+                        case Constants.Documents.VOTER_ID:
+                            viewModel.getLocalCopy().setVoterIdNumber(card);
+                            break;
+                        case Constants.Documents.DRIVING_LICENSE:
+                            viewModel.getLocalCopy().setDrivingLicenseNumber(card);
+                            break;
+                        case Constants.Documents.RATION_CARD:
+                            viewModel.getLocalCopy().setRationCardNumber(card);
+                            break;
+                    }
                     callback.done(type,uploaded);
                 }
                 else
@@ -200,7 +252,19 @@ public class SelectedDocumentFragment extends Fragment {
             uploadText.setVisibility(View.GONE);
             done.setVisibility(View.VISIBLE);
 
-            viewModel.setImage(bmp,type);
+            viewModel.setImage(reducedImage(bmp),type);
         }
+    }
+
+    private Bitmap reducedImage(Bitmap bmp) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        int currSize = stream.toByteArray().length;
+        if(currSize > Constants.Documents.ONE_MEGABYTE) {
+            int width = (int) ((bmp.getWidth() * Constants.Documents.ONE_MEGABYTE)/currSize);
+            int height = (int) ((bmp.getHeight() * Constants.Documents.ONE_MEGABYTE)/currSize);
+            bmp = Bitmap.createScaledBitmap(bmp, width, height, true);
+        }
+        return bmp;
     }
 }

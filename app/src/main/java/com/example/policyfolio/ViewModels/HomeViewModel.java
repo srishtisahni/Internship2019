@@ -99,6 +99,8 @@ public class HomeViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> addDocumentsVault() {
-        return repository.addDocumentsVault(new Documents(Uid,null,null,null,null,null,null));
+        return repository.addDocumentsVault(new Documents(Uid,null,null,null,
+                null,null,null,null,null,null,
+                null,null,null));
     }
 }
