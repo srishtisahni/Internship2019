@@ -47,6 +47,7 @@ public class StorageManager {
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = fileRef.putBytes(data);
+        Log.e("UPLOAD",storageReference.getPath());
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {

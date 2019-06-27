@@ -127,27 +127,47 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
     public void done() {
         fragmentHolder.setAlpha(.4f);
         progressBar.setVisibility(View.VISIBLE);
-        viewModel.saveImage().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(String s) {
-                if(s!=null){
-                    viewModel.setPhotoUrl(s);
-                    Toast.makeText(AddPolicyActivity.this,"Image Uploaded",Toast.LENGTH_LONG).show();
-                }
-                viewModel.savePolicy().observe(AddPolicyActivity.this, new Observer<Boolean>() {
-                    @Override
-                    public void onChanged(Boolean aBoolean) {
-                        fragmentHolder.setAlpha(1f);
-                        progressBar.setVisibility(View.GONE);
-                        if(!aBoolean)
-                            Toast.makeText(AddPolicyActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
-                        else
-                            setResult(Constants.PermissionAndRequests.ADD_POLICY_RESULT);
+        if(viewModel.getBitmap() != null) {
+            viewModel.saveImage().observe(this, new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    Log.e("IMAGE", "Uploading");
+                    if (s != null) {
+                        viewModel.setPhotoUrl(s);
+                        Toast.makeText(AddPolicyActivity.this, "Image Uploaded", Toast.LENGTH_LONG).show();
+                        Log.e("IMAGE", "Uploaded");
                     }
-                });
-            }
-        });
-        finish();
+                    viewModel.savePolicy().observe(AddPolicyActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(Boolean aBoolean) {
+                            fragmentHolder.setAlpha(1f);
+                            progressBar.setVisibility(View.GONE);
+                            Log.e("POLICY", "Created");
+                            if (!aBoolean)
+                                Toast.makeText(AddPolicyActivity.this, "Unable to update Information", Toast.LENGTH_LONG).show();
+                            else
+                                setResult(Constants.PermissionAndRequests.ADD_POLICY_RESULT);
+                            finish();
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            viewModel.savePolicy().observe(AddPolicyActivity.this, new Observer<Boolean>() {
+                @Override
+                public void onChanged(Boolean aBoolean) {
+                    fragmentHolder.setAlpha(1f);
+                    progressBar.setVisibility(View.GONE);
+                    Log.e("POLICY", "Created");
+                    if (!aBoolean)
+                        Toast.makeText(AddPolicyActivity.this, "Unable to update Information", Toast.LENGTH_LONG).show();
+                    else
+                        setResult(Constants.PermissionAndRequests.ADD_POLICY_RESULT);
+                    finish();
+                }
+            });
+        }
     }
 
     @Override
