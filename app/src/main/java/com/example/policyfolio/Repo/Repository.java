@@ -157,9 +157,31 @@ public class Repository {
         return cache.getNominees(uId);                                          //Returns live data from Cache
     }
 
-    public LiveData<String> saveImage(Bitmap bmp, String uId, String policyNumber) {
-        imageStorage.saveImage(uId,policyNumber,bmp);                           //Saves image in the local storage
-        return storageManager.saveImage(uId,policyNumber,bmp);                  //returns live data containing image URL
+    public LiveData<String> saveImage(Bitmap bmp, String uId, String fileName) {
+        imageStorage.save(uId,fileName,bmp);                           //Saves image in the local storage
+        cache.addImage(uId,fileName,bmp);
+        return storageManager.saveImage(uId,fileName,bmp);                  //returns live data containing image URL
+    }
+
+    public LiveData<Bitmap> fetchImage(String uId, String filename){
+        MutableLiveData<Bitmap> result = new MutableLiveData<>();
+        if(cache.getImage(uId,filename) == null)
+            cache.addImage(uId,filename,imageStorage.fetch(uId,filename));
+        result.setValue(cache.getImage(uId,filename));
+        storageManager.fetchImage(uId,filename,result);
+        return result;
+    }
+
+    public LiveData<Boolean> deleteImage(String uId, String filename) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+        cache.clearImage(uId,filename);
+        if(imageStorage.delete(uId,filename)){
+            storageManager.deleteImage(uId,filename,result);
+        }
+        else {
+            result.setValue(false);
+        }
+        return result;
     }
 
     public LiveData<Boolean> addPolicy(final Policy policy) {
@@ -257,13 +279,13 @@ public class Repository {
         return cache.getDocuments(uId);
     }
 
-    public void addDocumentsVault(final Documents documents) {
+    public LiveData<Boolean> addDocumentsVault(final Documents documents) {
         appExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
                 appDatabase.policyFolioDao().putDocuments(documents);
             }
         });
-        dataManager.addDocuments(documents);
+        return dataManager.addDocuments(documents);
     }
 }

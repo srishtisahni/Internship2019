@@ -479,7 +479,8 @@ public class DataManager {
                 });
     }
 
-    public void addDocuments(Documents documents) {
+    public LiveData<Boolean> addDocuments(Documents documents) {
+        final MutableLiveData<Boolean> result = new MutableLiveData<>();
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_DOCUMENTS)
                 .document(documents.getUserId())
                 .set(documents)
@@ -487,10 +488,11 @@ public class DataManager {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful())
-                            Log.e("DOCUMENT VAULT","Vault Initiated");
+                            result.setValue(true);
                         else
-                            Log.e("DOCUMENT VAULT", "Unable to Initiate Vault");
+                            result.setValue(false);
                     }
                 });
+        return result;
     }
 }

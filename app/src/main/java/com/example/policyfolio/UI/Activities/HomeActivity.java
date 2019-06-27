@@ -108,7 +108,15 @@ public class HomeActivity extends AppCompatActivity
                         name.setText(user.getName());
                     }
                     if(!user.isComplete()){
-                        viewModel.addDocumentsVault();
+                        viewModel.addDocumentsVault().observe(HomeActivity.this, new Observer<Boolean>() {
+                            @Override
+                            public void onChanged(Boolean aBoolean) {
+                                if(aBoolean)
+                                    Log.e("DOCUMENT VAULT","Added");
+                                else
+                                    Log.e("DOCUMENT VAULT","Error!");
+                            }
+                        });
                         if(popUpIntent == null) {
                             popUpIntent = new Intent(HomeActivity.this, PopUpActivity.class);
                             popUpIntent.putExtra(Constants.PopUps.POPUP_TYPE, Constants.PopUps.Type.INFO_POPUP);

@@ -1,17 +1,22 @@
 package com.example.policyfolio.Repo.Firebase;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.Util.Constants;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 public class StorageManager {
@@ -35,7 +40,7 @@ public class StorageManager {
 
     public LiveData<String> saveImage(String uId, String filename, Bitmap bitmap) {
         final MutableLiveData<String> imagePath=new MutableLiveData<>();
-        StorageReference fileRef = storageReference.child("images/"+uId+"_"+filename);
+        StorageReference fileRef = storageReference.child(Constants.Documents.IMAGE_DIRECTORY+"/"+uId+"_"+filename);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -54,5 +59,33 @@ public class StorageManager {
             }
         });
         return imagePath;
+    }
+
+    public void fetchImage(String uId, String filename, final MutableLiveData<Bitmap> result) {
+        StorageReference fileRef = storageReference.child(Constants.Documents.IMAGE_DIRECTORY+"/"+uId+"_"+filename);
+        fileRef.getBytes(Constants.Documents.ONE_MEGABYTE).addOnCompleteListener(new OnCompleteListener<byte[]>() {
+            @Override
+            public void onComplete(@NonNull Task<byte[]> task) {
+                if(task.isSuccessful()){
+                    byte[] bytes=task.getResult();
+                    ByteArrayInputStream inputStream= new ByteArrayInputStream(bytes);
+                    Bitmap bmp= BitmapFactory.decodeStream(inputStream);
+                    result.setValue(bmp);
+                }
+            }
+        });
+    }
+
+    public void deleteImage(String uId, String filename, final MutableLiveData<Boolean> result) {
+        StorageReference fileRef = storageReference.child(Constants.Documents.IMAGE_DIRECTORY+"/"+uId+"_"+filename);
+        fileRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                    result.setValue(true);
+                else
+                    result.setValue(false);
+            }
+        });
     }
 }

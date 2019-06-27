@@ -14,7 +14,7 @@ import com.example.policyfolio.Repo.Repository;
 import java.util.HashMap;
 import java.util.List;
 
-public class AddViewModel extends ViewModel {
+public class AddPolicyViewModel extends ViewModel {
     private Repository repository;
 
     private int type;
@@ -28,6 +28,7 @@ public class AddViewModel extends ViewModel {
     private String premiumAmount;
     private String coverAmount;
     private Long matureDateEpoch;
+    private Bitmap bitmap;
 
     private HashMap<Integer,LiveData<List<InsuranceProvider>>> providers = new HashMap<>();
     private LiveData<List<Nominee>> nominees;
@@ -97,8 +98,8 @@ public class AddViewModel extends ViewModel {
         this.nominee = nominee;
     }
 
-    public LiveData<String> saveImage(Bitmap bmp) {
-        return repository.saveImage(bmp,uId,policyNumber);
+    public LiveData<String> saveImage() {
+        return repository.saveImage(bitmap,uId,policyNumber);
     }
 
     public String getPhotoUrl() {
@@ -144,5 +145,13 @@ public class AddViewModel extends ViewModel {
     public LiveData<Boolean> savePolicy() {
         Policy policy = new Policy(uId,policyNumber,provider.getId(), premiumDateEpoch, matureDateEpoch, premiumFrequency,premiumAmount,coverAmount,type,photoUrl,true,nominee.getEmail());
         return repository.addPolicy(policy);
+    }
+
+    public void setBitmap(Bitmap bmp) {
+        this.bitmap = bmp;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 }

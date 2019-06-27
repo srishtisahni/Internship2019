@@ -217,6 +217,7 @@ public class DocumentFragment extends Fragment {
                         uploadRationCard.setVisibility(View.VISIBLE);
                         uploadedRationCard.setVisibility(View.GONE);
                     }
+                    viewModel.setLocalCopy(documents);
                 }
             }
         });

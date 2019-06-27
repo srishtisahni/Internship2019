@@ -38,7 +38,7 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownNomineeAdapter;
 import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.CallBackListeners.AddPolicyCallback;
-import com.example.policyfolio.ViewModels.AddViewModel;
+import com.example.policyfolio.ViewModels.AddPolicyViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +50,7 @@ import java.util.List;
 public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownTextAdapter.ParentCallback, BasicDropdownNomineeAdapter.ParentCallback {
 
     private View rootView;
-    private AddViewModel viewModel;
+    private AddPolicyViewModel viewModel;
 
     private TextView insuranceProvider;
     private TextView policyNumber;
@@ -105,7 +105,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_policy_details, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(AddViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(AddPolicyViewModel.class);
         viewModel.initiateRepo(getContext());
 
         insuranceProvider = rootView.findViewById(R.id.insurance_provider);
@@ -393,15 +393,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             clickPolicy.setVisibility(View.GONE);
             optional2.setVisibility(View.GONE);
             optional1.setText("Policy Document");
-            viewModel.saveImage(bmp).observe(this, new Observer<String>() {
-                @Override
-                public void onChanged(String s) {
-                   if (s != null)
-                       viewModel.setPhotoUrl(s);
-                   else
-                       Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
-                }
-            });
+            viewModel.setBitmap(bmp);
         }
         if(requestCode == Constants.PermissionAndRequests.CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data!=null){
             Bitmap bmp = (Bitmap) data.getExtras().get("data");
@@ -410,15 +402,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             clickPolicy.setVisibility(View.GONE);
             optional2.setVisibility(View.GONE);
             optional1.setText("Policy Document");
-                viewModel.saveImage(bmp).observe(this, new Observer<String>() {
-                    @Override
-                    public void onChanged(String s) {
-                        if (s != null)
-                            viewModel.setPhotoUrl(s);
-                        else
-                            Toast.makeText(getContext(), "Error uploading Image", Toast.LENGTH_LONG).show();
-                    }
-                });
+            viewModel.setBitmap(bmp);
         }
     }
 }

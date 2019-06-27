@@ -4,5 +4,5 @@ public interface DocumentCallback {
     void uploadDocument(int type);
     void viewUploadedDocument(int type);
     void getImage();
-    void done();
+    void done(int type, boolean uploaded);
 }

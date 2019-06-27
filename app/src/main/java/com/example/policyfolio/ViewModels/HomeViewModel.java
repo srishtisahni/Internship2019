@@ -12,11 +12,9 @@ import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
 import com.example.policyfolio.Repo.Repository;
 import com.example.policyfolio.Util.Constants;
-import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class HomeViewModel extends ViewModel {
@@ -100,7 +98,7 @@ public class HomeViewModel extends ViewModel {
         repository.deleteAllNotifications();
     }
 
-    public void addDocumentsVault() {
-        repository.addDocumentsVault(new Documents(Uid,null,null,null,null,null,null));
+    public LiveData<Boolean> addDocumentsVault() {
+        return repository.addDocumentsVault(new Documents(Uid,null,null,null,null,null,null));
     }
 }

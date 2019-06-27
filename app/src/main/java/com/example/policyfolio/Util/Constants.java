@@ -1,15 +1,16 @@
 package com.example.policyfolio.Util;
 
 import android.content.Intent;
+import android.hardware.camera2.CaptureRequest;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Formatter;
 
 public class Constants {
     public static final String LOGIN_SHARED_PREFERENCE_KEY = "user_logged_in";
     public static final String DATABASE_NAME = "policy_folio_database";
     public static final int DATABASE_VERSION = 1;
-    public static final String IMAGE_DIRECTORY = "Images";
 
     public static class Time{
         public static final long EPOCH_DAY = 86400;
@@ -199,11 +200,17 @@ public class Constants {
     }
 
     public static class Documents {
-        public static final int ADHAAR = 1;
-        public static final int PASSPORT = 2;
-        public static final int PAN = 3;
-        public static final int VOTER_ID = 4;
-        public static final int DRIVING_LICENSE = 5;
-        public static final int RATION_CARD = 6;
+        public static final int ADHAAR = 0;
+        public static final int PASSPORT = 1;
+        public static final int PAN = 2;
+        public static final int VOTER_ID = 3;
+        public static final int DRIVING_LICENSE = 4;
+        public static final int RATION_CARD = 5;
+
+        public static final int NUMBER = 6;
+
+        public static final String IMAGE_DIRECTORY = "images";
+        public static final long ONE_MEGABYTE = 1024*1024;
+        public static final String[] NAMES = {"adhaar", "passport", "pan", "voter", "driving", "ration"};
     }
 }

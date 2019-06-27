@@ -1,6 +1,7 @@
 package com.example.policyfolio.Util.DataFetch;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
 
@@ -20,6 +21,7 @@ public class Cache {
     private HashMap<Integer, LiveData<List<InsuranceProvider>>> providers;
     private LiveData<List<InsuranceProvider>> allProviders;
     private HashMap<String, LiveData<Documents>> documents;
+    private HashMap<String, Bitmap> images;
 
 
     private static Cache INSTANCE;
@@ -37,6 +39,7 @@ public class Cache {
         policies = new HashMap<>();
         providers = new HashMap<>();
         documents = new HashMap<>();
+        images = new HashMap<>();
     }
 
     public static void clearCache(){
@@ -89,5 +92,17 @@ public class Cache {
 
     public void setDocuments(String uId, LiveData<Documents> documents) {
         this.documents.put(uId,documents);
+    }
+
+    public void addImage(String uId, String fileName, Bitmap bmp) {
+        images.put(uId+"_"+fileName,bmp);
+    }
+
+    public Bitmap getImage(String uId, String fileName) {
+        return images.get(uId+"_"+fileName);
+    }
+
+    public void clearImage(String uId, String filename) {
+        images.remove(uId+"_"+filename);
     }
 }

@@ -85,34 +85,42 @@ public class SelectedDocumentFragment extends Fragment {
 
     @SuppressLint("RestrictedApi")
     private void setUpData() {
-        String text = "Upload File Here.";
+        String textUpload = "Upload File Here.";
+        String cardHint = "Card Number";
         switch (type){
             case Constants.Documents.ADHAAR:
                 cardText.setText(getResources().getString(R.string.adhaar_card));
-                text = "Upload " + getResources().getString(R.string.adhaar_card) + " Here.";
+                textUpload = "Upload " + getResources().getString(R.string.adhaar_card) + " Here.";
+                cardHint =  getResources().getString(R.string.adhaar_card) + " Number.";
                 break;
             case Constants.Documents.PASSPORT:
                 cardText.setText(getResources().getString(R.string.passport));
-                text = "Upload " + getResources().getString(R.string.passport) + " Here.";
+                textUpload = "Upload " + getResources().getString(R.string.passport) + " Here.";
+                cardHint =  getResources().getString(R.string.passport) + " Number.";
                 break;
             case Constants.Documents.PAN:
                 cardText.setText(getResources().getString(R.string.pan_card));
-                text = "Upload " + getResources().getString(R.string.pan_card) + " Here.";
+                textUpload = "Upload " + getResources().getString(R.string.pan_card) + " Here.";
+                cardHint =  getResources().getString(R.string.pan_card) + " Number.";
                 break;
             case Constants.Documents.VOTER_ID:
                 cardText.setText(getResources().getString(R.string.voter_id));
-                text = "Upload " + getResources().getString(R.string.voter_id) + " Here.";
+                textUpload = "Upload " + getResources().getString(R.string.voter_id) + " Here.";
+                cardHint =  getResources().getString(R.string.voter_id) + " Number.";
                 break;
             case Constants.Documents.DRIVING_LICENSE:
                 cardText.setText(getResources().getString(R.string.driving_license));
-                text = "Upload " + getResources().getString(R.string.driving_license) + " Here.";
+                textUpload = "Upload " + getResources().getString(R.string.driving_license) + " Here.";
+                cardHint =  getResources().getString(R.string.driving_license) + " Number.";
                 break;
             case Constants.Documents.RATION_CARD:
                 cardText.setText(getResources().getString(R.string.ration_card));
-                text = "Upload " + getResources().getString(R.string.ration_card) + " Here.";
+                textUpload = "Upload " + getResources().getString(R.string.ration_card) + " Here.";
+                cardHint =  getResources().getString(R.string.ration_card) + " Number.";
                 break;
         }
-        uploadText.setText(text);
+        uploadText.setText(textUpload);
+        cardNumber.setHint(cardHint);
 
         if(!uploaded){
             edit.setVisibility(View.GONE);
@@ -120,19 +128,26 @@ public class SelectedDocumentFragment extends Fragment {
             done.setVisibility(View.GONE);
         }
         else {
-            uploadText.setVisibility(View.GONE);
+            viewModel.fetchImage(type).observe(this, new Observer<Bitmap>() {
+                @Override
+                public void onChanged(Bitmap bitmap) {
+                    if(bitmap!=null){
+                        photo.setImageBitmap(bitmap);
+                        uploadText.setVisibility(View.GONE);
+                        photo.setOnClickListener(null);
+                    }
+                }
+            });
         }
     }
 
     private void setUpListeners() {
-        if(!uploaded) {
-            photo.setOnClickListener(new View.OnClickListener() {
+        photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     callback.getImage();
                 }
             });
-        }
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,6 +155,8 @@ public class SelectedDocumentFragment extends Fragment {
                 photo.setScaleX(0.5f);
                 photo.setScaleY(0.5f);
                 uploadText.setVisibility(View.VISIBLE);
+                viewModel.setImage(null,type);
+                done.setVisibility(View.VISIBLE);
             }
         });
         edit.setOnClickListener(new View.OnClickListener() {
@@ -151,8 +168,8 @@ public class SelectedDocumentFragment extends Fragment {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(cardNumber.getText().toString().length()>0) {
-                    callback.done();
+                if(cardNumber.getText().toString().length()>0 || uploaded) {
+                    callback.done(type,uploaded);
                 }
                 else
                     Toast.makeText(getContext(),"Enter a valid Card Number",Toast.LENGTH_LONG).show();
@@ -183,7 +200,7 @@ public class SelectedDocumentFragment extends Fragment {
             uploadText.setVisibility(View.GONE);
             done.setVisibility(View.VISIBLE);
 
-            //TODO upload Image
+            viewModel.setImage(bmp,type);
         }
     }
 }
