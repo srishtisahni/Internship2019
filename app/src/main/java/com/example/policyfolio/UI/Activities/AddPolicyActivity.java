@@ -134,6 +134,7 @@ public class AddPolicyActivity extends AppCompatActivity implements AddPolicyCal
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            //TODO Delete Image
                             AddPolicyActivity.super.onBackPressed();
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {
