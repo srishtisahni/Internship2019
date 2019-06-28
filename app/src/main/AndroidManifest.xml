@@ -14,19 +14,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.Activities.DocumentActivity"
+            android:name=".UI.Document.DocumentActivity"
             android:label="@string/title_activity_document"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".UI.Activities.ClaimSupportActivity"
+            android:name=".UI.Claim.ClaimSupportActivity"
             android:label="@string/title_activity_claim_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.PromotionsActivity"
+            android:name=".UI.Promotions.PromotionsActivity"
             android:label="@string/title_activity_promotions"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.HelpActivity"
+            android:name=".UI.Help.HelpActivity"
             android:label="@string/title_activity_help"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -36,18 +36,18 @@
             android:exported="false" />
 
         <activity
-            android:name=".UI.Activities.NomineeSupportActivity"
+            android:name=".UI.Nominee.NomineeSupportActivity"
             android:label="@string/title_activity_nominee_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.AddPolicyActivity"
+            android:name=".UI.AddPolicy.AddPolicyActivity"
             android:label="@string/title_activity_add_policy"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.PopUpActivity"
+            android:name=".UI.PopUps.PopUpActivity"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
         <activity
-            android:name=".UI.Activities.HomeActivity"
+            android:name=".UI.Home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar.Navigation" />
 
@@ -60,10 +60,10 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
-            android:name=".UI.Activities.LoginSignUpActivity"
+            android:name=".UI.LoginSignUp.LoginSignUpActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Activities.WelcomeActivity"
+            android:name=".UI.WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar.fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

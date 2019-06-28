@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".UI.Fragments.LoginSignUp.LoginFragment">
+    tools:context=".UI.LoginSignUp.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_credentials"

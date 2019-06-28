@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".UI.Fragments.Home.HomePoliciesFragment"
+    tools:context=".UI.Home.HomePoliciesFragment"
     android:background="@color/colorPrimary">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

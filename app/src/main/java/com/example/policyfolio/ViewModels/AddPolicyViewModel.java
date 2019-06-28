@@ -6,11 +6,11 @@ import android.graphics.Bitmap;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.Repo.Database.DataClasses.InsuranceProvider;
-import com.example.policyfolio.Repo.Database.DataClasses.Nominee;
-import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
-import com.example.policyfolio.Repo.Database.DataClasses.Policy;
-import com.example.policyfolio.Repo.Repository;
+import com.example.policyfolio.Data.Local.Classes.InsuranceProvider;
+import com.example.policyfolio.Data.Local.Classes.Nominee;
+import com.example.policyfolio.Data.Local.Classes.Notifications;
+import com.example.policyfolio.Data.Local.Classes.Policy;
+import com.example.policyfolio.Data.Repository;
 import com.example.policyfolio.Util.Constants;
 import com.facebook.login.LoginManager;
 

@@ -19,10 +19,9 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.policyfolio.Util.ListAdapters.BasicDropdownTextAdapter;
+import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.Util.CallBackListeners.PopUpCallBack;
 import com.example.policyfolio.ViewModels.PopUpViewModel;
 
 import java.util.Calendar;

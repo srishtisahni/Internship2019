@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.Repo.Firebase.DataClasses.LogInData;
-import com.example.policyfolio.Repo.Repository;
+import com.example.policyfolio.Data.Firebase.Classes.LogInData;
+import com.example.policyfolio.Data.Repository;
 
 public class WelcomeViewModel extends ViewModel {
 
