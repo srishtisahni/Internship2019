@@ -12,6 +12,7 @@ import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
 import com.example.policyfolio.UI.Fragments.Document.DocumentFragment;
 import com.example.policyfolio.UI.Fragments.Document.SelectedDocumentFragment;
 import com.example.policyfolio.Util.CallBackListeners.DocumentCallback;
+import com.example.policyfolio.Util.CallBackListeners.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
 import com.example.policyfolio.ViewModels.DocumentViewModel;
@@ -44,17 +45,9 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-public class DocumentActivity extends AppCompatActivity implements DocumentCallback, NavigationView.OnNavigationItemSelectedListener {
-
-    private DrawerLayout drawer;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private TextView name;
+public class DocumentActivity extends ParentNavigationActivity implements DocumentCallback, ParentChildNavigationCallback {
 
     private DocumentViewModel viewModel;
-
-    private FrameLayout fragmentHolder;
-    private ProgressBar progressBar;
 
     private DocumentFragment documentFragment;
     private SelectedDocumentFragment selectedDocumentFragment;
@@ -62,16 +55,7 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_document);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-
-        name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
-        name.setText(getIntent().getStringExtra(Constants.User.NAME));
-
+        setContentView(R.layout.activity_navigation);
         getSupportActionBar().setTitle("Document Vault");
 
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
@@ -80,38 +64,13 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
 
-        fragmentHolder = findViewById(R.id.fragment_holder);
-        progressBar = findViewById(R.id.progress_bar);
+        super.setCallback(this);
 
-        setUpDrawer();
         setUpFragment();
     }
 
-    private void setUpDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.setDrawerIndicatorEnabled(false);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.document_icon, this.getTheme());
-        toggle.setHomeAsUpIndicator(drawable);
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(progressBar.getVisibility() == View.GONE) {
-                    if (drawer.isDrawerVisible(GravityCompat.START)) {
-                        drawer.closeDrawer(GravityCompat.START);
-                    } else {
-                        drawer.openDrawer(GravityCompat.START);
-                    }
-                }
-            }
-        });
-
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
     private void setUpFragment() {
+        super.endProgress();
         if(documentFragment == null)
             documentFragment = new DocumentFragment(this);
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,documentFragment).commit();
@@ -150,8 +109,7 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
 
     @Override
     public void done(final int type, boolean uploaded) {
-        fragmentHolder.setAlpha(0.4f);
-        progressBar.setVisibility(View.VISIBLE);
+        super.startProgress();
         if(uploaded && viewModel.getImage(type) == null){
             viewModel.deleteImage(type).observe(this, new Observer<Boolean>() {
                 @Override
@@ -187,8 +145,7 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
                         saveChanges();
                     }
                     else {
-                        fragmentHolder.setAlpha(1f);
-                        progressBar.setVisibility(View.GONE);
+                        DocumentActivity.super.endProgress();
                         Toast.makeText(DocumentActivity.this, "Unable to modify image database", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -223,8 +180,7 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
                         saveChanges();
                     }
                     else {
-                        fragmentHolder.setAlpha(1f);
-                        progressBar.setVisibility(View.GONE);
+                        DocumentActivity.super.endProgress();
                         Toast.makeText(DocumentActivity.this, "Unable to modify image database", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -236,8 +192,7 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
         viewModel.updateChanges().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                DocumentActivity.super.endProgress();
                 if(aBoolean){
                     Toast.makeText(DocumentActivity.this,"Changes Successful",Toast.LENGTH_LONG).show();
                 }
@@ -253,108 +208,58 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if(selectedDocumentFragment != null){
-                getSupportFragmentManager().beginTransaction().remove(selectedDocumentFragment).commit();
-                selectedDocumentFragment = null;
-            }
-            else {
-                super.onBackPressed();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(selectedDocumentFragment != null){
-            selectedDocumentFragment.onActivityResult(requestCode,resultCode,data);
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id){
-            case R.id.add_policy:
-                addPolicy();
-                break;
-            case R.id.logout:
-                logOut();
-                break;
-            case R.id.nominee_support:
-                nomineeDashboard();
-                break;
-            case R.id.help:
-                getHelp();
-                break;
-            case R.id.promotions:
-                promotions();
-                break;
-            case R.id.claim_support:
-                claimSupport();
-                break;
-            case R.id.documents:
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void addPolicy() {
+    public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
 
-    private void claimSupport() {
+    @Override
+    public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
 
-    private void promotions() {
+    @Override
+    public void documentVault() {
+
+    }
+
+    @Override
+    public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
 
-    private void getHelp() {
+    @Override
+    public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }
 
-    private void nomineeDashboard() {
+    @Override
+    public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
         finish();
     }
 
-    private void logOut() {
-        fragmentHolder.setAlpha(.4f);
-        progressBar.setVisibility(View.VISIBLE);
+    @Override
+    public void logOut() {
+        super.startProgress();
         cancelNotifications();
         viewModel.logOut().observe(DocumentActivity.this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                DocumentActivity.super.endProgress();
                 if(aBoolean){
                     getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE).edit().clear().apply();
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
@@ -389,5 +294,28 @@ public class DocumentActivity extends AppCompatActivity implements DocumentCallb
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(selectedDocumentFragment != null){
+            selectedDocumentFragment.onActivityResult(requestCode,resultCode,data);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (super.isDrawerOpen()) {
+            super.closeDrawer();
+        } else {
+            if(selectedDocumentFragment != null){
+                getSupportFragmentManager().beginTransaction().remove(selectedDocumentFragment).commit();
+                selectedDocumentFragment = null;
+            }
+            else {
+                super.onBackPressed();
+            }
+        }
     }
 }

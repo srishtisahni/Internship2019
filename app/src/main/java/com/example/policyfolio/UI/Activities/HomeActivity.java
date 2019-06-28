@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.policyfolio.Repo.Database.DataClasses.Notifications;
+import com.example.policyfolio.Util.CallBackListeners.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Repo.Database.DataClasses.Policy;
 import com.example.policyfolio.Repo.Database.DataClasses.User;
@@ -41,17 +42,9 @@ import androidx.lifecycle.ViewModelProviders;
 import java.util.List;
 
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, HomeCallback {
+public class HomeActivity extends ParentNavigationActivity implements HomeCallback, ParentChildNavigationCallback {
 
     private HomeViewModel viewModel;
-
-    private FrameLayout fragmentHolder;
-    private ProgressBar progressBar;
-    private DrawerLayout drawer;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private TextView name;
 
     private HomeStartupFragment homeStartupFragment;
     private HomePoliciesFragment homePoliciesFragment;
@@ -67,24 +60,16 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        toolbar = findViewById(R.id.toolbar);
-        fragmentHolder = findViewById(R.id.fragment_holder);
-        progressBar = findViewById(R.id.progress_bar);
-        drawer = findViewById(R.id.drawer_layout);
-        name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
-        navigationView = findViewById(R.id.nav_view);
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("PolicyFolio");
+        setContentView(R.layout.activity_navigation);
+        getSupportActionBar().setTitle("Policy Folio");
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         viewModel.initiateRepo(this);
 
         notifications = getSharedPreferences(Constants.Notification.NOTIFICATION_SHARED_PREFERENCE,MODE_PRIVATE);
 
+        super.setCallback(this);
         getUpdated();
-        setUpDrawer();
         fetchInfo();
         getUser();
     }
@@ -103,7 +88,8 @@ public class HomeActivity extends AppCompatActivity
                     viewModel.setType(user.getType());
                     if(user.getName()!=null){
                         getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
-                        name.setText(user.getName());
+                        HomeActivity.super.setNameText(user.getName());
+                        HomeActivity.super.updateName();
                     }
                     if(!user.isComplete()){
                         viewModel.addDocumentsVault().observe(HomeActivity.this, new Observer<Boolean>() {
@@ -308,8 +294,7 @@ public class HomeActivity extends AppCompatActivity
         }
         homePoliciesFragment.setPolicies(policies);
 
-        fragmentHolder.setAlpha(1f);
-        progressBar.setVisibility(View.GONE);
+        super.endProgress();
     }
 
     private void updatePaidStatus(List<Policy> policies) {
@@ -337,18 +322,7 @@ public class HomeActivity extends AppCompatActivity
         homeStartupFragment = new HomeStartupFragment(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeStartupFragment).commit();
 
-        fragmentHolder.setAlpha(1f);
-        progressBar.setVisibility(View.GONE);
-    }
-
-
-    @Override
-    public void addPolicy() {
-        Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
-        startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
+        super.endProgress();
     }
 
     @Override
@@ -356,125 +330,66 @@ public class HomeActivity extends AppCompatActivity
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
         intent.putExtra(Constants.InsuranceProviders.TYPE,type);
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
-    private void setUpDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.setDrawerIndicatorEnabled(false);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.home_icon, this.getTheme());
-        toggle.setHomeAsUpIndicator(drawable);
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(progressBar.getVisibility() == View.GONE) {
-                    if (drawer.isDrawerVisible(GravityCompat.START)) {
-                        drawer.closeDrawer(GravityCompat.START);
-                    } else {
-                        drawer.openDrawer(GravityCompat.START);
-                    }
-                }
-            }
-        });
-
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id){
-            case R.id.add_policy:
-                addPolicy();
-                break;
-            case R.id.logout:
-                logOut();
-                break;
-            case R.id.nominee_support:
-                nomineeDashboard();
-                break;
-            case R.id.help:
-                getHelp();
-                break;
-            case R.id.promotions:
-                promotions();
-                break;
-            case R.id.claim_support:
-                claimSupport();
-                break;
-            case R.id.documents:
-                documentVault();
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void documentVault() {
-        Intent intent = new Intent(this, DocumentActivity.class);
+    public void addPolicy() {
+        Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
-        startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
+        startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
-    private void claimSupport() {
+    @Override
+    public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
     }
 
-    private void promotions() {
+    @Override
+    public void documentVault() {
+        Intent intent = new Intent(this, DocumentActivity.class);
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
+        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
+        startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
+    }
+
+    @Override
+    public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
     }
 
-    private void getHelp() {
+    @Override
+    public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
     }
 
-    private void nomineeDashboard() {
+    @Override
+    public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
     }
 
-    private void logOut() {
-        fragmentHolder.setAlpha(.4f);
-        progressBar.setVisibility(View.VISIBLE);
+    @Override
+    public void logOut() {
+        super.startProgress();
         cancelNotifications();
         viewModel.logOut().observe(HomeActivity.this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                HomeActivity.super.endProgress();
                 if(aBoolean){
                     getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE).edit().clear().apply();
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
@@ -529,4 +444,12 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        if (super.isDrawerOpen()) {
+            super.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

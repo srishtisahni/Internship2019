@@ -68,71 +68,6 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
         addFragment(loginFragment);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Constants.Google.SIGN_IN_RC){
-            progressBar.setVisibility(View.VISIBLE);
-            fragmentHolder.setAlpha(0.4f);
-            viewModel.checkIfUserExistsEmail(data).observe(this, new Observer<Integer>() {
-                @Override
-                public void onChanged(Integer integer) {
-                    if(integer!=null){
-                        switch (integer){
-                            case Constants.LoginInInfo.Type.GOOGLE:
-                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        if(firebaseUser!=null){
-                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
-                                        }
-                                        else {
-                                            Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-                                break;
-                            case Constants.LoginInInfo.Type.FACEBOOK:
-                                progressBar.setVisibility(View.GONE);
-                                fragmentHolder.setAlpha(1f);
-                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Facebook",Toast.LENGTH_LONG).show();
-                                break;
-                            case Constants.LoginInInfo.Type.PHONE:
-                                progressBar.setVisibility(View.GONE);
-                                fragmentHolder.setAlpha(1f);
-                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Phone Number",Toast.LENGTH_LONG).show();
-                                break;
-                            case Constants.LoginInInfo.Type.EMAIL:
-                                progressBar.setVisibility(View.GONE);
-                                fragmentHolder.setAlpha(1f);
-                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
-                                break;
-                            default:
-                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        if(firebaseUser!=null){
-                                            addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
-                                        }
-                                        else {
-                                            Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
-                                        }
-                                    }
-                                });
-                                break;
-                        }
-                    }
-                    else {
-                        progressBar.setVisibility(View.GONE);
-                        fragmentHolder.setAlpha(1f);
-                        Toast.makeText(LoginSignUpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-        }
-        loginFragment.onActivityResult(requestCode, resultCode, data);
-    }
-
     private void startHomeActivity(FirebaseUser firebaseUser, int type) {
         Bundle bundle = new Bundle();
         bundle.putInt(Constants.LoginInInfo.TYPE, type);
@@ -456,6 +391,15 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
     }
 
     @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+    }
+
+    private void removeFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+    }
+
+    @Override
     public void onBackPressed() {
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         Fragment fragment = fragments.get(fragments.size() - 1);
@@ -467,13 +411,68 @@ public class LoginSignUpActivity extends AppCompatActivity implements LoginCallb
         }
     }
 
-    private void removeFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
-    }
-
     @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Constants.Google.SIGN_IN_RC){
+            progressBar.setVisibility(View.VISIBLE);
+            fragmentHolder.setAlpha(0.4f);
+            viewModel.checkIfUserExistsEmail(data).observe(this, new Observer<Integer>() {
+                @Override
+                public void onChanged(Integer integer) {
+                    if(integer!=null){
+                        switch (integer){
+                            case Constants.LoginInInfo.Type.GOOGLE:
+                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        if(firebaseUser!=null){
+                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                        }
+                                        else {
+                                            Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                                break;
+                            case Constants.LoginInInfo.Type.FACEBOOK:
+                                progressBar.setVisibility(View.GONE);
+                                fragmentHolder.setAlpha(1f);
+                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using Facebook",Toast.LENGTH_LONG).show();
+                                break;
+                            case Constants.LoginInInfo.Type.PHONE:
+                                progressBar.setVisibility(View.GONE);
+                                fragmentHolder.setAlpha(1f);
+                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Phone Number",Toast.LENGTH_LONG).show();
+                                break;
+                            case Constants.LoginInInfo.Type.EMAIL:
+                                progressBar.setVisibility(View.GONE);
+                                fragmentHolder.setAlpha(1f);
+                                Toast.makeText(LoginSignUpActivity.this,"Account already Exists. Please Sign In using your Email and Password",Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        if(firebaseUser!=null){
+                                            addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                        }
+                                        else {
+                                            Toast.makeText(LoginSignUpActivity.this,"Google Sign Up Failed",Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                                break;
+                        }
+                    }
+                    else {
+                        progressBar.setVisibility(View.GONE);
+                        fragmentHolder.setAlpha(1f);
+                        Toast.makeText(LoginSignUpActivity.this,"Unable to update Information",Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+        loginFragment.onActivityResult(requestCode, resultCode, data);
     }
-
 }

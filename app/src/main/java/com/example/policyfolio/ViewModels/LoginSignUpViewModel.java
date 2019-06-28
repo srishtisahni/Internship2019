@@ -35,7 +35,7 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     private String email;
     private String phone;
     private String name;
-    private Long birthdayEpoch;
+    private long birthdayEpoch = 0;
     private int gender;
     private String city;
     private String password;

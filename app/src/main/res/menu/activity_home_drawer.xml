@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="none"
+    <group android:checkableBehavior="single"
         android:id="@+id/main_group">
         <item
             android:id="@+id/add_policy"
@@ -27,7 +27,7 @@
             android:title="@string/nominee_support" />
     </group>
 
-    <group android:checkableBehavior="none"
+    <group android:checkableBehavior="single"
         android:id="@+id/support_group">
         <item
             android:id="@+id/promotions"

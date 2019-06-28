@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.policyfolio.R;
+import com.example.policyfolio.Util.CallBackListeners.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
 import com.example.policyfolio.ViewModels.NomineeViewModel;
@@ -39,17 +40,9 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-public class NomineeSupportActivity extends AppCompatActivity implements NomineeCallback, NavigationView.OnNavigationItemSelectedListener {
-
-    private DrawerLayout drawer;
-    private Toolbar toolbar;
-    private NavigationView navigationView;
-    private TextView name;
+public class NomineeSupportActivity extends ParentNavigationActivity implements NomineeCallback, NavigationView.OnNavigationItemSelectedListener, ParentChildNavigationCallback {
 
     private NomineeViewModel viewModel;
-
-    private FrameLayout fragmentHolder;
-    private ProgressBar progressBar;
 
     private NomineeDashboardFragment nomineeDashboardFragment;
     private AddNomineeFragment addNomineeFragment;
@@ -58,15 +51,7 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nominee_support);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        drawer = findViewById(R.id.drawer_layout);
-        navigationView = findViewById(R.id.nav_view);
-
-        name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
-        name.setText(getIntent().getStringExtra(Constants.User.NAME));
+        setContentView(R.layout.activity_navigation);
 
         viewModel = ViewModelProviders.of(this).get(NomineeViewModel.class);
         viewModel.initiateRepo(this);
@@ -74,42 +59,13 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
 
-        fragmentHolder = findViewById(R.id.fragment_holder);
-        progressBar = findViewById(R.id.progress_bar);
-
-        setUpDrawer();
+        super.setCallback(this);
         addDashboard();
-    }
-
-    private void setUpDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.setDrawerIndicatorEnabled(false);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.nominee_icon, this.getTheme());
-        toggle.setHomeAsUpIndicator(drawable);
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(progressBar.getVisibility() == View.GONE) {
-                    if (drawer.isDrawerVisible(GravityCompat.START)) {
-                        drawer.closeDrawer(GravityCompat.START);
-                    } else {
-                        drawer.openDrawer(GravityCompat.START);
-                    }
-                }
-            }
-        });
-
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     private void addDashboard() {
         getSupportActionBar().setTitle("Nominee Dashboard");
-
-        fragmentHolder.setAlpha(1f);
-        progressBar.setVisibility(View.GONE);
+        super.endProgress();
 
         if(nomineeDashboardFragment == null){
             nomineeDashboardFragment = new NomineeDashboardFragment(this);
@@ -128,14 +84,11 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
 
     @Override
     public void done() {
-        fragmentHolder.setAlpha(0.4f);
-        progressBar.setVisibility(View.VISIBLE);
-
+        super.startProgress();
         viewModel.addNominee().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                NomineeSupportActivity.super.endProgress();
                 if (aBoolean) {
                     getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
                     addNomineeFragment = null;
@@ -148,115 +101,53 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if(addNomineeFragment!=null){
-                AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                        .setTitle("Exit")
-                        .setMessage("Do you want to exit without saving the Nominee?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                getSupportActionBar().setTitle("Nominee Dashboard");
-                                getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
-                                addNomineeFragment = null;
-                            }
-                        }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-                builder.show();
-            }
-            else {
-                super.onBackPressed();
-            }
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id){
-            case R.id.add_policy:
-                addPolicy();
-                break;
-            case R.id.logout:
-                logOut();
-                break;
-            case R.id.nominee_support:
-                break;
-            case R.id.help:
-                getHelp();
-                break;
-            case R.id.promotions:
-                promotions();
-                break;
-            case R.id.claim_support:
-                claimSupport();
-                break;
-            case R.id.documents:
-                documentVault();
-                break;
-        }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void addPolicy() {
+    public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
 
-    private void documentVault() {
+    @Override
+    public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
 
-    private void claimSupport() {
+    @Override
+    public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
 
-    private void promotions() {
+    @Override
+    public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
 
-    private void getHelp() {
+    @Override
+    public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
         intent.putExtra(Constants.User.ID,viewModel.getuId());
-        intent.putExtra(Constants.User.NAME,name.getText().toString());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }
 
-    private void logOut() {
-        fragmentHolder.setAlpha(.4f);
-        progressBar.setVisibility(View.VISIBLE);
+    @Override
+    public void logOut() {
+        super.startProgress();
         cancelNotifications();
         viewModel.logOut().observe(NomineeSupportActivity.this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                fragmentHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                NomineeSupportActivity.super.endProgress();
                 if(aBoolean){
                     getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE).edit().clear().apply();
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
@@ -270,6 +161,11 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
                 }
             }
         });
+    }
+
+    @Override
+    public void nomineeDashboard() {
+
     }
 
     private void cancelNotifications() {
@@ -291,5 +187,23 @@ public class NomineeSupportActivity extends AppCompatActivity implements Nominee
                 }
             }
         });
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            if(addNomineeFragment!=null){
+                getSupportActionBar().setTitle("Nominee Dashboard");
+                getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
+                addNomineeFragment = null;
+            }
+            else {
+                super.onBackPressed();
+            }
+        }
     }
 }

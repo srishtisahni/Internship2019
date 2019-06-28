@@ -14,7 +14,7 @@ public class User {
     private String email;
     private String phone;
     private String name;
-    private Long birthday;
+    private long birthday;
     private int gender = 0;
     private String city;
     private Integer type;
@@ -24,7 +24,7 @@ public class User {
     private Long lastUpdated;
 
     @Ignore
-    public User(String id, String email, String phone, String name, Long birthday, int gender, String city,int type){
+    public User(String id, String email, String phone, String name, long birthday, int gender, String city,int type){
         this.id = id;
         this.email = email;
         this.phone = phone;
@@ -161,7 +161,7 @@ public class User {
     }
 
     private void setComplete() {
-        this.complete = email!=null && id!=null && phone!=null && name!=null && birthday!=null && city!=null && type!=null;
+        this.complete = email!=null && id!=null && phone!=null && name!=null && birthday>0 && city!=null && type!=null;
     }
 
     public Long getLastUpdated() {

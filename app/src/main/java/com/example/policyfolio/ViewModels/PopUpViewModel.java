@@ -83,6 +83,7 @@ public class PopUpViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> updateFirebaseUser() {
+        user.setComplete(true);
         return repository.updateFirebaseUser(user);
     }
 
