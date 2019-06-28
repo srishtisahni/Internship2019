@@ -38,8 +38,10 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        getSupportActionBar().setTitle("Need Help");
+        super.setCallback(this);
         super.setMenuSelection(R.id.help);
+
+        getSupportActionBar().setTitle("Need Help");
 
         viewModel = ViewModelProviders.of(this).get(HelpViewModel.class);
         viewModel.initiateRepo(this);
@@ -47,8 +49,6 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setType(getIntent().getIntExtra(Constants.Query.TYPE,-1));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
-        super.setCallback(this);
 
         setUpFragment();
     }

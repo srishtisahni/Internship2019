@@ -42,15 +42,15 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        getSupportActionBar().setTitle("Add Policy");
+        super.setCallback(this);
         super.setMenuSelection(R.id.add_policy);
+        getSupportActionBar().setTitle("Add Policy");
 
         viewModel = ViewModelProviders.of(this).get(AddPolicyViewModel.class);
         viewModel.initiateRepo(this);
 
         viewModel.setUid(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-        super.setCallback(this);
 
         addEntryFragment();
     }

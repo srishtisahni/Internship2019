@@ -42,6 +42,7 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        super.setCallback(this);
         super.setMenuSelection(R.id.nominee_support);
 
         viewModel = ViewModelProviders.of(this).get(NomineeViewModel.class);
@@ -50,7 +51,7 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
 
-        super.setCallback(this);
+
         addDashboard();
     }
 

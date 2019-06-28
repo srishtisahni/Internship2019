@@ -44,16 +44,15 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        getSupportActionBar().setTitle("Document Vault");
+        super.setCallback(this);
         super.setMenuSelection(R.id.documents);
+        getSupportActionBar().setTitle("Document Vault");
 
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
         viewModel.initiateRepo(this);
 
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
-        super.setCallback(this);
 
         setUpFragment();
     }

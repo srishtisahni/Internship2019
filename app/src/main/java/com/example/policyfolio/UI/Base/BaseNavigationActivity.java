@@ -43,19 +43,17 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
         navigationView = findViewById(R.id.nav_view);
 
         setUpDrawer();
-        updateName();
     }
 
     private void setUpDrawer() {
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.setDrawerIndicatorEnabled(false);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerToggle.setDrawerIndicatorEnabled(false);
         Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.home_icon, this.getTheme());
-        toggle.setHomeAsUpIndicator(drawable);
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+        mDrawerToggle.setHomeAsUpIndicator(drawable);
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(inProgress()) {
+                if(!inProgress()) {
                     if (drawer.isDrawerVisible(GravityCompat.START)) {
                         drawer.closeDrawer(GravityCompat.START);
                     } else {
@@ -64,9 +62,7 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
                 }
             }
         });
-
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        mDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -122,6 +118,16 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
         drawer.closeDrawer(GravityCompat.START);
     }
 
+    protected void setMenuSelection(int id) {
+        navigationView.setCheckedItem(id);
+    }
+
+    protected void removeAllSelections() {
+        for (int i = 0; i < navigationView.getMenu().size(); i++) {
+            navigationView.getMenu().getItem(i).setChecked(false);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -134,9 +140,5 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
                     showSnackbar("We will get back on your query as soon as possible");
                 break;
         }
-    }
-
-    protected void setMenuSelection(int id) {
-        onNavigationItemSelected(navigationView.getMenu().findItem(id));
     }
 }

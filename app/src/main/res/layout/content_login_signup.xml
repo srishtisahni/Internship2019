@@ -8,7 +8,6 @@
     tools:context=".UI.LoginSignUp.LoginSignUpActivity"
     tools:showIn="@layout/activity_login_signup">
     <FrameLayout
-        android:alpha="0.4"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"

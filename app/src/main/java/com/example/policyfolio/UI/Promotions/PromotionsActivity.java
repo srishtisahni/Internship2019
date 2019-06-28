@@ -38,16 +38,15 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        getSupportActionBar().setTitle("Promotions and Offers");
+        super.setCallback(this);
         super.setMenuSelection(R.id.promotions);
+        getSupportActionBar().setTitle("Promotions and Offers");
 
         viewModel = ViewModelProviders.of(this).get(PromotionViewModel.class);
         viewModel.initiateRepo(this);
 
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
-        super.setCallback(this);
 
         setUpFragment();
     }

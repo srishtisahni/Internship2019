@@ -50,6 +50,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+        super.setCallback(this);
         getSupportActionBar().setTitle("Policy Folio");
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -57,7 +58,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
 
         notifications = getSharedPreferences(Constants.Notification.NOTIFICATION_SHARED_PREFERENCE,MODE_PRIVATE);
 
-        super.setCallback(this);
         getUpdated();
         fetchInfo();
         getUser();
@@ -425,6 +425,12 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                     popUpIntent = null;                                  //Render Fragments based on user information
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        super.removeAllSelections();
     }
 
     @Override

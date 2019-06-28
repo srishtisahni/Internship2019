@@ -40,16 +40,15 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-        getSupportActionBar().setTitle("Claims");
+        super.setCallback(this);
         super.setMenuSelection(R.id.claim_support);
+        getSupportActionBar().setTitle("Claims");
 
         viewModel = ViewModelProviders.of(this).get(ClaimViewModel.class);
         viewModel.initiateRepo(this);
 
         viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
-        super.setCallback(this);
 
         setUpDashboard();
     }
