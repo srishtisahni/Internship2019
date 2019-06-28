@@ -5,16 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.Repo.Facebook.DataClasses.FacebookData;
+import com.example.policyfolio.Data.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.Repo.Database.DataClasses.User;
-import com.example.policyfolio.Repo.Repository;
-import com.example.policyfolio.Util.CallBackListeners.FragmentViewModelCallback;
+import com.example.policyfolio.Data.Local.Classes.User;
+import com.example.policyfolio.Data.Repository;
+import com.example.policyfolio.UI.LoginSignUp.FragmentViewModelCallback;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -35,7 +34,7 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     private String email;
     private String phone;
     private String name;
-    private Long birthdayEpoch;
+    private long birthdayEpoch = 0;
     private int gender;
     private String city;
     private String password;

@@ -6,7 +6,7 @@
     android:background="@android:color/transparent"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UI.Activities.HomeActivity">
+    tools:context=".UI.Home.HomeActivity">
 
     <View
         android:id="@+id/view2"

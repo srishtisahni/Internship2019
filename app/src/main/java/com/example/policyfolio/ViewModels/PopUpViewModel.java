@@ -2,12 +2,11 @@ package com.example.policyfolio.ViewModels;
 
 import android.content.Context;
 
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.policyfolio.Repo.Database.DataClasses.User;
-import com.example.policyfolio.Repo.Repository;
+import com.example.policyfolio.Data.Local.Classes.User;
+import com.example.policyfolio.Data.Repository;
 
 public class PopUpViewModel extends ViewModel {
 
@@ -83,6 +82,7 @@ public class PopUpViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> updateFirebaseUser() {
+        user.setComplete(true);
         return repository.updateFirebaseUser(user);
     }
 
