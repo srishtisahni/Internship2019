@@ -1,27 +1,21 @@
 package com.example.policyfolio.UI.PopUps;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.policyfolio.UI.Base.BasicProgressActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Local.Classes.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.PopUpViewModel;
 
-public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
+public class PopUpActivity extends BasicProgressActivity implements PopUpCallBack {
 
     private PopUpViewModel viewModel;
-
-    private CardView popUpHolder;
-    private ProgressBar progressBar;
 
     private EmailPopUp emailPopUp;
     private InfoPopUp infoPopUp;
@@ -35,9 +29,6 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
 
         viewModel = ViewModelProviders.of(this).get(PopUpViewModel.class);
         viewModel.initiateRepo(this);
-
-        popUpHolder = findViewById(R.id.card_view);
-        progressBar = findViewById(R.id.progress_bar);
 
         type = getIntent().getExtras().getInt(Constants.PopUps.POPUP_TYPE,-1);
         createPopUps();
@@ -79,13 +70,11 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
 
     @Override
     public void ForgotPassword() {
-        popUpHolder.setAlpha(0.5f);
-        progressBar.setVisibility(View.VISIBLE);
+        startProgress();
         viewModel.resetPassword().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                popUpHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                endProgress();
                 if(aBoolean) {
                     Toast.makeText(PopUpActivity.this, "A Password Reset email has been sent to your email Id", Toast.LENGTH_LONG).show();
                     finish();
@@ -99,13 +88,11 @@ public class PopUpActivity extends AppCompatActivity implements PopUpCallBack {
 
     @Override
     public void updateInfo() {
-        popUpHolder.setAlpha(0.5f);
-        progressBar.setVisibility(View.VISIBLE);
+        startProgress();
         viewModel.updateFirebaseUser().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
-                popUpHolder.setAlpha(1f);
-                progressBar.setVisibility(View.GONE);
+                endProgress();
                 if(aBoolean) {
                     Toast.makeText(PopUpActivity.this, "Information Updated", Toast.LENGTH_LONG).show();
                     setResult(Constants.PermissionAndRequests.UPDATE_RESULT);

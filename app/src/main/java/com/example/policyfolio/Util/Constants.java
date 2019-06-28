@@ -29,6 +29,7 @@ public class Constants {
         public static final String GENDER = "gender";
         public static final String NAME = "name";
         public static final String LOGIN_TYPE = "login_type";
+        public static final String COMPLETED = "completed";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;

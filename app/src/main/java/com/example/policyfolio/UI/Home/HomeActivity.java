@@ -421,8 +421,9 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
 
         switch (requestCode){
             case Constants.PermissionAndRequests.UPDATE_REQUEST:
-                if(resultCode == Constants.PermissionAndRequests.UPDATE_RESULT)
+                if(resultCode == Constants.PermissionAndRequests.UPDATE_RESULT) {
                     popUpIntent = null;                                  //Render Fragments based on user information
+                }
                 break;
         }
     }
