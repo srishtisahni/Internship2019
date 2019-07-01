@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
-    tools:context=".UI.PopUps.PopUpActivity">
+    tools:context=".UI.BottomSheets.PopUpActivity">
     <androidx.cardview.widget.CardView
         app:cardBackgroundColor="@color/white"
         android:id="@+id/card_view"

@@ -44,6 +44,7 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
         setContentView(R.layout.activity_navigation);
         super.setCallback(this);
         super.setMenuSelection(R.id.add_policy);
+        super.setUpBottomSheet();
         getSupportActionBar().setTitle("Add Policy");
 
         viewModel = ViewModelProviders.of(this).get(AddPolicyViewModel.class);

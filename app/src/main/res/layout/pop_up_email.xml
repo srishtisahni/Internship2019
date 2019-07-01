@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:focusableInTouchMode="true"
     android:layout_height="wrap_content"
-    tools:context=".UI.PopUps.EmailPopUp">
+    tools:context=".UI.BottomSheets.EmailBottomSheet">
 
     <EditText
         android:id="@+id/email"

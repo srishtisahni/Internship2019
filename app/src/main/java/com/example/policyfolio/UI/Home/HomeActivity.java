@@ -17,7 +17,7 @@ import com.example.policyfolio.UI.Base.BaseNavigationActivity;
 import com.example.policyfolio.UI.Claim.ClaimSupportActivity;
 import com.example.policyfolio.UI.Document.DocumentActivity;
 import com.example.policyfolio.UI.Help.HelpActivity;
-import com.example.policyfolio.UI.PopUps.PopUpActivity;
+import com.example.policyfolio.UI.BottomSheets.PopUpActivity;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Local.Classes.Policy;
@@ -51,6 +51,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         super.setCallback(this);
+        super.setUpBottomSheet();
         getSupportActionBar().setTitle("Policy Folio");
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);

@@ -1,4 +1,4 @@
-package com.example.policyfolio.UI.PopUps;
+package com.example.policyfolio.UI.BottomSheets;
 
 
 import android.annotation.SuppressLint;
@@ -22,22 +22,21 @@ import com.example.policyfolio.ViewModels.WithUser.PopUpViewModel;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EmailPopUp extends Fragment {
+public class EmailBottomSheet extends Fragment {
 
-    private PopUpViewModel viewModel;
     private View rootView;
 
     private EditText email;
     private Button next;
     private TextView error;
 
-    private PopUpCallBack callBack;
+    private PopUpsCallback callBack;
 
-    public EmailPopUp() {
+    public EmailBottomSheet() {
     }
 
     @SuppressLint("ValidFragment")
-    public EmailPopUp(PopUpCallBack callBack){
+    public EmailBottomSheet(PopUpsCallback callBack){
         this.callBack = callBack;
     }
 
@@ -47,8 +46,6 @@ public class EmailPopUp extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.pop_up_email, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
-        viewModel.initiateRepo(getContext());
 
         email = rootView.findViewById(R.id.email);
         next = rootView.findViewById(R.id.next);
@@ -91,9 +88,8 @@ public class EmailPopUp extends Fragment {
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                viewModel.setEmail(email.getText().toString());
-                callBack.ForgotPassword();
+            public void onClick(View view){
+                callBack.ForgotPassword(email.getText().toString());
             }
         });
 

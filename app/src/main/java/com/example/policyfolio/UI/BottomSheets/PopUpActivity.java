@@ -1,4 +1,4 @@
-package com.example.policyfolio.UI.PopUps;
+package com.example.policyfolio.UI.BottomSheets;
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -13,12 +13,12 @@ import com.example.policyfolio.Data.Local.Classes.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.WithUser.PopUpViewModel;
 
-public class PopUpActivity extends BasicProgressActivity implements PopUpCallBack {
+public class PopUpActivity extends BasicProgressActivity implements PopUpsCallback {
 
     private PopUpViewModel viewModel;
 
-    private EmailPopUp emailPopUp;
-    private InfoPopUp infoPopUp;
+    private EmailBottomSheet emailBottomSheet;
+    private InfoBottomSheet infoPopUp;
 
     private int type;
 
@@ -37,17 +37,17 @@ public class PopUpActivity extends BasicProgressActivity implements PopUpCallBac
     private void createPopUps() {
         switch (type){
             case Constants.PopUps.Type.EMAIL_POPUP:
-                emailPopUp = new EmailPopUp(this);
+                emailBottomSheet = new EmailBottomSheet(this);
                 String email = getIntent().getExtras().getString(Constants.User.EMAIL,null);
                 if(email!=null) {
                     Bundle args = new Bundle();
                     args.putString(Constants.User.EMAIL, email);
-                    emailPopUp.setArguments(args);
+                    emailBottomSheet.setArguments(args);
                 }
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder,emailPopUp).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, emailBottomSheet).commit();
                 break;
             case Constants.PopUps.Type.INFO_POPUP:
-                infoPopUp = new InfoPopUp(this);
+                infoPopUp = new InfoBottomSheet(this);
                 String id = getIntent().getExtras().getString(Constants.User.ID,null);
                 if(id!=null){
                     Bundle bundle = getIntent().getExtras();
@@ -69,21 +69,8 @@ public class PopUpActivity extends BasicProgressActivity implements PopUpCallBac
     }
 
     @Override
-    public void ForgotPassword() {
-        startProgress();
-        viewModel.resetPassword().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(@Nullable Boolean aBoolean) {
-                endProgress();
-                if(aBoolean) {
-                    Toast.makeText(PopUpActivity.this, "A Password Reset email has been sent to your email Id", Toast.LENGTH_LONG).show();
-                    finish();
-                }
-                else {
-                    Toast.makeText(PopUpActivity.this, "The account doesn't exist", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+    public void ForgotPassword(String s) {
+
     }
 
     @Override
@@ -103,5 +90,15 @@ public class PopUpActivity extends BasicProgressActivity implements PopUpCallBac
                 }
             }
         });
+    }
+
+    @Override
+    public void startProgress() {
+
+    }
+
+    @Override
+    public void endProgress() {
+
     }
 }

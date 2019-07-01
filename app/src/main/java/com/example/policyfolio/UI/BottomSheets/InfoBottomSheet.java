@@ -1,4 +1,4 @@
-package com.example.policyfolio.UI.PopUps;
+package com.example.policyfolio.UI.BottomSheets;
 
 
 import android.annotation.SuppressLint;
@@ -29,9 +29,9 @@ import java.util.Calendar;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
+public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
 
-    private PopUpCallBack callback;
+    private PopUpsCallback callback;
     private PopUpViewModel viewModel;
     private View rootView;
 
@@ -55,11 +55,11 @@ public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.Pare
     private String[] genderArray;
     private int genderSelection;
 
-    public InfoPopUp() {
+    public InfoBottomSheet() {
     }
 
     @SuppressLint("ValidFragment")
-    public InfoPopUp(PopUpCallBack callback){
+    public InfoBottomSheet(PopUpsCallback callback){
         this.callback = callback;
     }
 
