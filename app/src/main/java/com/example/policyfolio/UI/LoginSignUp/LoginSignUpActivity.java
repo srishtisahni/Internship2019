@@ -16,7 +16,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.policyfolio.Data.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.UI.Base.BasicProgressActivity;
 import com.example.policyfolio.UI.BottomSheets.EmailBottomSheet;
-import com.example.policyfolio.UI.BottomSheets.PopUpsCallback;
+import com.example.policyfolio.UI.BottomSheets.SheetCallback;
 import com.example.policyfolio.UI.Home.HomeActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
@@ -217,7 +217,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     @Override
     public void forgotPassword() {
-        EmailBottomSheet emailBottomSheet = new EmailBottomSheet(new PopUpsCallback() {
+        EmailBottomSheet emailBottomSheet = new EmailBottomSheet(new SheetCallback() {
             @Override
             public void ForgotPassword(String s) {
                 startProgress();

@@ -20,9 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
+import com.example.policyfolio.UI.Home.HomeActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.WithUser.PopUpViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HomeViewModel;
 
 import java.util.Calendar;
 
@@ -31,8 +32,8 @@ import java.util.Calendar;
  */
 public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
 
-    private PopUpsCallback callback;
-    private PopUpViewModel viewModel;
+    private SheetCallback callback;
+    private HomeViewModel viewModel;
     private View rootView;
 
     private EditText name;
@@ -59,8 +60,9 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
     }
 
     @SuppressLint("ValidFragment")
-    public InfoBottomSheet(PopUpsCallback callback){
+    public InfoBottomSheet(SheetCallback callback, HomeViewModel viewModel){
         this.callback = callback;
+        this.viewModel = viewModel;
     }
 
 
@@ -68,8 +70,6 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.pop_up_info, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
-        viewModel.initiateRepo(getContext());
 
         name = rootView.findViewById(R.id.name);
         email = rootView.findViewById(R.id.email);

@@ -13,11 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.WithUser.PopUpViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,13 +28,13 @@ public class EmailBottomSheet extends Fragment {
     private Button next;
     private TextView error;
 
-    private PopUpsCallback callBack;
+    private SheetCallback callBack;
 
     public EmailBottomSheet() {
     }
 
     @SuppressLint("ValidFragment")
-    public EmailBottomSheet(PopUpsCallback callBack){
+    public EmailBottomSheet(SheetCallback callBack){
         this.callBack = callBack;
     }
 

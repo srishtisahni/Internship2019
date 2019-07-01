@@ -44,9 +44,6 @@
             android:label="@string/title_activity_add_policy"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.BottomSheets.PopUpActivity"
-            android:theme="@style/AppTheme.NoActionBar.Transparent" />
-        <activity
             android:name=".UI.Home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar.Navigation" />

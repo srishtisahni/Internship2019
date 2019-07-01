@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.policyfolio.Data.Local.Classes.Notifications;
+import com.example.policyfolio.UI.BottomSheets.InfoBottomSheet;
+import com.example.policyfolio.UI.BottomSheets.SheetCallback;
 import com.example.policyfolio.UI.LoginSignUp.LoginSignUpActivity;
 import com.example.policyfolio.UI.Nominee.NomineeSupportActivity;
 import com.example.policyfolio.UI.Promotions.PromotionsActivity;
@@ -17,7 +19,6 @@ import com.example.policyfolio.UI.Base.BaseNavigationActivity;
 import com.example.policyfolio.UI.Claim.ClaimSupportActivity;
 import com.example.policyfolio.UI.Document.DocumentActivity;
 import com.example.policyfolio.UI.Help.HelpActivity;
-import com.example.policyfolio.UI.BottomSheets.PopUpActivity;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Local.Classes.Policy;
@@ -44,7 +45,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
     private Toast timeToast;
     private SharedPreferences notifications;
     private long updatedEpoch;
-    private Intent popUpIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
             public void onChanged(@Nullable User user) {
                 if(user!=null){
                     getTimeToast(user.getLastUpdated());
-                    viewModel.setLoginType(user.getType());
+                    viewModel.updateUser(user);
                     if(user.getName()!=null){
                         getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
                         HomeActivity.super.setNameText(user.getName());
@@ -91,23 +91,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                                     Log.e("DOCUMENT VAULT","Error!");
                             }
                         });
-                        if(popUpIntent == null) {
-                            popUpIntent = new Intent(HomeActivity.this, PopUpActivity.class);
-                            popUpIntent.putExtra(Constants.PopUps.POPUP_TYPE, Constants.PopUps.Type.INFO_POPUP);
-
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.User.ID, user.getId());
-                            bundle.putString(Constants.User.NAME, user.getName());
-                            bundle.putLong(Constants.User.BIRTHDAY, user.getBirthday());
-                            bundle.putInt(Constants.User.GENDER, user.getGender());
-                            bundle.putString(Constants.User.CITY, user.getCity());
-                            bundle.putString(Constants.User.EMAIL, user.getEmail());
-                            bundle.putString(Constants.User.PHONE, user.getPhone());
-                            bundle.putInt(Constants.User.LOGIN_TYPE, user.getType());
-                            popUpIntent.putExtras(bundle);
-
-                            startActivityForResult(popUpIntent, Constants.PermissionAndRequests.UPDATE_REQUEST);
-                        }
+                        createBottomSheetForInfo();
                     }
                     else{
                         policyUpdate();                                       //Render UI based on the user info
@@ -115,6 +99,46 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                 }
             }
         });
+    }
+
+    private void createBottomSheetForInfo() {
+        if(!super.isSheetOpen()){
+            InfoBottomSheet infoBottomSheet = new InfoBottomSheet(new SheetCallback() {
+                @Override
+                public void ForgotPassword(String s) {
+
+                }
+
+                @Override
+                public void updateInfo() {
+                    startProgress();
+                    viewModel.updateFirebaseUser().observe(HomeActivity.this, new Observer<Boolean>() {
+                        @Override
+                        public void onChanged(@Nullable Boolean aBoolean) {
+                            endProgress();
+                            if(aBoolean) {
+                                showSnackbar("Information Updated");
+                                collapseSheet();
+                            }
+                            else {
+                                showSnackbar("Unable to update Information");
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                public void startProgress() {
+                    HomeActivity.super.startSheetProgress();
+                }
+
+                @Override
+                public void endProgress() {
+                    HomeActivity.super.endSheetProgress();
+                }
+            },viewModel);
+            expandSheet(infoBottomSheet);
+        }
     }
 
     private void getTimeToast(Long lastUpdated) {
@@ -398,19 +422,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                 }
             }
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode){
-            case Constants.PermissionAndRequests.UPDATE_REQUEST:
-                if(resultCode == Constants.PermissionAndRequests.UPDATE_RESULT) {
-                    popUpIntent = null;                                  //Render Fragments based on user information
-                }
-                break;
-        }
     }
 
     @Override

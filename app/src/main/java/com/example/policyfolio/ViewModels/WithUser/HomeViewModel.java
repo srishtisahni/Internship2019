@@ -56,4 +56,9 @@ public class HomeViewModel extends BaseViewModelWithUser {
                 null,null,null,null,null,null,
                 null,null,null));
     }
+
+    public LiveData<Boolean> updateFirebaseUser() {
+        setComplete(true);
+        return getRepository().updateFirebaseUser(getLocalUser());
+    }
 }
