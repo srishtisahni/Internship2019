@@ -17,7 +17,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.PopUpViewModel;
+import com.example.policyfolio.ViewModels.WithUser.PopUpViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

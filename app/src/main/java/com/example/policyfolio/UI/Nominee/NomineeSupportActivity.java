@@ -25,7 +25,7 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.NomineeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.NomineeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -47,10 +47,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
 
         viewModel = ViewModelProviders.of(this).get(NomineeViewModel.class);
         viewModel.initiateRepo(this);
-
-        viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
 
         addDashboard();
     }
@@ -95,7 +91,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
@@ -103,7 +98,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
@@ -111,7 +105,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
@@ -119,7 +112,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
@@ -127,7 +119,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }

@@ -24,7 +24,7 @@ import com.example.policyfolio.Data.Local.Classes.Policy;
 import com.example.policyfolio.Data.Local.Classes.User;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.HomeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HomeViewModel;
 
 
 import androidx.annotation.Nullable;
@@ -74,7 +74,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
             public void onChanged(@Nullable User user) {
                 if(user!=null){
                     getTimeToast(user.getLastUpdated());
-                    viewModel.setType(user.getType());
+                    viewModel.setLoginType(user.getType());
                     if(user.getName()!=null){
                         getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
                         HomeActivity.super.setNameText(user.getName());
@@ -85,7 +85,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                             @Override
                             public void onChanged(Boolean aBoolean) {
                                 if(aBoolean)
-                                    Log.e("DOCUMENT VAULT","Added");
+                                    Log.v("DOCUMENT VAULT","Added");
                                 else
                                     Log.e("DOCUMENT VAULT","Error!");
                             }
@@ -155,7 +155,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
             editor.putInt(Constants.LoginInInfo.TYPE,bundle.getInt(Constants.LoginInInfo.TYPE));
             editor.putString(Constants.LoginInInfo.FIREBASE_UID,bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
             editor.apply();
-            viewModel.setType(bundle.getInt(Constants.LoginInInfo.TYPE));
+            viewModel.setLoginType(bundle.getInt(Constants.LoginInInfo.TYPE));
             viewModel.setUid(bundle.getString(Constants.LoginInInfo.FIREBASE_UID));
         }
     }
@@ -207,7 +207,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
         viewModel.addNotifications(notifications,frequency).observe(this, new Observer<List<Long>>() {
             @Override
             public void onChanged(List<Long> longs) {
-                Log.e("SIZE",longs.size()+"");
                 if(longs.size()!=0) {
                     long time;
 
@@ -310,64 +309,49 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
     private void zeroPoliciesFragment() {
         homeStartupFragment = new HomeStartupFragment(this);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeStartupFragment).commit();
-
         super.endProgress();
     }
 
     @Override
     public void addPolicy(int type) {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
         intent.putExtra(Constants.InsuranceProviders.TYPE,type);
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
     }
 
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
     }
 
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
     }
 
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
     }
 
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
     }
 
     @Override
     public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getUid());
-        intent.putExtra(Constants.User.LOGIN_TYPE,viewModel.getType());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
     }
 
@@ -409,7 +393,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                         }
                     }
                     viewModel.deleteAllNotifications();
-                    Log.e("NOTIFICATIONS", "Cancelled");
+                    Log.v("NOTIFICATIONS", "Cancelled");
                 }
             }
         });

@@ -11,7 +11,7 @@ import com.example.policyfolio.UI.Base.BasicProgressActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Local.Classes.User;
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.PopUpViewModel;
+import com.example.policyfolio.ViewModels.WithUser.PopUpViewModel;
 
 public class PopUpActivity extends BasicProgressActivity implements PopUpCallBack {
 

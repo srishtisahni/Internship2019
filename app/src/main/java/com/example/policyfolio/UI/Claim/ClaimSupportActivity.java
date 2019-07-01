@@ -17,7 +17,7 @@ import com.example.policyfolio.UI.Base.BaseNavigationActivity;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.ClaimViewModel;
+import com.example.policyfolio.ViewModels.WithUser.ClaimViewModel;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -47,9 +47,6 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
         viewModel = ViewModelProviders.of(this).get(ClaimViewModel.class);
         viewModel.initiateRepo(this);
 
-        viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
         setUpDashboard();
     }
 
@@ -63,7 +60,7 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     @Override
     public void claimAssistance() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
+        intent.putExtra(Constants.User.ID,viewModel.getUid());
         intent.putExtra(Constants.Query.TYPE,Constants.Query.Type.CLAIMS);
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
     }
@@ -94,28 +91,8 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     }
 
     @Override
-    public void onBackPressed() {
-        if (super.isDrawerOpen()) {
-            super.closeDrawer();
-        } else {
-            if(trackClaimFragment!=null){
-                List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
-                for(int i=0;i<fragmentList.size();i++){
-                    if(fragmentList.get(i) instanceof  TrackClaimFragment ||  fragmentList.get(i) instanceof OnGoingFragment || fragmentList.get(i) instanceof ResolvedFragment) {
-                        getSupportFragmentManager().beginTransaction().remove(fragmentList.get(i)).commit();
-                        trackClaimFragment = null;
-                    }
-                }
-            }
-            else
-                super.onBackPressed();
-        }
-    }
-
-    @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID, viewModel.getuId());
         startActivityForResult(intent, Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
@@ -123,7 +100,6 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
@@ -131,7 +107,6 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
@@ -144,7 +119,6 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }
@@ -152,7 +126,6 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
     @Override
     public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
         finish();
     }
@@ -199,5 +172,26 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
                 }
             }
         });
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (super.isDrawerOpen()) {
+            super.closeDrawer();
+        } else {
+            if(trackClaimFragment!=null){
+                List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+                for(int i=0;i<fragmentList.size();i++){
+                    if(fragmentList.get(i) instanceof  TrackClaimFragment ||  fragmentList.get(i) instanceof OnGoingFragment || fragmentList.get(i) instanceof ResolvedFragment) {
+                        getSupportFragmentManager().beginTransaction().remove(fragmentList.get(i)).commit();
+                        trackClaimFragment = null;
+                    }
+                }
+            }
+            else
+                super.onBackPressed();
+        }
     }
 }

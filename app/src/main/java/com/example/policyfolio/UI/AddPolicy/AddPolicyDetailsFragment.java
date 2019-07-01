@@ -36,7 +36,7 @@ import com.example.policyfolio.Data.Local.Classes.Nominee;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownNomineeAdapter;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.ViewModels.AddPolicyViewModel;
+import com.example.policyfolio.ViewModels.WithUser.AddPolicyViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;

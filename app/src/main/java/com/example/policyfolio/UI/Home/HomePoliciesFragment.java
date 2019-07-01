@@ -20,7 +20,7 @@ import com.example.policyfolio.Data.Local.Classes.Policy;
 import com.example.policyfolio.UI.Adapters.ListAdapters.PolicyDisplayAdapter;
 import com.example.policyfolio.UI.Adapters.ListAdapters.YellowTextAdapter;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.HomeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HomeViewModel;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

@@ -26,7 +26,7 @@ import com.example.policyfolio.Data.Local.Classes.InsuranceProvider;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownProviderAdapter;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.ViewModels.AddPolicyViewModel;
+import com.example.policyfolio.ViewModels.WithUser.AddPolicyViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,9 +99,11 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
     }
 
     private void setDefaultType() {
-        int type = getArguments().getInt(Constants.InsuranceProviders.TYPE,-1);
-        if(type!=-1)
-            setValue(type,Constants.DropDownType.INSURANCE_TYPE);
+        if(getArguments()!=null) {
+            int type = getArguments().getInt(Constants.InsuranceProviders.TYPE, -1);
+            if (type != -1)
+                setValue(type, Constants.DropDownType.INSURANCE_TYPE);
+        }
     }
 
     private void setUpViews() {

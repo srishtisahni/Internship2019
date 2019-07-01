@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.NomineeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.NomineeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

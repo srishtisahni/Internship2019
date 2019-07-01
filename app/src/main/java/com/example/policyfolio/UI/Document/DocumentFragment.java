@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Data.Local.Classes.Documents;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.DocumentViewModel;
+import com.example.policyfolio.ViewModels.WithUser.DocumentViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
