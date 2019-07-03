@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,9 @@ public class BasicProgressActivity extends AppCompatActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);
@@ -129,14 +133,17 @@ public class BasicProgressActivity extends AppCompatActivity {
     }
 
     protected void setUpFullScreen() {
-        appBarLayout.setVisibility(View.GONE);
         setTheme(R.style.AppTheme_NoActionBar_fullscreen);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        appBarLayout.setVisibility(View.GONE);
     }
 
     protected void disableFullscreen() {
         appBarLayout.setVisibility(View.VISIBLE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
         setTheme(R.style.AppTheme_NoActionBar);
     }

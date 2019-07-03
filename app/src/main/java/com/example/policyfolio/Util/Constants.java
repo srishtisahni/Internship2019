@@ -67,6 +67,7 @@ public class Constants {
         public static final String TYPE = "type";
         public static final String FIREBASE_UID = "firebase_token";
         public static final String LOG_IN_DATA = "data";
+        public static final String POST_LOGOUT = "post_logout";
 
         public static class Type{
             public static final int GOOGLE = 0;

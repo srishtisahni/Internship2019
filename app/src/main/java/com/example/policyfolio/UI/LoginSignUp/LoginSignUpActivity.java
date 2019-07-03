@@ -41,11 +41,19 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_signup);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if(getIntent().getBooleanExtra(Constants.LoginInInfo.POST_LOGOUT,false)) {
+            setTheme(R.style.AppTheme_NoActionBar);
+            setContentView(R.layout.activity_login_signup);
+            openLoginSignUp();
+        }
+        else {
+            setTheme(R.style.AppTheme_NoActionBar_fullscreen);
+            setContentView(R.layout.activity_login_signup);
+            setUpWelcome();
+        }
 
-        setUpWelcome();
+        viewModel = ViewModelProviders.of(this).get(LoginSignUpViewModel.class);
+        viewModel.initiateRepo(this);
     }
 
     private void setUpWelcome() {
@@ -54,8 +62,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, welcomeFragment).commit();
     }
 
-
-
     @Override
     public void openLoginSignUp() {
         Drawable dr = getResources().getDrawable(R.drawable.titlebar_icon);
@@ -63,9 +69,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
         Drawable d = new BitmapDrawable(getResources(),
                 Bitmap.createScaledBitmap(bitmap, 120, 120, true));
         getSupportActionBar().setIcon(d);
-
-        viewModel = ViewModelProviders.of(this).get(LoginSignUpViewModel.class);
-        viewModel.initiateRepo(this);
 
         loginFragment = new LoginFragment(this);
         signUpFragment = new SignUpFragment(this);

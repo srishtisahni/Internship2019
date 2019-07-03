@@ -108,6 +108,7 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
 
                     Intent intent = new Intent(PromotionsActivity.this, LoginSignUpActivity.class);
+                    intent.putExtra(Constants.LoginInInfo.POST_LOGOUT,true);
                     startActivity(intent);
                     finish();
                 }
