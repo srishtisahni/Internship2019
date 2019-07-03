@@ -80,7 +80,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     @Override
     public void openHome(LogInData logInData) {
-        super.disableFullscreen();
         Intent intent = new Intent(this, HomeActivity.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(Constants.LoginInInfo.LOGGED_IN, logInData.isLogin());
