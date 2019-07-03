@@ -165,4 +165,9 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     public LiveData<Integer> checkIfUserExistsPhone() {
         return repository.checkIfUserExistsPhone(phone);
     }
+
+
+    public LiveData<Boolean> resetPassword() {
+        return repository.resetPassword(email);
+    }
 }

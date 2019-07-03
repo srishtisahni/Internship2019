@@ -1,27 +1,19 @@
-package com.example.policyfolio.ViewModels;
+package com.example.policyfolio.ViewModels.WithUser;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
-
 import com.example.policyfolio.Data.Local.Classes.InsuranceProvider;
 import com.example.policyfolio.Data.Local.Classes.Nominee;
-import com.example.policyfolio.Data.Local.Classes.Notifications;
 import com.example.policyfolio.Data.Local.Classes.Policy;
-import com.example.policyfolio.Data.Repository;
-import com.example.policyfolio.Util.Constants;
-import com.facebook.login.LoginManager;
+import com.example.policyfolio.ViewModels.Base.BaseViewModelWithUser;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class AddPolicyViewModel extends ViewModel {
-    private Repository repository;
+public class AddPolicyViewModel extends BaseViewModelWithUser {
 
     private int type;
-    private String uId;
     private InsuranceProvider provider;
     private Nominee nominee;
     private String policyNumber;
@@ -35,11 +27,6 @@ public class AddPolicyViewModel extends ViewModel {
 
     private HashMap<Integer,LiveData<List<InsuranceProvider>>> providers = new HashMap<>();
     private LiveData<List<Nominee>> nominees;
-    private int loginType;
-
-    public void initiateRepo(Context context){
-        repository = Repository.getInstance(context);
-    }
 
     public int getType() {
         return type;
@@ -52,7 +39,7 @@ public class AddPolicyViewModel extends ViewModel {
 
     private LiveData<List<InsuranceProvider>> getProviders() {
         if(providers.get(type) == null)
-            providers.put(type,repository.fetchProviders(type));
+            providers.put(type, getRepository().fetchProviders(type));
         return providers.get(type);
     }
 
@@ -82,16 +69,8 @@ public class AddPolicyViewModel extends ViewModel {
 
     public LiveData<List<Nominee>> fetchNominees() {
         if(nominees == null)
-            nominees = repository.fetchNominees(uId);
+            nominees = getRepository().fetchNominees(getUid());
         return nominees;
-    }
-
-    public String getuId() {
-        return uId;
-    }
-
-    public void setUid(String uId) {
-        this.uId = uId;
     }
 
     public Nominee getNominee() {
@@ -103,7 +82,7 @@ public class AddPolicyViewModel extends ViewModel {
     }
 
     public LiveData<String> saveImage() {
-        return repository.saveImage(bitmap,uId,policyNumber);
+        return getRepository().saveImage(bitmap, getUid(),policyNumber);
     }
 
     public String getPhotoUrl() {
@@ -147,8 +126,8 @@ public class AddPolicyViewModel extends ViewModel {
     }
 
     public LiveData<Boolean> savePolicy() {
-        Policy policy = new Policy(uId,policyNumber,provider.getId(), premiumDateEpoch, matureDateEpoch, premiumFrequency,premiumAmount,coverAmount,type,photoUrl,true,nominee.getEmail());
-        return repository.addPolicy(policy);
+        Policy policy = new Policy(getUid(),policyNumber,provider.getId(), premiumDateEpoch, matureDateEpoch, premiumFrequency,premiumAmount,coverAmount,type,photoUrl,true,nominee.getEmail());
+        return getRepository().addPolicy(policy);
     }
 
     public void setBitmap(Bitmap bmp) {
@@ -157,29 +136,5 @@ public class AddPolicyViewModel extends ViewModel {
 
     public Bitmap getBitmap() {
         return bitmap;
-    }
-
-    public int getLoginType() {
-        return loginType;
-    }
-
-    public void setLoginType(int loginType) {
-        this.loginType = loginType;
-    }
-
-
-    public LiveData<List<Notifications>> getAllNotificatios() {
-        return repository.getAllNotifications();
-    }
-
-    public void deleteAllNotifications() {
-        repository.deleteAllNotifications();
-    }
-
-    public LiveData<Boolean> logOut() {
-        if(loginType == Constants.LoginInInfo.Type.FACEBOOK) {
-            LoginManager.getInstance().logOut();
-        }
-        return repository.logOut(uId);
     }
 }

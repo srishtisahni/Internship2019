@@ -14,8 +14,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.Data.Local.Classes.Notifications;
+import com.example.policyfolio.UI.BottomSheets.ListBottomSheet;
 import com.example.policyfolio.UI.Claim.ClaimSupportActivity;
 import com.example.policyfolio.UI.Document.DocumentActivity;
 import com.example.policyfolio.UI.Help.HelpActivity;
@@ -27,7 +29,7 @@ import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.AddPolicyViewModel;
+import com.example.policyfolio.ViewModels.WithUser.AddPolicyViewModel;
 
 import java.util.List;
 
@@ -48,9 +50,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
 
         viewModel = ViewModelProviders.of(this).get(AddPolicyViewModel.class);
         viewModel.initiateRepo(this);
-
-        viewModel.setUid(getIntent().getStringExtra(Constants.User.ID));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
 
         addEntryFragment();
     }
@@ -141,7 +140,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
@@ -149,7 +147,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
@@ -157,7 +154,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
@@ -165,7 +161,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }
@@ -173,7 +168,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     @Override
     public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
         finish();
     }
@@ -235,9 +229,13 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
 
     @Override
     public void onBackPressed() {
-        if (super.isDrawerOpen()) {
+        if(isSheetOpen()){
+            super.collapseSheet();
+        }
+        else if (super.isDrawerOpen()) {
             super.closeDrawer();
-        } else {
+        }
+        else {
             if(addPolicyDetailsFragment == null) {
                 super.onBackPressed();
             }
@@ -246,5 +244,16 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
                 addPolicyDetailsFragment = null;
             }
         }
+    }
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
     }
 }

@@ -16,7 +16,7 @@ import com.example.policyfolio.UI.Nominee.NomineeSupportActivity;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.PromotionViewModel;
+import com.example.policyfolio.ViewModels.WithUser.PromotionViewModel;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -45,9 +45,6 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
         viewModel = ViewModelProviders.of(this).get(PromotionViewModel.class);
         viewModel.initiateRepo(this);
 
-        viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
         setUpFragment();
     }
 
@@ -61,7 +58,6 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
@@ -69,7 +65,6 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
@@ -77,7 +72,6 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
@@ -85,7 +79,6 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     @Override
     public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
         finish();
     }
@@ -93,7 +86,6 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }

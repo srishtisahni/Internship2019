@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.PagerAdapters.ClaimPagerAdapter;
-import com.example.policyfolio.ViewModels.ClaimViewModel;
+import com.example.policyfolio.ViewModels.WithUser.ClaimViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;

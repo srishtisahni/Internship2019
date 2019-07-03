@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.policyfolio.Data.Local.Classes.Notifications;
+import com.example.policyfolio.UI.BottomSheets.ListBottomSheet;
 import com.example.policyfolio.UI.Promotions.PromotionsActivity;
 import com.example.policyfolio.UI.AddPolicy.AddPolicyActivity;
 import com.example.policyfolio.UI.Base.BaseNavigationActivity;
@@ -18,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 
@@ -25,12 +27,12 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.NomineeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.NomineeViewModel;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-public class NomineeSupportActivity extends BaseNavigationActivity implements NomineeCallback, NavigationView.OnNavigationItemSelectedListener, ParentChildNavigationCallback {
+public class NomineeSupportActivity extends BaseNavigationActivity implements NomineeCallback, ParentChildNavigationCallback {
 
     private NomineeViewModel viewModel;
 
@@ -47,10 +49,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
 
         viewModel = ViewModelProviders.of(this).get(NomineeViewModel.class);
         viewModel.initiateRepo(this);
-
-        viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
-
 
         addDashboard();
     }
@@ -95,7 +93,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
@@ -103,7 +100,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
@@ -111,7 +107,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
@@ -119,7 +114,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
@@ -127,7 +121,6 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }
@@ -184,10 +177,13 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+        if(isSheetOpen()){
+            closeListSheet();
+        }
+        else if (super.isDrawerOpen()) {
+            super.closeDrawer();
+        }
+        else {
             if(addNomineeFragment!=null){
                 getSupportActionBar().setTitle("Nominee Dashboard");
                 getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
@@ -197,5 +193,17 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
                 super.onBackPressed();
             }
         }
+    }
+
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
     }
 }

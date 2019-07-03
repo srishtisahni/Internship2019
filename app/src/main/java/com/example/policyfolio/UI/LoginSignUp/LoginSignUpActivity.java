@@ -12,11 +12,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.Data.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.UI.Base.BasicProgressActivity;
+import com.example.policyfolio.UI.BottomSheets.EmailBottomSheet;
+import com.example.policyfolio.UI.BottomSheets.EmailSheetCallback;
+import com.example.policyfolio.UI.BottomSheets.ListBottomSheet;
 import com.example.policyfolio.UI.Home.HomeActivity;
-import com.example.policyfolio.UI.PopUps.PopUpActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
@@ -215,10 +218,40 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     @Override
     public void forgotPassword() {
-        Intent intent = new Intent(this, PopUpActivity.class);
-        intent.putExtra(Constants.PopUps.POPUP_TYPE,Constants.PopUps.Type.EMAIL_POPUP);
-        intent.putExtra(Constants.User.EMAIL,viewModel.getEmail());
-        startActivity(intent);
+        EmailBottomSheet emailBottomSheet = new EmailBottomSheet(new EmailSheetCallback() {
+            @Override
+            public void ForgotPassword(String s) {
+                startProgress();
+                viewModel.setEmail(s);
+                viewModel.resetPassword().observe(LoginSignUpActivity.this, new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(@Nullable Boolean aBoolean) {
+                        endProgress();
+                        LoginSignUpActivity.super.collapseSheet();
+                        if(aBoolean) {
+                            showSnackbar("A Password Reset email has been sent to your email Id");
+                        }
+                        else {
+                            showSnackbar("The account doesn't exist");
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void startProgress() {
+                LoginSignUpActivity.super.startSheetProgress();
+            }
+
+            @Override
+            public void endProgress() {
+                LoginSignUpActivity.super.endSheetProgress();
+            }
+        });
+        Bundle args = new Bundle();
+        args.putString(Constants.User.EMAIL,viewModel.getEmail());
+        emailBottomSheet.setArguments(args);
+        super.expandSheet(emailBottomSheet);
     }
 
 
@@ -363,13 +396,18 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     @Override
     public void onBackPressed() {
-        List<Fragment> fragments = getSupportFragmentManager().getFragments();
-        Fragment fragment = fragments.get(fragments.size() - 1);
-        if(fragment instanceof SignUpFragment || fragment instanceof EmailPhoneFragment){
-            removeFragment(fragment);
+        if(super.isSheetOpen()){
+            super.collapseSheet();
         }
         else {
-            super.onBackPressed();
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            Fragment fragment = fragments.get(fragments.size() - 1);
+            if(fragment instanceof SignUpFragment || fragment instanceof EmailPhoneFragment){
+                removeFragment(fragment);
+            }
+            else {
+                super.onBackPressed();
+            }
         }
     }
 
@@ -431,5 +469,16 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
             });
         }
         loginFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
     }
 }

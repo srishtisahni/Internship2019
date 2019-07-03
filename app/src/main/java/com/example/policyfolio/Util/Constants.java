@@ -29,6 +29,7 @@ public class Constants {
         public static final String GENDER = "gender";
         public static final String NAME = "name";
         public static final String LOGIN_TYPE = "login_type";
+        public static final String COMPLETED = "completed";
 
         public static class Gender{
             public static final int GENDER_NOT_DISCLOSE = 0;
@@ -118,7 +119,7 @@ public class Constants {
         }
     }
 
-    public static class DropDownType {
+    public static class ListTypes {
         public static final int INSURANCE_TYPE = 0;
         public static final int INSURANCE_PROVIDER = 1;
         public static final int PREMIUM_FREQUENCY = 2;

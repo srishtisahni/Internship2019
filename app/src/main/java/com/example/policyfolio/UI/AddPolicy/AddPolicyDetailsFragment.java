@@ -36,7 +36,7 @@ import com.example.policyfolio.Data.Local.Classes.Nominee;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownNomineeAdapter;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
-import com.example.policyfolio.ViewModels.AddPolicyViewModel;
+import com.example.policyfolio.ViewModels.WithUser.AddPolicyViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -57,7 +57,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
     private FrameLayout premiumFrame;
     private TextView premiumText;
-    private RecyclerView premiumChoice;
     private BasicDropdownTextAdapter premiumAdapter;
     private String[] premiums;
 
@@ -76,7 +75,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
     private FrameLayout nomineeFrame;
     private TextView nomineeText;
-    private RecyclerView nomineeChoice;
     private ArrayList<Nominee> nominees;
     private BasicDropdownNomineeAdapter nomineeAdapter;
 
@@ -113,7 +111,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
         premiumFrame = rootView.findViewById(R.id.frequency_frame);
         premiumText = rootView.findViewById(R.id.frequency_text);
-        premiumChoice = rootView.findViewById(R.id.frequency);
         premiums = getResources().getStringArray(R.array.premium_frequency);
 
         premiumAmount = rootView.findViewById(R.id.premium_amount);
@@ -128,7 +125,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
         nomineeFrame = rootView.findViewById(R.id.nominee_frame);
         nomineeText = rootView.findViewById(R.id.nominee_text);
-        nomineeChoice = rootView.findViewById(R.id.nominee);
         nominees = new ArrayList<>();
 
         addPolicy = rootView.findViewById(R.id.add_document);
@@ -163,7 +159,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 }
                 else {
                     coverAmount.setPadding(24,4,32,4);
-                    coverAmount.setBackground(getResources().getDrawable(R.drawable.text_background_8dp));
+                    coverAmount.setBackground(getResources().getDrawable(R.drawable.text_background_grey_8dp));
                 }
             }
 
@@ -173,10 +169,8 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             }
         });
 
-        premiumAdapter = new BasicDropdownTextAdapter(getContext(),premiums, this,Constants.DropDownType.PREMIUM_FREQUENCY);
-        premiumChoice.setAdapter(premiumAdapter);
-        premiumChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
-
+        premiumAdapter = new BasicDropdownTextAdapter(getContext(),premiums, this, Constants.ListTypes.PREMIUM_FREQUENCY,getResources().getColor(R.color.colorPrimaryDarkest));
+        viewModel.setPremiumFrequency(0);
         premiumFrame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,8 +179,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
                 premiumFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 premiumFrame.setPadding(0,4,0,4);
-                premiumText.setVisibility(View.GONE);
-                premiumChoice.setVisibility(View.VISIBLE);
+                callback.openListSheet(Constants.ListTypes.PREMIUM_FREQUENCY,premiumAdapter);
             }
         });
 
@@ -205,7 +198,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
                 }
                 else {
                     premiumAmount.setPadding(24,4,32,4);
-                    premiumAmount.setBackground(getResources().getDrawable(R.drawable.text_background_8dp));
+                    premiumAmount.setBackground(getResources().getDrawable(R.drawable.text_background_grey_8dp));
                 }
             }
 
@@ -275,8 +268,6 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
         });
 
         nomineeAdapter = new BasicDropdownNomineeAdapter(getContext(),nominees,this);
-        nomineeChoice.setAdapter(nomineeAdapter);
-        nomineeChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
 
         nomineeFrame.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -286,8 +277,7 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
 
                 if(nominees.size()!=0) {
                     nomineeFrame.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    nomineeText.setVisibility(View.GONE);
-                    nomineeChoice.setVisibility(View.VISIBLE);
+                    callback.openListSheet(Constants.ListTypes.NOMINEE,nomineeAdapter);
                 }
                 else
                     callback.showSnackbar("No Nominees exist for the User");
@@ -339,6 +329,8 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
             public void onChanged(List<Nominee> nominees) {
                 AddPolicyDetailsFragment.this.nominees.clear();
                 AddPolicyDetailsFragment.this.nominees.addAll(nominees);
+                if(nominees.size()>0 && viewModel.getNominee() == null)
+                    viewModel.setNominee(nominees.get(0));
                 nomineeAdapter.notifyDataSetChanged();
             }
         });
@@ -350,22 +342,19 @@ public class AddPolicyDetailsFragment extends Fragment implements BasicDropdownT
     public void setValue(int position, int type) {
         coverAmount.clearFocus();
         premiumAmount.clearFocus();
+        callback.closeListSheet();
         switch (type){
-            case Constants.DropDownType.PREMIUM_FREQUENCY:
+            case Constants.ListTypes.PREMIUM_FREQUENCY:
                 premiumText.setText(premiums[position]);
                 premiumText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 premiumText.setPadding(0,4,0,4);
-                premiumChoice.setVisibility(View.GONE);
-                premiumText.setVisibility(View.VISIBLE);
                 viewModel.setPremiumFrequency(position);
                 break;
-            case Constants.DropDownType.NOMINEE:
+            case Constants.ListTypes.NOMINEE:
                 String[] relations = getResources().getStringArray(R.array.relationship_array);
                 nomineeText.setText(nominees.get(position).getName() + ", " + relations[nominees.get(position).getRelation()]);
                 nomineeText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 nomineeText.setPadding(0,4,0,4);
-                nomineeChoice.setVisibility(View.GONE);
-                nomineeText.setVisibility(View.VISIBLE);
                 viewModel.setNominee(nominees.get(position));
                 break;
         }

@@ -53,7 +53,7 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
         mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!inProgress()) {
+                if(!inProgress() && !isSheetOpen()) {
                     if (drawer.isDrawerVisible(GravityCompat.START)) {
                         drawer.closeDrawer(GravityCompat.START);
                     } else {

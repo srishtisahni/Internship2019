@@ -33,7 +33,6 @@ public class User {
         this.gender = gender;
         this.city = city;
         this.type = type;
-        setComplete();
         splitName();
         setLastUpdated(System.currentTimeMillis()/1000);
     }
@@ -54,12 +53,10 @@ public class User {
     @Ignore
     public User(String id) {
         this.id = id;
-        setComplete();
         setLastUpdated(System.currentTimeMillis()/1000);
     }
 
     public User() {
-        setComplete();
         setLastUpdated(System.currentTimeMillis()/1000);
     }
 
@@ -70,7 +67,6 @@ public class User {
 
     public void setId(String uid) {
         id = uid;
-        setComplete();
     }
 
     public String getEmail() {
@@ -79,7 +75,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-        setComplete();
     }
 
     public String getPhone() {
@@ -88,7 +83,6 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
-        setComplete();
     }
 
     public String getName() {
@@ -97,7 +91,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-        setComplete();
         splitName();
     }
 
@@ -107,7 +100,6 @@ public class User {
 
     public void setBirthday(Long birthday) {
         this.birthday = birthday;
-        setComplete();
     }
 
     public int getGender() {
@@ -116,7 +108,6 @@ public class User {
 
     public void setGender(int gender) {
         this.gender = gender;
-        setComplete();
     }
 
     public String getCity() {
@@ -125,7 +116,6 @@ public class User {
 
     public void setCity(String city) {
         this.city = city;
-        setComplete();
     }
 
     public Integer getType() {
@@ -158,10 +148,6 @@ public class User {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    private void setComplete() {
-        this.complete = email!=null && id!=null && phone!=null && name!=null && birthday>0 && city!=null && type!=null;
     }
 
     public Long getLastUpdated() {

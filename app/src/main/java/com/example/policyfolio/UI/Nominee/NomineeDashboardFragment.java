@@ -22,7 +22,7 @@ import com.example.policyfolio.Data.Local.Classes.Policy;
 import com.example.policyfolio.Data.Local.Classes.User;
 import com.example.policyfolio.UI.Adapters.ListAdapters.MeNomineeDisplayAdapter;
 import com.example.policyfolio.UI.Adapters.ListAdapters.NomineeDisplayAdapter;
-import com.example.policyfolio.ViewModels.NomineeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.NomineeViewModel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,7 +107,7 @@ public class NomineeDashboardFragment extends Fragment {
                 nomineeDisplayAdapter.notifyDataSetChanged();
             }
         });
-        viewModel.fetchUser().observe(this, new Observer<User>() {
+        viewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(final User user) {
                 if(user!=null){

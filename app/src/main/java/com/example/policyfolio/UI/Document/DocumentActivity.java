@@ -18,7 +18,7 @@ import com.example.policyfolio.UI.Claim.ClaimSupportActivity;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.DocumentViewModel;
+import com.example.policyfolio.ViewModels.WithUser.DocumentViewModel;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -50,9 +50,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
 
         viewModel = ViewModelProviders.of(this).get(DocumentViewModel.class);
         viewModel.initiateRepo(this);
-
-        viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
 
         setUpFragment();
     }
@@ -198,7 +195,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
@@ -206,7 +202,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
@@ -219,7 +214,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
@@ -227,7 +221,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     @Override
     public void getHelp() {
         Intent intent = new Intent(this, HelpActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.HELP_REQUEST);
         finish();
     }
@@ -235,7 +228,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     @Override
     public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
         finish();
     }

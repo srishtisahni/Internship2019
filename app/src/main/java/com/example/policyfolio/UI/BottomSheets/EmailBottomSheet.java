@@ -1,4 +1,4 @@
-package com.example.policyfolio.UI.PopUps;
+package com.example.policyfolio.UI.BottomSheets;
 
 
 import android.annotation.SuppressLint;
@@ -13,31 +13,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.PopUpViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EmailPopUp extends Fragment {
+public class EmailBottomSheet extends Fragment {
 
-    private PopUpViewModel viewModel;
     private View rootView;
 
     private EditText email;
     private Button next;
     private TextView error;
 
-    private PopUpCallBack callBack;
+    private EmailSheetCallback callBack;
 
-    public EmailPopUp() {
+    public EmailBottomSheet() {
     }
 
     @SuppressLint("ValidFragment")
-    public EmailPopUp(PopUpCallBack callBack){
+    public EmailBottomSheet(EmailSheetCallback callBack){
         this.callBack = callBack;
     }
 
@@ -46,9 +43,7 @@ public class EmailPopUp extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.pop_up_email, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
-        viewModel.initiateRepo(getContext());
+        rootView = inflater.inflate(R.layout.bottom_sheet_email, container, false);
 
         email = rootView.findViewById(R.id.email);
         next = rootView.findViewById(R.id.next);
@@ -91,9 +86,8 @@ public class EmailPopUp extends Fragment {
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                viewModel.setEmail(email.getText().toString());
-                callBack.ForgotPassword();
+            public void onClick(View view){
+                callBack.ForgotPassword(email.getText().toString());
             }
         });
 

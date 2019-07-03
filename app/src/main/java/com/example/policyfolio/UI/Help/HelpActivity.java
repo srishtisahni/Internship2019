@@ -16,7 +16,7 @@ import com.example.policyfolio.UI.Document.DocumentActivity;
 import com.example.policyfolio.UI.Base.ParentChildNavigationCallback;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Util.Receivers.PremiumDuesReceiver;
-import com.example.policyfolio.ViewModels.HelpViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HelpViewModel;
 
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -46,9 +46,7 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
         viewModel = ViewModelProviders.of(this).get(HelpViewModel.class);
         viewModel.initiateRepo(this);
 
-        viewModel.setuId(getIntent().getStringExtra(Constants.User.ID));
         viewModel.setType(getIntent().getIntExtra(Constants.Query.TYPE,-1));
-        viewModel.setLoginType(getIntent().getIntExtra(Constants.User.LOGIN_TYPE,-1));
 
         setUpFragment();
     }
@@ -82,7 +80,6 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);
         finish();
     }
@@ -90,7 +87,6 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     @Override
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
         finish();
     }
@@ -98,7 +94,6 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     @Override
     public void claimSupport() {
         Intent intent = new Intent(this, ClaimSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.CLAIMS_REQUEST);
         finish();
     }
@@ -106,7 +101,6 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     @Override
     public void promotions() {
         Intent intent = new Intent(this, PromotionsActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.PROMOTIONS_REQUEST);
         finish();
     }
@@ -114,7 +108,6 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     @Override
     public void nomineeDashboard() {
         Intent intent = new Intent(this, NomineeSupportActivity.class);
-        intent.putExtra(Constants.User.ID,viewModel.getuId());
         startActivityForResult(intent,Constants.PermissionAndRequests.NOMINEE_DASHBOARD_REQUEST);
         finish();
     }

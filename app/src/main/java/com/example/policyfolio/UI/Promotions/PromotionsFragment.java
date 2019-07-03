@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.PromotionViewModel;
+import com.example.policyfolio.ViewModels.WithUser.PromotionViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

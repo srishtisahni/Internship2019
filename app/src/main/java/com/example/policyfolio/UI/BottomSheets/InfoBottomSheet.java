@@ -1,4 +1,4 @@
-package com.example.policyfolio.UI.PopUps;
+package com.example.policyfolio.UI.BottomSheets;
 
 
 import android.annotation.SuppressLint;
@@ -15,24 +15,23 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.PopUpViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HomeViewModel;
 
 import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
+public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapter.ParentCallback {
 
-    private PopUpCallBack callback;
-    private PopUpViewModel viewModel;
+    private InfoSheetCallback callback;
+    private HomeViewModel viewModel;
     private View rootView;
 
     private EditText name;
@@ -55,21 +54,20 @@ public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.Pare
     private String[] genderArray;
     private int genderSelection;
 
-    public InfoPopUp() {
+    public InfoBottomSheet() {
     }
 
     @SuppressLint("ValidFragment")
-    public InfoPopUp(PopUpCallBack callback){
+    public InfoBottomSheet(InfoSheetCallback callback, HomeViewModel viewModel){
         this.callback = callback;
+        this.viewModel = viewModel;
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.pop_up_info, container, false);
-        viewModel = ViewModelProviders.of(getActivity()).get(PopUpViewModel.class);
-        viewModel.initiateRepo(getContext());
+        rootView = inflater.inflate(R.layout.bottom_sheet_info, container, false);
 
         name = rootView.findViewById(R.id.name);
         email = rootView.findViewById(R.id.email);
@@ -118,9 +116,9 @@ public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.Pare
         if (viewModel.getBirthday()!=null) {
             birthday.setText(Constants.Time.DATE_FORMAT.format(viewModel.getBirthday()*1000));
             birthdayEpoch = viewModel.getBirthday();
-            birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            birthday.setTextColor(getResources().getColor(R.color.white));
         }
-        setValue(viewModel.getGender(),Constants.DropDownType.GENDER);
+        setValue(viewModel.getGender(), Constants.ListTypes.GENDER);
         if(viewModel.getCity()!=null)
             city.setText(viewModel.getCity());
     }
@@ -200,7 +198,7 @@ public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.Pare
                 calendar.set(year,monthOfYear,dayOfMonth);
                 birthdayEpoch = (calendar.getTimeInMillis())/1000;
                 birthday.setText(Constants.Time.DATE_FORMAT.format(birthdayEpoch*1000));
-                birthday.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                birthday.setTextColor(getResources().getColor(R.color.white));
             }
         });
         dialog.show();
@@ -209,7 +207,7 @@ public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.Pare
     private void setGenderAdapter() {
         genderSelection = 0;
         genderArray = getResources().getStringArray(R.array.gender_array);
-        genderAdapter = new BasicDropdownTextAdapter(getContext(),genderArray,this,Constants.DropDownType.GENDER);
+        genderAdapter = new BasicDropdownTextAdapter(getContext(),genderArray,this, Constants.ListTypes.GENDER, getResources().getColor(R.color.colorPrimaryDarkest));
         genderChoice.setAdapter(genderAdapter);
         genderChoice.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
@@ -224,12 +222,12 @@ public class InfoPopUp extends Fragment implements BasicDropdownTextAdapter.Pare
 
     @Override
     public void setValue(int position, int type) {
-        if(type == Constants.DropDownType.GENDER){
+        if(type == Constants.ListTypes.GENDER){
             genderSelection = position;
             if(genderSelection == 0)
-                genderText.setTextColor(getResources().getColor(R.color.Grey));
+                genderText.setTextColor(getResources().getColor(R.color.dustyWhite));
             else
-                genderText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                genderText.setTextColor(getResources().getColor(R.color.white));
             genderText.setText(genderArray[genderSelection]);
             genderText.setVisibility(View.VISIBLE);
             genderChoice.setVisibility(View.GONE);

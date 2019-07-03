@@ -4,9 +4,14 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.policyfolio.R;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
 public class BasicProgressActivity extends AppCompatActivity {
@@ -15,6 +20,13 @@ public class BasicProgressActivity extends AppCompatActivity {
     private FrameLayout fragmentHolder;
     private ProgressBar progressBar;
 
+    private FrameLayout sheetFragmentHolder;
+    private ProgressBar sheetProgressBar;
+    private CoordinatorLayout sheet;
+    private BottomSheetBehavior sheetBehavior;
+    private Fragment sheetFragment;
+    private View coverFragment;
+
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
@@ -22,6 +34,7 @@ public class BasicProgressActivity extends AppCompatActivity {
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);
         snackbar = findViewById(R.id.snackbar_action);
+        setUpBottomSheet();
     }
 
 
@@ -41,5 +54,70 @@ public class BasicProgressActivity extends AppCompatActivity {
 
     public void showSnackbar(String text) {
         Snackbar.make(snackbar,text,Snackbar.LENGTH_LONG).show();
+    }
+
+    private void setUpBottomSheet() {
+        sheet = findViewById(R.id.bottom_sheet);
+        sheetFragmentHolder = findViewById(R.id.sheet_fragment_holder);
+        sheetProgressBar = findViewById(R.id.sheet_progress_bar);
+        sheetBehavior = BottomSheetBehavior.from(sheet);
+        coverFragment = findViewById(R.id.cover_fragment);
+
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        coverFragment.setVisibility(View.GONE);
+                        sheet.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        sheet.setVisibility(View.VISIBLE);
+                        coverFragment.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        coverFragment.setVisibility(View.GONE);
+                        sheet.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    protected void expandSheet(Fragment fragment){
+        this.sheetFragment = fragment;
+        sheet.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.sheet_fragment_holder,fragment).commit();
+        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+    protected void collapseSheet(){
+        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        sheet.setVisibility(View.GONE);
+        getSupportFragmentManager().beginTransaction().remove(sheetFragment).commit();
+    }
+
+    protected void startSheetProgress() {
+        sheetFragmentHolder.setAlpha(0.4f);
+        sheetProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    protected void endSheetProgress() {
+        sheetFragmentHolder.setAlpha(1f);
+        sheetProgressBar.setVisibility(View.GONE);
+    }
+
+    protected boolean isSheetOpen() {
+        return sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
     }
 }

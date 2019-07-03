@@ -22,7 +22,7 @@ import android.widget.Toast;
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.HelpViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HelpViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,7 +77,7 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
     private void setUpAdapterAndListeners() {
         if(viewModel.getType() != -1)
             textType.setText(queryTypes[viewModel.getType()]);
-        typeAdapter = new BasicDropdownTextAdapter(getContext(),queryTypes,this, Constants.DropDownType.QUERY);
+        typeAdapter = new BasicDropdownTextAdapter(getContext(),queryTypes,this, Constants.ListTypes.QUERY,getResources().getColor(R.color.Grey));
         typeChoice.setAdapter(typeAdapter);
         typeChoice.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
 
@@ -133,7 +133,7 @@ public class NeedHelpFragment extends Fragment implements BasicDropdownTextAdapt
 
     @Override
     public void setValue(int position, int type) {
-        if(type == Constants.DropDownType.QUERY){
+        if(type == Constants.ListTypes.QUERY){
             typeChoice.setVisibility(View.GONE);
             textType.setVisibility(View.VISIBLE);
             textType.setText(queryTypes[position]);

@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.HomeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.HomeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

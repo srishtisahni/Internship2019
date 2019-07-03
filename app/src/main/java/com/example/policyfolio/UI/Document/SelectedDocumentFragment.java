@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.DocumentViewModel;
+import com.example.policyfolio.ViewModels.WithUser.DocumentViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.ByteArrayOutputStream;

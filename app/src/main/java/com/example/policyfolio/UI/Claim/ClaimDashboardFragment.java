@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.policyfolio.R;
-import com.example.policyfolio.ViewModels.ClaimViewModel;
+import com.example.policyfolio.ViewModels.WithUser.ClaimViewModel;
 
 /**
  * A simple {@link Fragment} subclass.

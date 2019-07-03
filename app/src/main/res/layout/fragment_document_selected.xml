@@ -46,7 +46,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
-        android:background="@drawable/text_background_8dp"
+        android:background="@drawable/text_background_grey_8dp"
         android:hint="Card Number"
         android:paddingHorizontal="12dp"
         android:paddingVertical="8dp"

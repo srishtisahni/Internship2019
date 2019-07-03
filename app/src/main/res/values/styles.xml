@@ -8,6 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="progressBarBottomSheet" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">@color/colorPrimaryLight</item>
+    </style>
+
     <style name="NavigationTheme" parent="AppTheme">
         <item name="android:textSize">14sp</item>
         <item name="android:layout_marginBottom">2dp</item>

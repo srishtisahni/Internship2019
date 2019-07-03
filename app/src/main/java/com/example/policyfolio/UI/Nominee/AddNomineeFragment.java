@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
@@ -17,12 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
-import com.example.policyfolio.ViewModels.NomineeViewModel;
+import com.example.policyfolio.ViewModels.WithUser.NomineeViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,8 +36,8 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
     private EditText phone;
     private EditText alternativePhone;
 
-    private TextView relation;
-    private RecyclerView relationChoice;
+    private TextView relationText;
+    private LinearLayout relation;
     private BasicDropdownTextAdapter textAdapter;
     private String[] relations;
 
@@ -65,13 +64,11 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
         phone = rootView.findViewById(R.id.phone);
         alternativePhone = rootView.findViewById(R.id.alt_phone);
 
-        relation = rootView.findViewById(R.id.relation_text);
-        relationChoice = rootView.findViewById(R.id.relation_choice);
+        relationText = rootView.findViewById(R.id.relation_text);
+        relation = rootView.findViewById(R.id.relation);
 
         relations = getResources().getStringArray(R.array.relationship_array);
-        textAdapter = new BasicDropdownTextAdapter(getContext(),relations,this, Constants.DropDownType.RELATIONSHIPS);
-        relationChoice.setAdapter(textAdapter);
-        relationChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
+        textAdapter = new BasicDropdownTextAdapter(getContext(),relations,this, Constants.ListTypes.RELATIONSHIPS, getResources().getColor(R.color.colorPrimaryDarkest));
 
         done = rootView.findViewById(R.id.done);
 
@@ -95,7 +92,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
                 if(string.length()>0)
                     name.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 else
-                    name.setBackground(getResources().getDrawable(R.drawable.text_background_8dp));
+                    name.setBackground(getResources().getDrawable(R.drawable.text_background_grey_8dp));
             }
 
             @Override
@@ -116,7 +113,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
                 if(string.length()>0)
                     email.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 else
-                    email.setBackground(getResources().getDrawable(R.drawable.text_background_8dp));
+                    email.setBackground(getResources().getDrawable(R.drawable.text_background_grey_8dp));
             }
 
             @Override
@@ -137,7 +134,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
                 if(string.length()>0)
                     phone.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 else
-                    phone.setBackground(getResources().getDrawable(R.drawable.text_background_8dp));
+                    phone.setBackground(getResources().getDrawable(R.drawable.text_background_grey_8dp));
             }
 
             @Override
@@ -158,7 +155,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
                 if(string.length()>0)
                     alternativePhone.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 else
-                    alternativePhone.setBackground(getResources().getDrawable(R.drawable.text_background_8dp));
+                    alternativePhone.setBackground(getResources().getDrawable(R.drawable.text_background_grey_8dp));
             }
 
             @Override
@@ -167,11 +164,11 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
             }
         });
 
+        viewModel.setRelation(0);
         relation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                relation.setVisibility(View.GONE);
-                relationChoice.setVisibility(View.VISIBLE);
+                callback.openListSheet(Constants.ListTypes.RELATIONSHIPS,textAdapter);
             }
         });
 
@@ -187,7 +184,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
 
                 if(!android.util.Patterns.EMAIL_ADDRESS.matcher(e).matches())
                     callback.showSnackbar("Enter a valid email address");
-                else if(email.length()>0 && phone.length()>0 && name.length()>0 && relation.getCurrentTextColor()==getResources().getColor(R.color.colorPrimaryDark)){
+                else if(email.length()>0 && phone.length()>0 && name.length()>0 && relationText.getCurrentTextColor()==getResources().getColor(R.color.colorPrimaryDark)){
                     viewModel.setEmail(e);
                     viewModel.setAlternateNumber(aP);
                     viewModel.setName(n);
@@ -203,12 +200,11 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
 
     @Override
     public void setValue(int position, int type) {
-        if(type == Constants.DropDownType.RELATIONSHIPS){
-            relation.setText(relations[position]);
-            relation.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+        callback.closeListSheet();
+        if(type == Constants.ListTypes.RELATIONSHIPS){
+            relationText.setText(relations[position]);
+            relationText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
             relation.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-            relation.setVisibility(View.VISIBLE);
-            relationChoice.setVisibility(View.GONE);
             viewModel.setRelation(position);
         }
     }

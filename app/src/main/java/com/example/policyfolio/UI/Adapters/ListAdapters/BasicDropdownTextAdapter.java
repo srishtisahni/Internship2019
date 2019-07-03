@@ -13,16 +13,18 @@ import com.example.policyfolio.R;
 
 public class BasicDropdownTextAdapter extends RecyclerView.Adapter<BasicDropdownTextAdapter.Holder> {
 
+    private int color;
     private Context context;
     private String[] values;
     private ParentCallback callback;
     private int type;
 
-    public BasicDropdownTextAdapter(Context context, String[] values, ParentCallback callback, int type){
+    public BasicDropdownTextAdapter(Context context, String[] values, ParentCallback callback, int type, int color){
         this.context = context;
         this.values = values;
         this.callback = callback;
         this.type = type;
+        this.color = color;
     }
 
     @NonNull
@@ -30,7 +32,7 @@ public class BasicDropdownTextAdapter extends RecyclerView.Adapter<BasicDropdown
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view=inflater.inflate(R.layout.dropdown_add_fragment,parent,false);
+        view=inflater.inflate(R.layout.text_dropdown_list,parent,false);
         Holder holder=new Holder(view);
         return holder;
     }
@@ -38,6 +40,7 @@ public class BasicDropdownTextAdapter extends RecyclerView.Adapter<BasicDropdown
     @Override
     public void onBindViewHolder(@NonNull Holder holder, final int position) {
         holder.textView.setText(values[position]);
+        holder.textView.setTextColor(color);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
