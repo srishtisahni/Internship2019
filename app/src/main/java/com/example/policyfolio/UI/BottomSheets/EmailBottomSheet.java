@@ -28,13 +28,13 @@ public class EmailBottomSheet extends Fragment {
     private Button next;
     private TextView error;
 
-    private SheetCallback callBack;
+    private EmailSheetCallback callBack;
 
     public EmailBottomSheet() {
     }
 
     @SuppressLint("ValidFragment")
-    public EmailBottomSheet(SheetCallback callBack){
+    public EmailBottomSheet(EmailSheetCallback callBack){
         this.callBack = callBack;
     }
 
@@ -43,7 +43,7 @@ public class EmailBottomSheet extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.pop_up_email, container, false);
+        rootView = inflater.inflate(R.layout.bottom_sheet_email, container, false);
 
         email = rootView.findViewById(R.id.email);
         next = rootView.findViewById(R.id.next);

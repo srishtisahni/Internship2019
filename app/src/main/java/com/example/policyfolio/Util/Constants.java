@@ -119,7 +119,7 @@ public class Constants {
         }
     }
 
-    public static class DropDownType {
+    public static class ListTypes {
         public static final int INSURANCE_TYPE = 0;
         public static final int INSURANCE_PROVIDER = 1;
         public static final int PREMIUM_FREQUENCY = 2;

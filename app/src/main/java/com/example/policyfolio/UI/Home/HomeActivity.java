@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.policyfolio.Data.Local.Classes.Notifications;
 import com.example.policyfolio.UI.BottomSheets.InfoBottomSheet;
-import com.example.policyfolio.UI.BottomSheets.SheetCallback;
+import com.example.policyfolio.UI.BottomSheets.InfoSheetCallback;
 import com.example.policyfolio.UI.LoginSignUp.LoginSignUpActivity;
 import com.example.policyfolio.UI.Nominee.NomineeSupportActivity;
 import com.example.policyfolio.UI.Promotions.PromotionsActivity;
@@ -51,7 +51,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         super.setCallback(this);
-        super.setUpBottomSheet();
         getSupportActionBar().setTitle("Policy Folio");
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -103,11 +102,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
 
     private void createBottomSheetForInfo() {
         if(!super.isSheetOpen()){
-            InfoBottomSheet infoBottomSheet = new InfoBottomSheet(new SheetCallback() {
-                @Override
-                public void ForgotPassword(String s) {
-
-                }
+            InfoBottomSheet infoBottomSheet = new InfoBottomSheet(new InfoSheetCallback() {
 
                 @Override
                 public void updateInfo() {

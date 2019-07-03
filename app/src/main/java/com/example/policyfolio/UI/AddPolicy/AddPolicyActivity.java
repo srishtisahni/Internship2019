@@ -14,8 +14,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.Data.Local.Classes.Notifications;
+import com.example.policyfolio.UI.BottomSheets.ListBottomSheet;
 import com.example.policyfolio.UI.Claim.ClaimSupportActivity;
 import com.example.policyfolio.UI.Document.DocumentActivity;
 import com.example.policyfolio.UI.Help.HelpActivity;
@@ -44,7 +46,6 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
         setContentView(R.layout.activity_navigation);
         super.setCallback(this);
         super.setMenuSelection(R.id.add_policy);
-        super.setUpBottomSheet();
         getSupportActionBar().setTitle("Add Policy");
 
         viewModel = ViewModelProviders.of(this).get(AddPolicyViewModel.class);
@@ -228,9 +229,13 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
 
     @Override
     public void onBackPressed() {
-        if (super.isDrawerOpen()) {
+        if(isSheetOpen()){
+            super.collapseSheet();
+        }
+        else if (super.isDrawerOpen()) {
             super.closeDrawer();
-        } else {
+        }
+        else {
             if(addPolicyDetailsFragment == null) {
                 super.onBackPressed();
             }
@@ -239,5 +244,16 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
                 addPolicyDetailsFragment = null;
             }
         }
+    }
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
     }
 }

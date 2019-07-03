@@ -32,7 +32,7 @@ public class BasicDropdownProviderAdapter extends RecyclerView.Adapter<BasicDrop
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater inflater=(LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view=inflater.inflate(R.layout.dropdown_add_fragment,parent,false);
+        view=inflater.inflate(R.layout.text_dropdown_list,parent,false);
         Holder holder=new Holder(view);
         return holder;
     }
@@ -43,7 +43,7 @@ public class BasicDropdownProviderAdapter extends RecyclerView.Adapter<BasicDrop
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.setValue(position, Constants.DropDownType.INSURANCE_PROVIDER);
+                callback.setValue(position, Constants.ListTypes.INSURANCE_PROVIDER);
             }
         });
     }

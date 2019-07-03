@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.policyfolio.Data.Local.Classes.Notifications;
+import com.example.policyfolio.UI.BottomSheets.ListBottomSheet;
 import com.example.policyfolio.UI.Promotions.PromotionsActivity;
 import com.example.policyfolio.UI.AddPolicy.AddPolicyActivity;
 import com.example.policyfolio.UI.Base.BaseNavigationActivity;
@@ -18,6 +19,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 
@@ -30,7 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-public class NomineeSupportActivity extends BaseNavigationActivity implements NomineeCallback, NavigationView.OnNavigationItemSelectedListener, ParentChildNavigationCallback {
+public class NomineeSupportActivity extends BaseNavigationActivity implements NomineeCallback, ParentChildNavigationCallback {
 
     private NomineeViewModel viewModel;
 
@@ -175,10 +177,13 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+        if(isSheetOpen()){
+            closeListSheet();
+        }
+        else if (super.isDrawerOpen()) {
+            super.closeDrawer();
+        }
+        else {
             if(addNomineeFragment!=null){
                 getSupportActionBar().setTitle("Nominee Dashboard");
                 getSupportFragmentManager().beginTransaction().remove(addNomineeFragment).commit();
@@ -188,5 +193,17 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
                 super.onBackPressed();
             }
         }
+    }
+
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
     }
 }

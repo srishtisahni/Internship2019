@@ -34,6 +34,7 @@ public class BasicProgressActivity extends AppCompatActivity {
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);
         snackbar = findViewById(R.id.snackbar_action);
+        setUpBottomSheet();
     }
 
 
@@ -55,27 +56,29 @@ public class BasicProgressActivity extends AppCompatActivity {
         Snackbar.make(snackbar,text,Snackbar.LENGTH_LONG).show();
     }
 
-    protected void setUpBottomSheet() {
+    private void setUpBottomSheet() {
         sheet = findViewById(R.id.bottom_sheet);
         sheetFragmentHolder = findViewById(R.id.sheet_fragment_holder);
         sheetProgressBar = findViewById(R.id.sheet_progress_bar);
         sheetBehavior = BottomSheetBehavior.from(sheet);
         coverFragment = findViewById(R.id.cover_fragment);
 
-        sheet.setVisibility(View.VISIBLE);
-
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_HIDDEN:
+                        coverFragment.setVisibility(View.GONE);
+                        sheet.setVisibility(View.GONE);
                         break;
-                    case BottomSheetBehavior.STATE_EXPANDED: {
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
-                    }
-                    break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        sheet.setVisibility(View.VISIBLE);
+                        coverFragment.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        coverFragment.setVisibility(View.GONE);
+                        sheet.setVisibility(View.GONE);
+                        break;
                     case BottomSheetBehavior.STATE_DRAGGING:
                         break;
                     case BottomSheetBehavior.STATE_SETTLING:
@@ -93,14 +96,14 @@ public class BasicProgressActivity extends AppCompatActivity {
 
     protected void expandSheet(Fragment fragment){
         this.sheetFragment = fragment;
-        getSupportFragmentManager().beginTransaction().add(R.id.sheet_fragment_holder,fragment).commit();
-        coverFragment.setVisibility(View.VISIBLE);
+        sheet.setVisibility(View.VISIBLE);
+        getSupportFragmentManager().beginTransaction().replace(R.id.sheet_fragment_holder,fragment).commit();
         sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     protected void collapseSheet(){
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        coverFragment.setVisibility(View.GONE);
+        sheet.setVisibility(View.GONE);
         getSupportFragmentManager().beginTransaction().remove(sheetFragment).commit();
     }
 

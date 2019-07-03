@@ -102,13 +102,13 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
         if(getArguments()!=null) {
             int type = getArguments().getInt(Constants.InsuranceProviders.TYPE, -1);
             if (type != -1)
-                setValue(type, Constants.DropDownType.INSURANCE_TYPE);
+                setValue(type, Constants.ListTypes.INSURANCE_TYPE);
         }
     }
 
     private void setUpViews() {
         insurances = getResources().getStringArray(R.array.insurance_type);
-        typeAdapter = new BasicDropdownTextAdapter(getContext(),insurances,this,Constants.DropDownType.INSURANCE_TYPE);
+        typeAdapter = new BasicDropdownTextAdapter(getContext(),insurances,this, Constants.ListTypes.INSURANCE_TYPE, getResources().getColor(R.color.Grey));
         typeChoice.setAdapter(typeAdapter);
         typeChoice.setLayoutManager(new LinearLayoutManager(getActivity(),RecyclerView.VERTICAL,false));
 
@@ -180,7 +180,7 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
     @Override
     public void setValue(int position, int type) {
         switch (type){
-            case Constants.DropDownType.INSURANCE_TYPE:
+            case Constants.ListTypes.INSURANCE_TYPE:
                 typeValue.setText(insurances[position]);
                 typeValue.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 typeValue.setBackgroundColor(getResources().getColor(android.R.color.transparent));
@@ -210,7 +210,7 @@ public class BasicAddPolicyFragment extends Fragment implements BasicDropdownTex
                 });
                 break;
 
-            case Constants.DropDownType.INSURANCE_PROVIDER:
+            case Constants.ListTypes.INSURANCE_PROVIDER:
                 providerText.setText(providers.get(position).getName());
                 providerText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 providerChoice.setVisibility(View.GONE);

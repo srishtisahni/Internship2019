@@ -16,7 +16,7 @@
         android:layout_marginEnd="64dp"
         android:layout_marginRight="64dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/text_background_32dp"
+        android:background="@drawable/text_background_grey_32dp"
         android:gravity="center"
         android:hint="Name*"
         android:inputType="textPersonName"
@@ -47,10 +47,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/text_background_32dp"
+        android:background="@drawable/text_background_grey_32dp"
         android:gravity="center"
         android:textColor="@color/borderGrey"
-        android:text="Date of Birth* : MM/DD/YYYY"
+        android:text="Date of Birth*"
         android:padding="10dp"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/name"
@@ -69,33 +69,20 @@
         app:layout_constraintStart_toStartOf="@+id/birthday"
         app:layout_constraintTop_toBottomOf="@+id/birthday" />
 
-    <LinearLayout
+    <TextView
         android:id="@+id/gender"
-        android:orientation="vertical"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:background="@drawable/text_background_grey_32dp"
+        android:gravity="center"
+        android:textColor="@color/borderGrey"
+        android:text="Gender"
+        android:padding="10dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/birthday"
         app:layout_constraintStart_toStartOf="@+id/birthday"
-        app:layout_constraintTop_toBottomOf="@+id/birthday" >
-        <TextView
-            android:padding="6dp"
-            android:id="@+id/gender_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/dropdown_item_32dp"
-            android:textColor="@color/Grey"
-            android:textSize="16sp"
-            android:text="Gender"
-            android:gravity="center"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/gender_choice"
-            android:padding="6dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/dropdown_background_white"
-            android:visibility="gone"/>
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/birthday" />
 
 
     <EditText
@@ -103,7 +90,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/text_background_32dp"
+        android:background="@drawable/text_background_grey_32dp"
         android:gravity="center"
         android:hint="City*"
         android:inputType="text"
@@ -132,7 +119,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@drawable/text_background_32dp"
+        android:background="@drawable/text_background_grey_32dp"
         android:gravity="center"
         android:hint="Password*"
         android:inputType="textPassword"

@@ -1,6 +1,8 @@
 package com.example.policyfolio.UI.AddPolicy;
 
-public interface AddPolicyCallback {
+import com.example.policyfolio.UI.Base.BaseActivityFragmentCallback;
+
+public interface AddPolicyCallback extends BaseActivityFragmentCallback {
     void next();
     void done();
     void addPolicyImage();

@@ -12,11 +12,13 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.Data.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.UI.Base.BasicProgressActivity;
 import com.example.policyfolio.UI.BottomSheets.EmailBottomSheet;
-import com.example.policyfolio.UI.BottomSheets.SheetCallback;
+import com.example.policyfolio.UI.BottomSheets.EmailSheetCallback;
+import com.example.policyfolio.UI.BottomSheets.ListBottomSheet;
 import com.example.policyfolio.UI.Home.HomeActivity;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
@@ -39,7 +41,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_signup);
-        super.setUpBottomSheet();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -217,7 +218,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     @Override
     public void forgotPassword() {
-        EmailBottomSheet emailBottomSheet = new EmailBottomSheet(new SheetCallback() {
+        EmailBottomSheet emailBottomSheet = new EmailBottomSheet(new EmailSheetCallback() {
             @Override
             public void ForgotPassword(String s) {
                 startProgress();
@@ -235,11 +236,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                         }
                     }
                 });
-            }
-
-            @Override
-            public void updateInfo() {
-
             }
 
             @Override
@@ -473,5 +469,16 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
             });
         }
         loginFragment.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
     }
 }

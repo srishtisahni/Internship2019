@@ -14,8 +14,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
@@ -34,8 +32,7 @@ public class SignUpFragment extends Fragment implements BasicDropdownTextAdapter
 
     private EditText name;
     private TextView birthday;
-    private TextView genderText;
-    private RecyclerView genderChoice;
+    private TextView gender;
     private EditText city;
     private EditText password;
     private Button signUp;
@@ -71,8 +68,7 @@ public class SignUpFragment extends Fragment implements BasicDropdownTextAdapter
 
         name = rootView.findViewById(R.id.name);
         birthday = rootView.findViewById(R.id.birthday);
-        genderText = rootView.findViewById(R.id.gender_text);
-        genderChoice = rootView.findViewById(R.id.gender_choice);
+        gender = rootView.findViewById(R.id.gender);
         city = rootView.findViewById(R.id.city);
         password = rootView.findViewById(R.id.password);
         signUp = rootView.findViewById(R.id.sign_up);
@@ -166,30 +162,26 @@ public class SignUpFragment extends Fragment implements BasicDropdownTextAdapter
     private void setGenderAdapter() {
         genderSelection = 0;
         genderArray = getResources().getStringArray(R.array.gender_array);
-        genderAdapter = new BasicDropdownTextAdapter(getContext(),genderArray,this,Constants.DropDownType.GENDER);
-        genderChoice.setAdapter(genderAdapter);
-        genderChoice.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+        genderAdapter = new BasicDropdownTextAdapter(getContext(),genderArray,this, Constants.ListTypes.GENDER, getResources().getColor(R.color.colorPrimaryDarkest));
 
-        genderText.setOnClickListener(new View.OnClickListener() {
+        gender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                genderText.setVisibility(View.GONE);
-                genderChoice.setVisibility(View.VISIBLE);
+                callback.openListSheet(Constants.ListTypes.GENDER,genderAdapter);
             }
         });
     }
 
     @Override
     public void setValue(int position, int type) {
-        if(type == Constants.DropDownType.GENDER){
+        callback.closeListSheet();
+        if(type == Constants.ListTypes.GENDER){
             genderSelection = position;
             if(genderSelection == 0)
-                genderText.setTextColor(getResources().getColor(R.color.Grey));
+                gender.setTextColor(getResources().getColor(R.color.borderGrey));
             else
-                genderText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-            genderText.setText(genderArray[genderSelection]);
-            genderText.setVisibility(View.VISIBLE);
-            genderChoice.setVisibility(View.GONE);
+                gender.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+            gender.setText(genderArray[genderSelection]);
         }
     }
 }
