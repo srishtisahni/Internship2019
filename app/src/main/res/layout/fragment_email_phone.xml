@@ -10,12 +10,10 @@
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="280dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/text_background_grey_32dp"
         android:gravity="center"
@@ -31,28 +29,43 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.125" />
 
-    <EditText
+    <LinearLayout
         android:id="@+id/phone"
-        android:layout_width="280dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginLeft="48dp"
         android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/text_background_grey_32dp"
-        android:gravity="center"
-        android:hint="Phone Number"
-        android:inputType="phone"
-        android:padding="10dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textColorHint="@color/borderGrey"
-        android:textSize="16sp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.125" />
+        app:layout_constraintVertical_bias="0.125">
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/ccp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:ccp_contentColor="@color/colorPrimaryDark"
+            app:ccp_textSize="16sp"
+            android:layout_gravity="center" />
+
+        <EditText
+            android:id="@+id/phone_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:maxLength="10"
+            android:background="@drawable/flag_transparent"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:padding="10dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="@color/borderGrey"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/text_empty"
