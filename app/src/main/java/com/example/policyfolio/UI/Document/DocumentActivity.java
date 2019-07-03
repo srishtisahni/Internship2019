@@ -245,6 +245,7 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
 
                     Intent intent = new Intent(DocumentActivity.this, LoginSignUpActivity.class);
+                    intent.putExtra(Constants.LoginInInfo.POST_LOGOUT,true);
                     startActivity(intent);
                     finish();
                 }

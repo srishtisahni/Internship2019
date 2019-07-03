@@ -130,6 +130,7 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
 
                     Intent intent = new Intent(HelpActivity.this, LoginSignUpActivity.class);
+                    intent.putExtra(Constants.LoginInInfo.POST_LOGOUT,true);
                     startActivity(intent);
                     finish();
                 }

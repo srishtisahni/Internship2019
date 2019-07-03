@@ -2,6 +2,7 @@ package com.example.policyfolio.UI.LoginSignUp;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
@@ -9,8 +10,10 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -19,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.LoginSignUpViewModel;
+import com.hbb20.CountryCodePicker;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +34,9 @@ public class EmailPhoneFragment extends Fragment {
     private LoginCallback callback;
 
     private EditText email;
-    private EditText phone;
+    private LinearLayout phone;
+    private EditText phoneText;
+    private CountryCodePicker ccp;
     private Button next;
 
     private TextView textError;
@@ -55,7 +61,9 @@ public class EmailPhoneFragment extends Fragment {
         Bundle bundle = getArguments();
 
         email = rootView.findViewById(R.id.email);
+        phoneText = rootView.findViewById(R.id.phone_text);
         phone = rootView.findViewById(R.id.phone);
+        ccp = rootView.findViewById(R.id.ccp);
         next = rootView.findViewById(R.id.next);
 
         if(viewModel.getEmail()!=null){
@@ -65,7 +73,6 @@ public class EmailPhoneFragment extends Fragment {
         if(bundle.getInt(Constants.LoginInInfo.TYPE,-1) == Constants.LoginInInfo.Type.PHONE) {
             email.setVisibility(View.GONE);
             next.setText("Sign Up");
-            phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         }
         else if(bundle.getInt(Constants.LoginInInfo.TYPE, -1) == Constants.LoginInInfo.Type.EMAIL) {
             phone.setVisibility(View.GONE);
@@ -83,6 +90,7 @@ public class EmailPhoneFragment extends Fragment {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hideSoftKeyboard(getActivity());
                 if(email.getVisibility()!=View.GONE) {
                     String email = EmailPhoneFragment.this.email.getText().toString();
                     if (email.equals("")) {
@@ -99,8 +107,8 @@ public class EmailPhoneFragment extends Fragment {
                         callback.EmailNext();
                     }
                 }
-                else if(phone.getVisibility() != View.GONE){
-                    String phone = EmailPhoneFragment.this.phone.getText().toString();
+                else if(phoneText.getVisibility() != View.GONE){
+                    String phone = "+" + ccp.getSelectedCountryCode() + EmailPhoneFragment.this.phoneText.getText().toString();
                     Log.e("TEXT",phone);
                     if (phone.equals("")) {
                         textError.setVisibility(View.VISIBLE);
@@ -118,6 +126,14 @@ public class EmailPhoneFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 
 }

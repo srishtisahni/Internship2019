@@ -1,4 +1,4 @@
-package com.example.policyfolio.ViewModels;
+package com.example.policyfolio.ViewModels.Base;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -11,10 +11,10 @@ import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Firebase.Classes.LogInData;
 import com.example.policyfolio.Data.Repository;
 
-public class WelcomeViewModel extends ViewModel {
+public class BasicLoginViewModel extends ViewModel {
 
     private MutableLiveData<LogInData> userLoggedIn = new MutableLiveData<>();
-    private Repository repository;
+    private static Repository repository;
 
     public void initiateRepo(Context context) {
         repository = Repository.getInstance(context);
@@ -34,5 +34,9 @@ public class WelcomeViewModel extends ViewModel {
         else {
             this.userLoggedIn.setValue(null);
         }
+    }
+
+    public Repository getRepository() {
+        return repository;
     }
 }

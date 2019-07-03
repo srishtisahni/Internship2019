@@ -239,8 +239,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                     time = (premium - Constants.Time.EPOCH_DAY) * 1000;
                     if (time > System.currentTimeMillis())
                         alarmManager.set(AlarmManager.RTC_WAKEUP, time, PendingIntent.getBroadcast(HomeActivity.this, (int) dayId, intent, 0));
-                    else
-                        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), PendingIntent.getBroadcast(HomeActivity.this, (int) dayId, intent, 0));
 
                     intent.putExtra(Constants.Notification.ID, weekId);
                     intent.putExtra(Constants.Notification.TYPE, Constants.Notification.Type.WEEK);
@@ -388,6 +386,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
 
                     Intent intent = new Intent(HomeActivity.this, LoginSignUpActivity.class);
+                    intent.putExtra(Constants.LoginInInfo.POST_LOGOUT,true);
                     startActivity(intent);
                     finish();
                 }

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.Data.Facebook.DataClasses.FacebookData;
+import com.example.policyfolio.Data.Firebase.Classes.LogInData;
 import com.example.policyfolio.UI.Base.BasicProgressActivity;
 import com.example.policyfolio.UI.BottomSheets.EmailBottomSheet;
 import com.example.policyfolio.UI.BottomSheets.EmailSheetCallback;
@@ -29,7 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.text.ParseException;
 import java.util.List;
 
-public class LoginSignUpActivity extends BasicProgressActivity implements LoginCallback {
+public class LoginSignUpActivity extends BasicProgressActivity implements LoginCallback, WelcomeCallback {
 
     private LoginSignUpViewModel viewModel;
 
@@ -40,24 +41,54 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_signup);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        if(getIntent().getBooleanExtra(Constants.LoginInInfo.POST_LOGOUT,false)) {
+            setTheme(R.style.AppTheme_NoActionBar);
+            setContentView(R.layout.activity_login_signup);
+            openLoginSignUp();
+        }
+        else {
+            setTheme(R.style.AppTheme_NoActionBar_fullscreen);
+            setContentView(R.layout.activity_login_signup);
+            setUpWelcome();
+        }
 
+        viewModel = ViewModelProviders.of(this).get(LoginSignUpViewModel.class);
+        viewModel.initiateRepo(this);
+    }
+
+    private void setUpWelcome() {
+        super.setUpFullScreen();
+        WelcomeFragment welcomeFragment = new WelcomeFragment(this,getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE));
+        getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, welcomeFragment).commit();
+    }
+
+    @Override
+    public void openLoginSignUp() {
         Drawable dr = getResources().getDrawable(R.drawable.titlebar_icon);
         Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
         Drawable d = new BitmapDrawable(getResources(),
                 Bitmap.createScaledBitmap(bitmap, 120, 120, true));
         getSupportActionBar().setIcon(d);
 
-        viewModel = ViewModelProviders.of(this).get(LoginSignUpViewModel.class);
-        viewModel.initiateRepo(this);
-
         loginFragment = new LoginFragment(this);
         signUpFragment = new SignUpFragment(this);
         emailPhoneFragment = new EmailPhoneFragment(this);
 
         addFragment(loginFragment);
+        super.disableFullscreen();
+    }
+
+    @Override
+    public void openHome(LogInData logInData) {
+        super.disableFullscreen();
+        Intent intent = new Intent(this, HomeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.LoginInInfo.LOGGED_IN, logInData.isLogin());
+        bundle.putInt(Constants.LoginInInfo.TYPE, logInData.getType());
+        bundle.putString(Constants.LoginInInfo.FIREBASE_UID, logInData.getFirebaseToken());
+        intent.putExtras(bundle);
+        startActivity(intent);
+        finish();
     }
 
     private void startHomeActivity(FirebaseUser firebaseUser, int type) {
@@ -108,6 +139,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                                         startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.FACEBOOK);
                                     }
                                     else {
+                                        endProgress();
                                         showSnackbar("Facebook Login Failed");
                                     }
                                 }
@@ -131,6 +163,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                                         addUser(firebaseUser,Constants.LoginInInfo.Type.FACEBOOK);
                                     }
                                     else {
+                                        endProgress();
                                         showSnackbar("Facebook Login Failed");
                                     }
                                 }
@@ -317,6 +350,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                                         startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
                                     }
                                     else {
+                                        endProgress();
                                         showSnackbar("Phone Sign Up Failed");
                                     }
                                 }
@@ -425,6 +459,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                                 viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
                                     @Override
                                     public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        endProgress();
                                         if(firebaseUser!=null){
                                             startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
                                         }
@@ -450,6 +485,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                                 viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
                                     @Override
                                     public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        endProgress();
                                         if(firebaseUser!=null){
                                             addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
                                         }

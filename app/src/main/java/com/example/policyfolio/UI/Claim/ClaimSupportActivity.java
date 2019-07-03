@@ -143,6 +143,7 @@ public class ClaimSupportActivity extends BaseNavigationActivity implements Clai
                     getSharedPreferences(Constants.Policy.UPDATED_SHARED_PREFRENCE,MODE_PRIVATE).edit().clear().apply();
 
                     Intent intent = new Intent(ClaimSupportActivity.this, LoginSignUpActivity.class);
+                    intent.putExtra(Constants.LoginInInfo.POST_LOGOUT,true);
                     startActivity(intent);
                     finish();
                 }

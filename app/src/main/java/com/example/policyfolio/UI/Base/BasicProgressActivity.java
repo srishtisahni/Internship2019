@@ -1,16 +1,21 @@
 package com.example.policyfolio.UI.Base;
 
+import android.os.Build;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.policyfolio.R;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -19,6 +24,7 @@ public class BasicProgressActivity extends AppCompatActivity {
     private FrameLayout snackbar;
     private FrameLayout fragmentHolder;
     private ProgressBar progressBar;
+    private AppBarLayout appBarLayout;
 
     private FrameLayout sheetFragmentHolder;
     private ProgressBar sheetProgressBar;
@@ -31,9 +37,14 @@ public class BasicProgressActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);
         snackbar = findViewById(R.id.snackbar_action);
+        appBarLayout = findViewById(R.id.appbar);
+
         setUpBottomSheet();
     }
 
@@ -119,5 +130,21 @@ public class BasicProgressActivity extends AppCompatActivity {
 
     protected boolean isSheetOpen() {
         return sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
+    }
+
+    protected void setUpFullScreen() {
+        setTheme(R.style.AppTheme_NoActionBar_fullscreen);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        appBarLayout.setVisibility(View.GONE);
+    }
+
+    protected void disableFullscreen() {
+        appBarLayout.setVisibility(View.VISIBLE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
+        }
+        setTheme(R.style.AppTheme_NoActionBar);
     }
 }

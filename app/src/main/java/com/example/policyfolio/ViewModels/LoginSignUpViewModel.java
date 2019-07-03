@@ -14,6 +14,7 @@ import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Local.Classes.User;
 import com.example.policyfolio.Data.Repository;
 import com.example.policyfolio.UI.LoginSignUp.FragmentViewModelCallback;
+import com.example.policyfolio.ViewModels.Base.BasicLoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -23,10 +24,9 @@ import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginSignUpViewModel extends ViewModel implements FragmentViewModelCallback {
+public class LoginSignUpViewModel extends BasicLoginViewModel implements FragmentViewModelCallback {
 
     private CallbackManager callbackManager;
-    private Repository repository;
 
     private MutableLiveData<Integer> facebookLoginStatus = new MutableLiveData<>();
     private LiveData<FacebookData> facebookData;
@@ -39,13 +39,9 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     private String city;
     private String password;
 
-    public void initiateRepo(Context context) {
-        repository = Repository.getInstance(context);
-    }
-
     public LiveData<FacebookData> fetchFacebookData() {
         if (facebookData == null)
-            facebookData = repository.getFacebookProfile(AccessToken.getCurrentAccessToken());
+            facebookData = getRepository().getFacebookProfile(AccessToken.getCurrentAccessToken());
         return facebookData;
     }
 
@@ -85,29 +81,29 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     }
 
     public void initiateGoogleLogin(String id, Context context) {
-        repository.initiateGoogleLogin(id, context);
+        getRepository().initiateGoogleLogin(id, context);
     }
 
     public GoogleSignInClient getGoogleSignInClient() {
-        return repository.getGoogleSignInClient();
+        return getRepository().getGoogleSignInClient();
     }
 
     public LiveData<FirebaseUser> googleAuthentication(Intent data) {
-        return repository.googleAuthentication(data);
+        return getRepository().googleAuthentication(data);
     }
 
     public LiveData<FirebaseUser> facebookFirebaseUser() {
-        return repository.facebookFirebaseUser();
+        return getRepository().facebookFirebaseUser();
     }
 
     public LiveData<Boolean> updateUserInfo(FirebaseUser firebaseUser,Integer type) {
         User user = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getPhoneNumber(),firebaseUser.getDisplayName(), birthdayEpoch,gender,city,type);
         Log.e(firebaseUser.toString(),user.toString());
-        return repository.updateFirebaseUser(user);
+        return getRepository().updateFirebaseUser(user);
     }
 
     public LiveData<FirebaseUser> signUpPhone(Activity activity) {
-        return repository.phoneSignUp(phone, activity);
+        return getRepository().phoneSignUp(phone, activity);
     }
 
     public void setEmail(String email) {
@@ -139,7 +135,7 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     }
 
     public LiveData<FirebaseUser> SignUp() {
-        return repository.SignUp(email,password);
+        return getRepository().SignUp(email,password);
     }
 
     public String getEmail() {
@@ -147,27 +143,27 @@ public class LoginSignUpViewModel extends ViewModel implements FragmentViewModel
     }
 
     public LiveData<FirebaseUser> logIn() {
-        return repository.Login(email,password);
+        return getRepository().Login(email,password);
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(Intent data) {
-        return repository.checkIfUserExistsEmail(data);
+        return getRepository().checkIfUserExistsEmail(data);
     }
 
     public LiveData<Integer> checkIfUserExistsEmail(String email) {
-        return repository.checkIfUserExistsEmail(email);
+        return getRepository().checkIfUserExistsEmail(email);
     }
 
     public LiveData<Integer> checkIfUserExistsEmail() {
-        return repository.checkIfUserExistsEmail(email);
+        return getRepository().checkIfUserExistsEmail(email);
     }
 
     public LiveData<Integer> checkIfUserExistsPhone() {
-        return repository.checkIfUserExistsPhone(phone);
+        return getRepository().checkIfUserExistsPhone(phone);
     }
 
 
     public LiveData<Boolean> resetPassword() {
-        return repository.resetPassword(email);
+        return getRepository().resetPassword(email);
     }
 }
