@@ -39,6 +39,7 @@ public class BasicDropdownProviderAdapter extends RecyclerView.Adapter<BasicDrop
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, final int position) {
+        holder.textView.setTextColor(context.getResources().getColor(R.color.Grey));
         holder.textView.setText(values.get(position).getName());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
