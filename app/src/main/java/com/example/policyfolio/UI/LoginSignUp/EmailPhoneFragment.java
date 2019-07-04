@@ -4,9 +4,6 @@ package com.example.policyfolio.UI.LoginSignUp;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.telephony.PhoneNumberFormattingTextWatcher;
-import android.util.Log;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +34,7 @@ public class EmailPhoneFragment extends Fragment {
     private LinearLayout phone;
     private EditText phoneText;
     private CountryCodePicker ccp;
-    private Button next;
+    private Button done;
 
     private TextView textError;
 
@@ -64,7 +61,7 @@ public class EmailPhoneFragment extends Fragment {
         phoneText = rootView.findViewById(R.id.phone_text);
         phone = rootView.findViewById(R.id.phone);
         ccp = rootView.findViewById(R.id.ccp);
-        next = rootView.findViewById(R.id.next);
+        done = rootView.findViewById(R.id.done);
 
         if(viewModel.getEmail()!=null){
             email.setText(viewModel.getEmail());
@@ -72,11 +69,13 @@ public class EmailPhoneFragment extends Fragment {
 
         if(bundle.getInt(Constants.LoginInInfo.TYPE,-1) == Constants.LoginInInfo.Type.PHONE) {
             email.setVisibility(View.GONE);
-            next.setText("Sign Up");
+            ccp.registerCarrierNumberEditText(phoneText);
+            ccp.setNumberAutoFormattingEnabled(true);
+            done.setText("Sign Up");
         }
         else if(bundle.getInt(Constants.LoginInInfo.TYPE, -1) == Constants.LoginInInfo.Type.EMAIL) {
             phone.setVisibility(View.GONE);
-            next.setText("Next");
+            done.setText("Next");
         }
 
         textError = rootView.findViewById(R.id.text_empty);
@@ -86,8 +85,9 @@ public class EmailPhoneFragment extends Fragment {
         return rootView;
     }
 
+
     private void setOnClick() {
-        next.setOnClickListener(new View.OnClickListener() {
+        done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 hideSoftKeyboard(getActivity());
@@ -108,13 +108,12 @@ public class EmailPhoneFragment extends Fragment {
                     }
                 }
                 else if(phoneText.getVisibility() != View.GONE){
-                    String phone = "+" + ccp.getSelectedCountryCode() + EmailPhoneFragment.this.phoneText.getText().toString();
-                    Log.e("TEXT",phone);
+                    String phone = ccp.getFormattedFullNumber();
                     if (phone.equals("")) {
                         textError.setVisibility(View.VISIBLE);
                         textError.setText("Empty Field Not Allowed");
                     }
-                    else if(!Patterns.PHONE.matcher(phone).matches()){
+                    else if(!ccp.isValidFullNumber()){
                         textError.setVisibility(View.VISIBLE);
                         textError.setText("Invalid PhoneNumber");
                     }

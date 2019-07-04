@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ViewModels.WithUser.HomeViewModel;
+import com.hbb20.CountryCodePicker;
 
 import java.util.Calendar;
 
@@ -36,7 +38,9 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
 
     private EditText name;
     private EditText email;
-    private EditText phone;
+    private LinearLayout phone;
+    private EditText phoneText;
+    private CountryCodePicker ccp;
     private TextView birthday;
     private TextView genderText;
     private RecyclerView genderChoice;
@@ -71,7 +75,9 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
 
         name = rootView.findViewById(R.id.name);
         email = rootView.findViewById(R.id.email);
+        phoneText = rootView.findViewById(R.id.phone_text);
         phone = rootView.findViewById(R.id.phone);
+        ccp = rootView.findViewById(R.id.ccp);
         birthday = rootView.findViewById(R.id.birthday);
         genderText = rootView.findViewById(R.id.gender_text);
         genderChoice = rootView.findViewById(R.id.gender_choice);
@@ -84,7 +90,9 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
         birthdayError = rootView.findViewById(R.id.birthday_empty);
         cityError = rootView.findViewById(R.id.city_empty);
 
-        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        ccp.registerCarrierNumberEditText(phoneText);
+        ccp.setNumberAutoFormattingEnabled(true);
+
         setGenderAdapter();
 
         birthday.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +120,7 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
         if(viewModel.getName()!=null)
             name.setText(viewModel.getName());
         if(viewModel.getPhone()!= null)
-            phone.setText(viewModel.getPhone());
+            phoneText.setText(viewModel.getPhone());
         if (viewModel.getBirthday()!=null) {
             birthday.setText(Constants.Time.DATE_FORMAT.format(viewModel.getBirthday()*1000));
             birthdayEpoch = viewModel.getBirthday();
@@ -147,12 +155,12 @@ public class InfoBottomSheet extends Fragment implements BasicDropdownTextAdapte
             viewModel.setEmail(email);
         }
 
-        String phone = this.phone.getText().toString();
+        String phone = ccp.getFormattedFullNumber();
         if (phone.equals("")) {
             phoneError.setVisibility(View.VISIBLE);
             phoneError.setText("Empty Field Not Allowed");
         }
-        else if(!Patterns.PHONE.matcher(phone).matches()){
+        else if(!ccp.isValidFullNumber()){
             phoneError.setVisibility(View.VISIBLE);
             phoneError.setText("Invalid PhoneNumber");
         }

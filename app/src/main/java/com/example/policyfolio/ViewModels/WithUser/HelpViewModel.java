@@ -26,6 +26,6 @@ public class HelpViewModel extends BaseViewModelWithUser {
     }
 
     public LiveData<String> saveQuery() {
-        return getRepository().saveQuery(new Query(getUid(),query,type));
+        return getRepository().saveQuery(new Query(getUid(),query,type,false));
     }
 }

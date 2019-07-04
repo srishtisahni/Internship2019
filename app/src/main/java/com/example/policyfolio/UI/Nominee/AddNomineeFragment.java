@@ -22,6 +22,7 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.UI.Adapters.ListAdapters.BasicDropdownTextAdapter;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.ViewModels.WithUser.NomineeViewModel;
+import com.hbb20.CountryCodePicker;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,8 +34,12 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
 
     private EditText name;
     private EditText email;
-    private EditText phone;
-    private EditText alternativePhone;
+    private LinearLayout phone;
+    private EditText phoneText;
+    private CountryCodePicker ccp;
+    private LinearLayout alternativePhone;
+    private EditText altPhoneText;
+    private CountryCodePicker altCcp;
 
     private TextView relationText;
     private LinearLayout relation;
@@ -61,8 +66,14 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
 
         name = rootView.findViewById(R.id.name);
         email = rootView.findViewById(R.id.email);
+
+        phoneText = rootView.findViewById(R.id.phone_text);
         phone = rootView.findViewById(R.id.phone);
+        ccp = rootView.findViewById(R.id.ccp);
+
         alternativePhone = rootView.findViewById(R.id.alt_phone);
+        altPhoneText = rootView.findViewById(R.id.alt_phone_text);
+        altCcp = rootView.findViewById(R.id.ccp_alt);
 
         relationText = rootView.findViewById(R.id.relation_text);
         relation = rootView.findViewById(R.id.relation);
@@ -78,8 +89,12 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
     }
 
     private void setListeners() {
-        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-        alternativePhone.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        ccp.registerCarrierNumberEditText(phoneText);
+        ccp.setNumberAutoFormattingEnabled(true);
+
+        altCcp.registerCarrierNumberEditText(altPhoneText);
+        altCcp.setNumberAutoFormattingEnabled(true);
+
         name.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -122,7 +137,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
             }
         });
 
-        phone.addTextChangedListener(new TextWatcher() {
+        phoneText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -143,7 +158,7 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
             }
         });
 
-        alternativePhone.addTextChangedListener(new TextWatcher() {
+        altPhoneText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -177,14 +192,16 @@ public class AddNomineeFragment extends Fragment implements BasicDropdownTextAda
             public void onClick(View v) {
                 String e = email.getText().toString();
                 String n = name.getText().toString();
-                String p = phone.getText().toString();
-                String aP = alternativePhone.getText().toString();
+                String p = ccp.getFormattedFullNumber();
+                String aP = altCcp.getFormattedFullNumber();
 
                 Log.e("DETAILS",e + " " + p + " " + n + " " + aP);
 
                 if(!android.util.Patterns.EMAIL_ADDRESS.matcher(e).matches())
                     callback.showSnackbar("Enter a valid email address");
-                else if(email.length()>0 && phone.length()>0 && name.length()>0 && relationText.getCurrentTextColor()==getResources().getColor(R.color.colorPrimaryDark)){
+                else if(!ccp.isValidFullNumber())
+                    callback.showSnackbar("Enter a valid phone Number");
+                else if(email.length()>0 && name.length()>0 && relationText.getCurrentTextColor()== getResources().getColor(R.color.colorPrimaryDark)){
                     viewModel.setEmail(e);
                     viewModel.setAlternateNumber(aP);
                     viewModel.setName(n);

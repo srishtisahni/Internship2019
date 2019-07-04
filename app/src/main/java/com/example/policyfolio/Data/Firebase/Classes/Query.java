@@ -3,12 +3,14 @@ package com.example.policyfolio.Data.Firebase.Classes;
 public class Query {
     private String userId;
     private String query;
+    private boolean resolved;
     private int type;
 
-    public Query(String userId,String query, int type){
+    public Query(String userId,String query, int type, boolean resolved){
         this.userId = userId;
         this.query = query;
         this.type = type;
+        this.resolved = resolved;
     }
 
     public int getType() {
@@ -33,5 +35,13 @@ public class Query {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public boolean isResolved() {
+        return resolved;
+    }
+
+    public void setResolved(boolean resolved) {
+        this.resolved = resolved;
     }
 }

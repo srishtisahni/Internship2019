@@ -3,16 +3,13 @@ package com.example.policyfolio.ViewModels;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.policyfolio.Data.Facebook.DataClasses.FacebookData;
 import com.example.policyfolio.Util.Constants;
 import com.example.policyfolio.Data.Local.Classes.User;
-import com.example.policyfolio.Data.Repository;
 import com.example.policyfolio.UI.LoginSignUp.FragmentViewModelCallback;
 import com.example.policyfolio.ViewModels.Base.BasicLoginViewModel;
 import com.facebook.AccessToken;
@@ -97,8 +94,13 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
     }
 
     public LiveData<Boolean> updateUserInfo(FirebaseUser firebaseUser,Integer type) {
-        User user = new User(firebaseUser.getUid(),firebaseUser.getEmail(),firebaseUser.getPhoneNumber(),firebaseUser.getDisplayName(), birthdayEpoch,gender,city,type);
-        Log.e(firebaseUser.toString(),user.toString());
+        if(email == null)
+            email = firebaseUser.getEmail();
+        if(phone == null)
+            phone = firebaseUser.getPhoneNumber();
+        if(name == null)
+            name = firebaseUser.getDisplayName();
+        User user = new User(firebaseUser.getUid(),email,phone,name, birthdayEpoch,gender,city,type);
         return getRepository().updateFirebaseUser(user);
     }
 

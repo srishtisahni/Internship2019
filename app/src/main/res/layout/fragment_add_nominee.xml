@@ -21,7 +21,7 @@
         android:paddingVertical="4dp"
         android:paddingLeft="28dp"
         android:paddingBottom="4dp"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:textColor="@color/colorPrimaryDark"
         android:textColorHint="@color/Grey"
         android:textSize="16sp"
@@ -54,8 +54,6 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-
-
     <EditText
         android:id="@+id/email"
         android:layout_width="0dp"
@@ -79,51 +77,79 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relation" />
 
-    <EditText
+    <LinearLayout
         android:id="@+id/phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:background="@drawable/text_background_grey_8dp"
-        android:hint="Mobile Number"
-        android:inputType="phone"
-        android:paddingVertical="4dp"
-        android:paddingLeft="28dp"
-        android:paddingBottom="4dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textColorHint="@color/Grey"
-        android:textSize="16sp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintTop_toBottomOf="@+id/email">
 
-    <EditText
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/ccp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:ccp_contentColor="@color/colorPrimaryDark"
+            app:ccp_textSize="16sp" />
+
+        <EditText
+            android:id="@+id/phone_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/flag_transparent"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:padding="4dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="@color/Grey"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/alt_phone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:background="@drawable/text_background_grey_8dp"
-        android:hint="Alternate Number"
-        android:inputType="phone"
-        android:paddingVertical="4dp"
-        android:paddingLeft="28dp"
-        android:paddingBottom="4dp"
-        android:textColor="@color/colorPrimaryDark"
-        android:textColorHint="@color/Grey"
-        android:textSize="16sp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phone" />
+        app:layout_constraintTop_toBottomOf="@+id/phone">
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/ccp_alt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            app:ccp_contentColor="@color/colorPrimaryDark"
+            app:ccp_textSize="16sp" />
+
+        <EditText
+            android:id="@+id/alt_phone_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/flag_transparent"
+            android:hint="Alternate Number"
+            android:inputType="phone"
+            android:padding="4dp"
+            android:textColor="@color/colorPrimaryDark"
+            android:textColorHint="@color/Grey"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/done"

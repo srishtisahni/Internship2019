@@ -19,7 +19,7 @@
         android:background="@drawable/text_background_grey_32dp"
         android:gravity="center"
         android:hint="Name*"
-        android:inputType="textPersonName"
+        android:inputType="textCapWords"
         android:padding="10dp"
         android:textColor="@color/colorPrimaryDark"
         android:textColorHint="@color/borderGrey"
