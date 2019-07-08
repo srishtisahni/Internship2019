@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context=".UI.LoginSignUp.LoginFragment">
+    tools:context=".ui.login.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/login_credentials"
@@ -42,30 +42,42 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.25" />
 
+        <TextView
+            android:id="@+id/email_error"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="Email and Password cannor be left empty"
+            android:textColor="@color/red"
+            android:textSize="9sp"
+            app:layout_constraintEnd_toEndOf="@+id/email"
+            app:layout_constraintStart_toStartOf="@+id/email"
+            app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/text_background_grey_32dp"
             android:gravity="center"
             android:hint="Password"
-            android:textColor="@color/colorPrimaryDark"
             android:inputType="textPassword"
             android:padding="10dp"
+            android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/borderGrey"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/email"
             app:layout_constraintStart_toStartOf="@+id/email"
-            app:layout_constraintTop_toBottomOf="@+id/email" />
+            app:layout_constraintTop_toBottomOf="@+id/email_error" />
 
         <TextView
-            android:id="@+id/error"
+            android:id="@+id/password_error"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:text="Email and Password cannor be left empty"
             android:textColor="@color/red"
             android:textSize="9sp"
@@ -86,7 +98,7 @@
             app:layout_constraintEnd_toEndOf="@+id/password"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="@+id/password"
-            app:layout_constraintTop_toBottomOf="@+id/error" />
+            app:layout_constraintTop_toBottomOf="@+id/password_error" />
 
         <TextView
             android:id="@+id/forgot_password"

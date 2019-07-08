@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="32dp"
     android:orientation="vertical"
-    tools:context=".UI.Document.DocumentFragment">
+    tools:context=".ui.document.DocumentFragment">
 
     <FrameLayout
         android:id="@+id/adhaar"
