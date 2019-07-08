@@ -95,15 +95,16 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
             else if (phone!!.isVisible) {
                 val phone = ccp!!.formattedFullNumber
                 if (phone == "") {
-                    textError!!.visibility = View.VISIBLE
-                    textError!!.text = "Empty Field Not Allowed"
+                    textError!!.isVisible = true
+                    textError!!.isGone = false
+                    textError!!.text = "Can't be empty!"
                 } else if (!ccp!!.isValidFullNumber) {
-                    textError!!.visibility = View.VISIBLE
-                    textError!!.text = "Invalid PhoneNumber"
+                    textError!!.isVisible = true
+                    textError!!.isGone = false
+                    textError!!.text = "Invalid Phone Number!"
                 } else {
-                    textError!!.visibility = View.GONE
-                    viewModel!!.setPhone(phone)
-                    callback.PhoneSignUp()
+                    textError!!.isVisible = false
+                    textError!!.isGone = true
                 }
             }
         }

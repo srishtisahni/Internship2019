@@ -122,6 +122,7 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
             viewModel!!.setGender(genderSelection)
             viewModel!!.setCity(city!!.text.toString())
             viewModel!!.setPassword(password!!.text.toString())
+            callback.SignUpEmailAndPassword()
         }
     }
 
