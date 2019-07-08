@@ -2,11 +2,13 @@ package com.example.policyfolio.ui.login
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -23,8 +25,6 @@ import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.facebook.login.widget.LoginButton
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
-
-import java.util.Arrays
 
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -119,7 +119,6 @@ class LoginFragment : Fragment {
 
     private fun setListeners() {
         login!!.setOnClickListener {
-
             emailError!!.isVisible = false
             emailError!!.isGone = true
             emailText!!.validEmail { message ->

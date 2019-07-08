@@ -69,15 +69,18 @@
 
     <TextView
         android:id="@+id/text_empty"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="The field cannot be left empty"
         android:textColor="@color/red"
         android:textSize="9sp"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/done"
+        app:layout_constraintEnd_toEndOf="@+id/done"
+        app:layout_constraintStart_toStartOf="@+id/done"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.88" />
 
     <Button
         android:id="@+id/done"
