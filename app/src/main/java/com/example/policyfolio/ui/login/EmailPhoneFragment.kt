@@ -27,11 +27,10 @@ import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
 /**
  * A simple [Fragment] subclass.
  */
-class EmailPhoneFragment : Fragment {
+class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val callback: LoginCallback) : Fragment() {
 
     private var rootView: View? = null
     private var viewModel: LoginSignUpViewModel? = null
-    private var callback: LoginCallback? = null
 
     private var email: EditText? = null
     private var phone: LinearLayout? = null
@@ -40,15 +39,6 @@ class EmailPhoneFragment : Fragment {
     private var done: Button? = null
 
     private var textError: TextView? = null
-
-    constructor() {
-        // Required empty public constructor
-    }
-
-    @SuppressLint("ValidFragment")
-    constructor(callback: LoginCallback) {
-        this.callback = callback
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +89,7 @@ class EmailPhoneFragment : Fragment {
                 }
                 if(textError!!.isGone){
                     viewModel!!.email = email!!.text.toString()
-                    callback!!.EmailNext()
+                    callback.EmailNext()
                 }
             }
             else if (phone!!.isVisible) {
@@ -113,7 +103,7 @@ class EmailPhoneFragment : Fragment {
                 } else {
                     textError!!.visibility = View.GONE
                     viewModel!!.setPhone(phone)
-                    callback!!.PhoneSignUp()
+                    callback.PhoneSignUp()
                 }
             }
         }

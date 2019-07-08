@@ -2,13 +2,11 @@ package com.example.policyfolio.ui.login
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -31,11 +29,10 @@ import de.hdodenhof.circleimageview.CircleImageView
 /**
  * A simple [Fragment] subclass.
  */
-class LoginFragment : Fragment {
+class LoginFragment @SuppressLint("ValidFragment") constructor(private val callback: LoginCallback) : Fragment() {
 
     private var rootView: View? = null
     private var viewModel: LoginSignUpViewModel? = null
-    private var callback: LoginCallback? = null
 
     private var emailText: EditText? = null
     private var emailError: TextView? = null
@@ -49,16 +46,6 @@ class LoginFragment : Fragment {
     private var phone: CircleImageView? = null
     private var email: CircleImageView? = null
     private var facebookLogin: LoginButton? = null
-
-
-    constructor() {
-        // Required empty public constructor
-    }
-
-    @SuppressLint("ValidFragment")
-    constructor(callback: LoginCallback) {
-        this.callback = callback
-    }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -138,21 +125,21 @@ class LoginFragment : Fragment {
             if( passwordError!!.isGone && emailError!!.isGone){
                 viewModel!!.email = emailText!!.text.toString()
                 viewModel!!.setPassword(password!!.text.toString())
-                callback!!.Login()
+                callback.Login()
             }
         }
 
         google!!.setOnClickListener {
             val id = getString(R.string.default_web_client_id)
             viewModel!!.initiateGoogleLogin(id, context)
-            callback!!.GoogleSignUp()
+            callback.GoogleSignUp()
         }
 
         facebook!!.setOnClickListener { facebookLogin!!.performClick() }
 
-        phone!!.setOnClickListener { callback!!.enterPhone() }
+        phone!!.setOnClickListener { callback.enterPhone() }
 
-        email!!.setOnClickListener { callback!!.enterEmail() }
+        email!!.setOnClickListener { callback.enterEmail() }
 
     }
 
