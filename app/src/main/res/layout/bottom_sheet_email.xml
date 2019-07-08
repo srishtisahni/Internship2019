@@ -7,7 +7,7 @@
     android:background="@color/colorPrimary"
     android:focusableInTouchMode="true"
     android:layout_height="wrap_content"
-    tools:context=".UI.BottomSheets.EmailBottomSheet">
+    tools:context=".ui.bottomsheets.EmailBottomSheet">
 
     <EditText
         android:id="@+id/email"

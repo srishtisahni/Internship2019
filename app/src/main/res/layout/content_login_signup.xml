@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".UI.LoginSignUp.LoginSignUpActivity"
-    android:background="@color/white"
+    tools:context=".ui.login.LoginSignUpActivity"
     tools:showIn="@layout/activity_login_signup">
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
+        android:background="@color/white"
         android:id="@+id/fragment_holder"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

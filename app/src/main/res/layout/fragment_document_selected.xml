@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:focusableInTouchMode="true"
-    tools:context=".UI.Document.SelectedDocumentFragment">
+    tools:context=".ui.document.SelectedDocumentFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/text_card"

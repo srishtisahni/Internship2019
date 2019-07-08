@@ -14,32 +14,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".UI.Document.DocumentActivity"
+            android:name=".ui.document.DocumentActivity"
             android:label="@string/title_activity_document"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:name=".UI.Claim.ClaimSupportActivity"
+            android:name=".ui.claim.ClaimSupportActivity"
             android:label="@string/title_activity_claim_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Promotions.PromotionsActivity"
+            android:name=".ui.promotions.PromotionsActivity"
             android:label="@string/title_activity_promotions"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Help.HelpActivity"
+            android:name=".ui.help.HelpActivity"
             android:label="@string/title_activity_help"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".UI.Nominee.NomineeSupportActivity"
+            android:name=".ui.Nominee.NomineeSupportActivity"
             android:label="@string/title_activity_nominee_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.AddPolicy.AddPolicyActivity"
+            android:name=".ui.addpolicy.AddPolicyActivity"
             android:label="@string/title_activity_add_policy"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".UI.Home.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -48,7 +48,7 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
         <activity
-            android:name=".UI.LoginSignUp.LoginSignUpActivity"
+            android:name=".ui.login.LoginSignUpActivity"
             android:theme="@style/AppTheme.NoActionBar.fullscreen" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,7 +58,7 @@
         </activity>
 
         <receiver
-            android:name=".Util.Receivers.PremiumDuesReceiver"
+            android:name=".util.receivers.PremiumDuesReceiver"
             android:enabled="true"
             android:exported="false" />
 
