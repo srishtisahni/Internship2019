@@ -15,8 +15,10 @@ import com.example.policyfolio.data.local.classes.Policy;
 import com.example.policyfolio.util.Constants;
 
 import java.sql.Date;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.ViewHolder>{
     private Context context;
@@ -52,6 +54,7 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
         InsuranceProvider provider = providerHashMap.get(policies.get(position).getInsuranceProviderId());
         if(policies.get(position).getPaid()){
             holder.textView.setTextColor(context.getResources().getColor(R.color.yellow));
@@ -64,11 +67,11 @@ public class YellowTextAdapter extends RecyclerView.Adapter<YellowTextAdapter.Vi
         if(provider!=null) {
             if(type==Constants.Policy.DISPLAY_PREMIUM) {
                 holder.textView.setText("- " + Constants.Time.DATE_FORMAT.format(new Date(policies.get(position).getNextDueDate()*1000)) + " | " + provider.getName());
-                holder.amount.setText(policies.get(position).getPremium());
+                holder.amount.setText(formatter.format(Double.parseDouble(policies.get(position).getPremium())));
             }
             else {
                 holder.textView.setText("- " + Constants.Time.DATE_FORMAT.format(new Date(policies.get(position).getMatureDate()*1000)) + " | " + provider.getName());
-                holder.amount.setText(policies.get(position).getSumAssured());
+                holder.amount.setText(formatter.format(Double.parseDouble(policies.get(position).getSumAssured())));
             }
         }
     }

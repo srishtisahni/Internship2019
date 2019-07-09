@@ -3,6 +3,7 @@ package com.example.policyfolio.ui.document;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -93,12 +94,13 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     }
 
     @Override
-    public void done(final int type, boolean uploaded) {
-        super.startProgress();
-        if(uploaded && viewModel.getImage(type) == null){
+    public void done(final int type, boolean updated) {
+        if(updated && viewModel.getImage(type) == null){
+            ProgressDialog dialog = ProgressDialog.show(this, "", "Deleting Image..", true);
             viewModel.deleteImage(type).observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(Boolean aBoolean) {
+                    dialog.dismiss();
                     if(aBoolean){
                         switch (type){
                             case Constants.Documents.ADHAAR:
@@ -130,16 +132,17 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
                         saveChanges();
                     }
                     else {
-                        DocumentActivity.super.endProgress();
                         showSnackbar("Unable to modify image database");
                     }
                 }
             });
         }
         else {
+            ProgressDialog dialog = ProgressDialog.show(this, "", "Uplaoding Image..", true);
             viewModel.uploadImage(type).observe(this, new Observer<String>() {
                 @Override
                 public void onChanged(String s) {
+                    dialog.dismiss();
                     if(s!=null){
                         switch (type){
                             case Constants.Documents.ADHAAR:
@@ -165,7 +168,6 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
                         saveChanges();
                     }
                     else {
-                        DocumentActivity.super.endProgress();
                         showSnackbar("Unable to modify image database");
                     }
                 }
@@ -174,6 +176,7 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
     }
 
     private void saveChanges() {
+        super.startProgress();
         viewModel.updateChanges().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {

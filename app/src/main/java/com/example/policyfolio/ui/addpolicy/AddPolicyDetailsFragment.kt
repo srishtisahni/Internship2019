@@ -276,6 +276,8 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
             }
 
             if(coverError!!.isGone && frequencyError!!.isGone && premiumError!!.isGone && dueError!!.isGone && matureError!!.isGone && nomineeError!!.isGone){
+                viewModel!!.coverAmount = coverAmount!!.text.toString()
+                viewModel!!.premiumAmount = premiumAmount!!.text.toString()
                 callback.done()
             } else {
                 callback.showSnackbar("Incomplete Information!")
@@ -309,6 +311,7 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
             Constants.ListTypes.NOMINEE -> {
                 val relations = resources.getStringArray(R.array.relationship_array)
                 nomineeText!!.text = nominees!![position].name + ", " + relations[nominees!![position].relation]
+                Log.e("RELATION",relations[nominees!![position].relation])
                 nomineeText!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
                 nomineeText!!.setPadding(0, 4, 0, 4)
                 viewModel!!.nominee = nominees!![position]
@@ -330,8 +333,8 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
             cursor.close()
 
             val bmp = BitmapFactory.decodeFile(picturePath)
-            Log.e("BITMAP", bmp.toString() + "")
             documentAddImage!!.setImageBitmap(bmp)
+            documentAddImage!!.setPadding(0,0,0,0)
             documentAddText!!.visibility = View.GONE
             clickPolicy!!.visibility = View.GONE
             optional2!!.visibility = View.GONE
@@ -341,6 +344,7 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
         if (requestCode == Constants.PermissionAndRequests.CAPTURE_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
             val bmp = data.extras!!.get("data") as Bitmap
             documentAddImage!!.setImageBitmap(bmp)
+            documentAddImage!!.setPadding(0,0,0,0)
             documentAddText!!.visibility = View.GONE
             clickPolicy!!.visibility = View.GONE
             optional2!!.visibility = View.GONE

@@ -45,10 +45,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:text="Policy Number"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/insurance_provider"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/insurance_provider"
             app:layout_constraintTop_toBottomOf="@+id/insurance_provider" />
@@ -58,16 +59,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/text_background_grey_8dp"
             android:hint="Cover Amount*"
+            android:inputType="numberDecimal"
             android:paddingVertical="4dp"
             android:paddingLeft="24dp"
             android:paddingRight="32dp"
             android:textColor="@color/colorPrimaryDark"
-            android:inputType="numberDecimal"
             android:textColorHint="@color/Grey"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/policy_number"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/policy_number"
             app:layout_constraintTop_toBottomOf="@+id/policy_number" />
@@ -92,22 +94,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/text_background_grey_8dp"
-            app:layout_constraintEnd_toEndOf="@+id/cover_amount"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/cover_amount"
             app:layout_constraintTop_toBottomOf="@+id/cover_amount">
 
             <TextView
-                android:layout_marginVertical="4dp"
                 android:id="@+id/frequency_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Payment Frequency*"
+                android:layout_marginVertical="4dp"
                 android:paddingLeft="20dp"
-                android:textSize="16sp"
+                android:paddingRight="32dp"
+                android:text="Payment Frequency*"
                 android:textColor="@color/Grey"
-                android:paddingRight="32dp"/>
+                android:textSize="16sp" />
         </FrameLayout>
 
         <TextView
@@ -130,16 +133,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/text_background_grey_8dp"
             android:hint="Premium Amount*"
+            android:inputType="numberDecimal"
             android:paddingVertical="4dp"
             android:paddingLeft="24dp"
             android:paddingRight="32dp"
-            android:inputType="numberDecimal"
             android:textColor="@color/colorPrimaryDark"
             android:textColorHint="@color/Grey"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@+id/frequency_frame"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/frequency_frame"
             app:layout_constraintTop_toBottomOf="@+id/frequency_frame" />
@@ -164,9 +168,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/text_background_grey_8dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/premium_amount"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/premium_amount"
             app:layout_constraintTop_toBottomOf="@+id/premium_amount">
@@ -175,9 +180,9 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
                 android:paddingLeft="22dp"
                 android:paddingRight="32dp"
-                android:paddingVertical="4dp"
                 android:text="Due Date for next Payment*"
                 android:textColor="@color/Grey"
                 android:textSize="16sp" />
@@ -211,9 +216,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/text_background_grey_8dp"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/date_picker"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/date_picker"
             app:layout_constraintTop_toBottomOf="@+id/date_picker">
@@ -222,9 +228,9 @@
                 android:id="@+id/date2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
                 android:paddingLeft="22dp"
                 android:paddingRight="32dp"
-                android:paddingVertical="4dp"
                 android:text="Policy Mature Date"
                 android:textColor="@color/Grey"
                 android:textSize="16sp" />
@@ -258,21 +264,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/text_background_grey_8dp"
-            app:layout_constraintEnd_toEndOf="@+id/date_picker2"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/date_picker2"
             app:layout_constraintTop_toBottomOf="@+id/date_picker2">
+
             <TextView
-                android:layout_marginVertical="4dp"
                 android:id="@+id/nominee_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nominee*"
+                android:layout_marginVertical="4dp"
                 android:paddingLeft="20dp"
-                android:textSize="16sp"
+                android:paddingRight="32dp"
+                android:text="Nominee*"
                 android:textColor="@color/Grey"
-                android:paddingRight="32dp"/>
+                android:textSize="16sp" />
         </FrameLayout>
 
         <TextView
@@ -306,8 +314,9 @@
 
             <ImageView
                 android:id="@+id/document_add_image"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:maxHeight="32dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
@@ -353,8 +362,9 @@
 
             <ImageView
                 android:id="@+id/document_click_image"
-                android:layout_width="wrap_content"
-                android:layout_height="24dp"
+                android:layout_width="32dp"
+                android:maxHeight="32dp"
+                android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:layout_gravity="center"
                 android:layout_margin="4dp"

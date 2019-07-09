@@ -4,7 +4,6 @@ package com.example.policyfolio.ui.login
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,18 +12,15 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-
-import com.example.policyfolio.util.Constants
 import com.example.policyfolio.R
+import com.example.policyfolio.util.Constants
 import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.facebook.login.widget.LoginButton
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
-
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -52,7 +48,7 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         rootView = inflater.inflate(R.layout.fragment_login, container, false)
-        viewModel = ViewModelProviders.of(activity!!).get(LoginSignUpViewModel::class.java!!)
+        viewModel = ViewModelProviders.of(activity!!).get(LoginSignUpViewModel::class.java)
         viewModel!!.initiateRepo(context)
 
         emailText = rootView!!.findViewById(R.id.email)
@@ -67,7 +63,7 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
         passwordError = rootView!!.findViewById(R.id.password_error)
         forgetPassword = rootView!!.findViewById(R.id.forgot_password)
 
-        forgetPassword!!.setOnClickListener { callback!!.forgotPassword() }
+        forgetPassword!!.setOnClickListener { callback.forgotPassword() }
 
         if (viewModel!!.email != null) {
             emailText!!.setText(viewModel!!.email)
@@ -87,9 +83,9 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
         viewModel!!.facebookLogin().observe(this, Observer { integer ->
             if (integer != null) {
                 when (integer) {
-                    Constants.Facebook.Login.LOGGED_IN -> viewModel!!.fetchFacebookData().observe(this@LoginFragment, Observer { facebookData ->
+                    Constants.Facebook.Login.LOGGED_IN -> viewModel!!.fetchFacebookData().observe(this, Observer { facebookData ->
                         if (facebookData != null) {
-                            callback!!.FacebookSignUp(facebookData)
+                            callback.FacebookSignUp(facebookData)
                         } else
                             Toast.makeText(context, "Login Error Occurred", Toast.LENGTH_LONG).show()
                     })

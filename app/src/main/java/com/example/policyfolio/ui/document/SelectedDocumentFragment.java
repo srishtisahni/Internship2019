@@ -50,7 +50,7 @@ public class SelectedDocumentFragment extends Fragment {
 
     private DocumentCallback callback;
     private int type;
-    private boolean uploaded;
+    private boolean updated;
 
     public SelectedDocumentFragment() {
         // Required empty public constructor
@@ -59,7 +59,7 @@ public class SelectedDocumentFragment extends Fragment {
     public SelectedDocumentFragment(DocumentCallback callback, int type, boolean uploaded) {
         this.callback = callback;
         this.type = type;
-        this.uploaded = uploaded;
+        this.updated = uploaded;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class SelectedDocumentFragment extends Fragment {
         uploadText.setText(textUpload);
         cardNumber.setHint(cardHint);
 
-        if(!uploaded){
+        if(!updated){
             edit.setVisibility(View.GONE);
             delete.setVisibility(View.GONE);
             done.setVisibility(View.GONE);
@@ -197,7 +197,7 @@ public class SelectedDocumentFragment extends Fragment {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(cardNumber.getText().toString().length()>0 || uploaded) {
+                if(cardNumber.getText().toString().length()>0 || updated) {
                     String card = cardNumber.getText().toString();
                     switch (type){
                         case Constants.Documents.ADHAAR:
@@ -219,7 +219,7 @@ public class SelectedDocumentFragment extends Fragment {
                             viewModel.getLocalCopy().setRationCardNumber(card);
                             break;
                     }
-                    callback.done(type,uploaded);
+                    callback.done(type, updated);
                 }
                 else
                     callback.showSnackbar("Enter a valid Card Number");
