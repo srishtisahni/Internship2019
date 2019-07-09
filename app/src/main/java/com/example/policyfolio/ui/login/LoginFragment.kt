@@ -74,7 +74,7 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
         }
 
         facebookLogin = rootView!!.findViewById(R.id.facebook_login)
-        facebookLogin!!.setReadPermissions(listOf(Constants.Facebook.BIRTHDAY, Constants.Facebook.EMAIL, Constants.Facebook.GENDER, Constants.Facebook.PROFILE, Constants.Facebook.LOCATION))
+        facebookLogin!!.setPermissions(listOf(Constants.Facebook.BIRTHDAY, Constants.Facebook.EMAIL, Constants.Facebook.GENDER, Constants.Facebook.PROFILE, Constants.Facebook.LOCATION))
         facebookLogin!!.fragment = this
 
         facebookCallback()
@@ -123,6 +123,8 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
                 viewModel!!.email = emailText!!.text.toString()
                 viewModel!!.setPassword(password!!.text.toString())
                 callback.Login()
+            } else {
+                callback.showSnackbar("Invalid Information!")
             }
         }
 

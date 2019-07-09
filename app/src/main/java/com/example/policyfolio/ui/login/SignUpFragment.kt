@@ -115,6 +115,8 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
             viewModel!!.setCity(city!!.text.toString())
             viewModel!!.setPassword(password!!.text.toString())
             callback.SignUpEmailAndPassword()
+        } else {
+            callback.showSnackbar("Incomplete Information!")
         }
     }
 

@@ -88,6 +88,8 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
                 if(textError!!.isGone){
                     viewModel!!.email = email!!.text.toString()
                     callback.EmailNext()
+                } else {
+                    callback.showSnackbar("Invalid Email!")
                 }
             }
             else if (phone!!.isVisible) {
@@ -95,11 +97,14 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
                 if (phone == "") {
                     textError!!.visibility = View.VISIBLE
                     textError!!.text = "Can't be empty!"
+                    callback.showSnackbar("Incomplete Information!")
                 } else if (!ccp!!.isValidFullNumber) {
                     textError!!.visibility = View.VISIBLE
                     textError!!.text = "Invalid Phone Number!"
+                    callback.showSnackbar("Invalid Phone Number!")
                 } else {
                     textError!!.visibility = View.GONE
+                    callback.PhoneSignUp()
                 }
             }
         }

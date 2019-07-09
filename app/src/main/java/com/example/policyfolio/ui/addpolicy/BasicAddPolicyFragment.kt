@@ -143,6 +143,8 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
             if(numberEmpty!!.isGone) {
                 viewModel!!.policyNumber = policyNumber!!.text.toString().toUpperCase()
                 callback.next()
+            } else {
+                callback.showSnackbar("Invalid Policy Number")
             }
         }
     }

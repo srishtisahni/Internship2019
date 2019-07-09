@@ -8,11 +8,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 
@@ -158,6 +154,8 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
             viewModel.city = city!!.text.toString()
             viewModel.phone = phone
             callback.updateInfo()
+        } else {
+            Toast.makeText(context,"Incomplete Information!",Toast.LENGTH_SHORT).show()
         }
     }
 
