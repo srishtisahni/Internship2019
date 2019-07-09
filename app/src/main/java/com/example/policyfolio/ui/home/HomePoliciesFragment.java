@@ -26,6 +26,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.policyfolio.util.Constants.Policy.Type.APPLIANCE_INSURANCE;
 import static com.example.policyfolio.util.Constants.Policy.Type.LIFE_INSURANCE;
@@ -125,11 +126,13 @@ public class HomePoliciesFragment extends Fragment implements PolicyDisplayAdapt
         returnsAdapter.updatePolicies(result);
 
         Double totalCover = Policy.totalCover(result);
+        NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
+
         int cover = (int) Math.floor(totalCover);
         int coverDecimal = (int) Math.floor((totalCover - cover)*100);
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
         String moneyString = formatter.format(cover);
-        this.cover.setText(moneyString.substring(1,moneyString.lastIndexOf(".00")));
+
+        this.cover.setText(moneyString.substring(0,moneyString.lastIndexOf(".00")));
         if(coverDecimal/10==0){
             this.coverDecimal.setText(".0"+coverDecimal);
         }

@@ -23,6 +23,7 @@ import com.example.policyfolio.data.local.classes.Policy;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class PolicyDisplayAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -83,21 +84,14 @@ public class PolicyDisplayAdapter extends RecyclerView.Adapter<ViewHolder> {
         else if(holder instanceof ViewHolderNonEmpty){
             Double totalCover = Policy.totalCover(typeWisePolicy.get(position));
             int cover = (int) Math.floor(totalCover);
-            int coverDecimal = (int) Math.floor((totalCover - cover)*100);
 
-            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
             String moneyString = formatter.format(cover);
 
             ViewHolderNonEmpty viewHolder = (ViewHolderNonEmpty) holder;
             viewHolder.title.setText(titles[position]);
             viewHolder.image.setImageDrawable(icons[position]);
-            viewHolder.amount.setText(moneyString.substring(1,moneyString.lastIndexOf(".00")));
-            if(coverDecimal/10==0) {
-                viewHolder.amountDecimal.setText(".0" + coverDecimal);
-            }
-            else {
-                viewHolder.amountDecimal.setText("." + coverDecimal);
-            }
+            viewHolder.amount.setText(moneyString.substring(0,moneyString.lastIndexOf(".00")));
             viewHolder.addPolicy.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,7 +131,6 @@ public class PolicyDisplayAdapter extends RecyclerView.Adapter<ViewHolder> {
         ImageView image;
         LinearLayout addPolicy;
         TextView amount;
-        TextView amountDecimal;
         RecyclerView policies;
         public ViewHolderNonEmpty(@NonNull View itemView) {
             super(itemView);
@@ -145,7 +138,6 @@ public class PolicyDisplayAdapter extends RecyclerView.Adapter<ViewHolder> {
             image = itemView.findViewById(R.id.image);
             addPolicy = itemView.findViewById(R.id.add_policy);
             amount = itemView.findViewById(R.id.amount);
-            amountDecimal = itemView.findViewById(R.id.amount_decimal);
             policies = itemView.findViewById(R.id.policies);
         }
     }

@@ -19,6 +19,7 @@ import com.example.policyfolio.data.local.classes.User;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 
 public class MeNomineeDisplayAdapter extends RecyclerView.Adapter<MeNomineeDisplayAdapter.ViewHolder> {
@@ -55,10 +56,10 @@ public class MeNomineeDisplayAdapter extends RecyclerView.Adapter<MeNomineeDispl
             Double totalCover = Policy.totalCover(policyArrayList);
             int cover = (int) Math.floor(totalCover);
 
-            NumberFormat formatter = NumberFormat.getCurrencyInstance();
+            NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
             String moneyString = formatter.format(cover);
 
-            holder.amount.setText(moneyString.substring(1,moneyString.lastIndexOf(".00")));
+            holder.amount.setText(moneyString.substring(0,moneyString.lastIndexOf(".00")));
 
             WhiteTextAdapter whiteTextAdapter = new WhiteTextAdapter(context,policyArrayList,providerHashMap);
             holder.policies.setAdapter(whiteTextAdapter);

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -77,7 +78,7 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
                     Log.e("IMAGE", "Uploading");
                     if (s != null) {
                         viewModel.setPhotoUrl(s);
-                        showSnackbar("Image Uploaded");
+                        Toast.makeText(AddPolicyActivity.this,"Image Uploaded",Toast.LENGTH_SHORT).show();
                         Log.e("IMAGE", "Uploaded");
                     }
                     viewModel.savePolicy().observe(AddPolicyActivity.this, new Observer<Boolean>() {
