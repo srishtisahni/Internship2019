@@ -103,12 +103,10 @@
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginLeft="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="16dp"
                     android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -118,20 +116,28 @@
 
                     <TextView
                         android:id="@+id/amount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="0dp"
+                        android:layout_weight="8.5"
+                        android:layout_height="match_parent"
+                        android:autoSizeTextType="uniform"
+                        android:gravity="right|bottom"
+                        android:maxLines="1"
                         android:text="Nu"
                         android:textColor="@color/white"
                         android:textSize="32sp" />
 
                     <TextView
                         android:id="@+id/amount_decimal"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:gravity="left|bottom"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:maxLines="1"
                         android:layout_marginLeft="2dp"
+                        android:autoSizeTextType="uniform"
                         android:text=".00"
                         android:textColor="@color/white"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

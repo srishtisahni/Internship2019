@@ -73,6 +73,7 @@
             app:layout_constraintVertical_bias="0.0"/>
 
         <FrameLayout
+            android:visibility="gone"
             android:id="@+id/frame_insurance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -80,7 +81,6 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:background="@drawable/dropdown_item_8dp"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -132,6 +132,18 @@
             app:layout_constraintTop_toBottomOf="@+id/frame_insurance"
             app:layout_constraintVertical_bias="0.0" />
 
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/number_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/can_t_be_empty"
+            android:textColor="@color/red"
+            android:textSize="9sp"
+            app:layout_constraintEnd_toEndOf="@+id/policy_number"
+            app:layout_constraintStart_toStartOf="@+id/policy_number"
+            app:layout_constraintTop_toBottomOf="@+id/policy_number" />
+
         <Button
             android:id="@+id/next"
             android:visibility="gone"
@@ -150,7 +162,7 @@
             app:layout_constraintEnd_toEndOf="@+id/policy_number"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/policy_number" />
+            app:layout_constraintTop_toBottomOf="@+id/number_empty" />
 
         <LinearLayout
             android:visibility="gone"

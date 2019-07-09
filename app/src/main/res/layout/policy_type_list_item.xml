@@ -59,26 +59,34 @@
 
                 <LinearLayout
                     android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:orientation="horizontal"
+                    android:gravity="center"
                     app:layout_constraintBottom_toTopOf="@+id/view4"
                     app:layout_constraintEnd_toEndOf="@+id/view3"
                     app:layout_constraintHorizontal_bias="0.52"
                     app:layout_constraintStart_toStartOf="@+id/view3">
+
                     <TextView
                         android:id="@+id/amount"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:maxLines="1"
+                        android:gravity="bottom"
+                        android:autoSizeTextType="uniform"
                         android:text="Nu"
                         android:textColor="@color/white"
                         android:textSize="24sp"
                         android:textStyle="bold" />
+
                     <TextView
                         android:id="@+id/amount_decimal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:maxLines="1"
+                        android:gravity="bottom"
                         android:layout_marginLeft="2dp"
                         android:text=".00"
                         android:textColor="@color/white"
@@ -90,6 +98,7 @@
                     android:id="@+id/view4"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:autoSizeTextType="uniform"
                     android:layout_marginStart="24dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginEnd="24dp"
