@@ -162,7 +162,7 @@
             app:layout_constraintEnd_toEndOf="@+id/policy_number"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/number_empty" />
+            app:layout_constraintTop_toBottomOf="@+id/policy_number" />
 
         <LinearLayout
             android:visibility="gone"

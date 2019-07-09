@@ -80,12 +80,10 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
     private fun setOnClick() {
         done!!.setOnClickListener {
             if(email!!.isVisible){
-                textError!!.isVisible = false
-                textError!!.isGone = true
+                textError!!.visibility = View.GONE
                 email!!.validEmail { message ->
                     textError!!.text = message
-                    textError!!.isVisible = true
-                    textError!!.isGone = false
+                    textError!!.visibility = View.VISIBLE
                 }
                 if(textError!!.isGone){
                     viewModel!!.email = email!!.text.toString()
@@ -95,16 +93,13 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
             else if (phone!!.isVisible) {
                 val phone = ccp!!.formattedFullNumber
                 if (phone == "") {
-                    textError!!.isVisible = true
-                    textError!!.isGone = false
+                    textError!!.visibility = View.VISIBLE
                     textError!!.text = "Can't be empty!"
                 } else if (!ccp!!.isValidFullNumber) {
-                    textError!!.isVisible = true
-                    textError!!.isGone = false
+                    textError!!.visibility = View.VISIBLE
                     textError!!.text = "Invalid Phone Number!"
                 } else {
-                    textError!!.isVisible = false
-                    textError!!.isGone = true
+                    textError!!.visibility = View.GONE
                 }
             }
         }

@@ -134,38 +134,16 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
             next!!.visibility = View.GONE
         }
 
-        policyNumber!!.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val text = s.toString()
-                numberEmpty!!.isVisible = false
-                numberEmpty!!.isGone = true
-                text.minLength(10){message ->
-                    numberEmpty!!.text = message
-                    numberEmpty!!.isVisible = true
-                    numberEmpty!!.isGone = false
-                }
-                if(numberEmpty!!.isGone){
-                    next!!.isVisible = true
-                    next!!.isGone = false
-                }
-                else {
-                    next!!.isVisible = false
-                    next!!.isGone = true
-                }
-            }
-
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        })
-
         next!!.setOnClickListener {
-            viewModel!!.policyNumber = policyNumber!!.text.toString().toUpperCase()
-            callback.next()
+            numberEmpty!!.visibility = View.GONE
+            policyNumber!!.minLength(10){message ->
+                numberEmpty!!.text = message
+                numberEmpty!!.visibility = View.VISIBLE
+            }
+            if(numberEmpty!!.isGone) {
+                viewModel!!.policyNumber = policyNumber!!.text.toString().toUpperCase()
+                callback.next()
+            }
         }
     }
 
@@ -189,6 +167,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                 providerFrame!!.background = resources.getDrawable(R.drawable.dropdown_item_8dp)
 
                 policyNumber!!.visibility = View.GONE
+                next!!.visibility = View.GONE
                 policyNumber!!.setText("")
 
                 viewModel!!.setType(position).observe(this, Observer { result ->
@@ -205,7 +184,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                 providerText!!.visibility = View.VISIBLE
 
                 policyNumber!!.visibility = View.VISIBLE
-                policyNumber!!.setText("")
+                next!!.visibility = View.VISIBLE
 
                 viewModel!!.provider = providers!![position]
             }

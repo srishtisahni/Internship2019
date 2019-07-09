@@ -59,7 +59,7 @@
             android:id="@+id/password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/text_background_grey_32dp"
             android:gravity="center"
             android:hint="Password"
@@ -70,7 +70,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/email"
             app:layout_constraintStart_toStartOf="@+id/email"
-            app:layout_constraintTop_toBottomOf="@+id/email_error" />
+            app:layout_constraintTop_toBottomOf="@+id/email" />
 
         <TextView
             android:id="@+id/password_error"
@@ -89,7 +89,7 @@
             android:id="@+id/login"
             android:layout_width="136dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="32dp"
             android:background="@drawable/button_background_green"
             android:text="Log In"
             android:textAllCaps="false"
@@ -98,7 +98,7 @@
             app:layout_constraintEnd_toEndOf="@+id/password"
             app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="@+id/password"
-            app:layout_constraintTop_toBottomOf="@+id/password_error" />
+            app:layout_constraintTop_toBottomOf="@+id/password" />
 
         <TextView
             android:id="@+id/forgot_password"

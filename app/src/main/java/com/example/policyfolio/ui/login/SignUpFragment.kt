@@ -81,39 +81,31 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
     }
 
     private fun signUp() {
-        nameError!!.isVisible = false
-        nameError!!.isGone = true
+        nameError!!.visibility = View.GONE
         name!!.nonEmpty { message ->
             nameError!!.text = message
-            nameError!!.isVisible = true
-            nameError!!.isGone = false
+            nameError!!.visibility = View.VISIBLE
         }
 
         if (birthdayEpoch == null) {
-            birthdayError!!.isVisible = true
-            birthdayError!!.isGone = false
+            birthdayError!!.visibility = View.VISIBLE
         } else {
-            birthdayError!!.isVisible = false
-            birthdayError!!.isGone = true
+            birthdayError!!.visibility = View.GONE
         }
 
-        cityError!!.isVisible = false
-        cityError!!.isGone = true
+        cityError!!.visibility = View.GONE
         city!!.nonEmpty { message ->
             cityError!!.text = message
-            cityError!!.isVisible = true
-            cityError!!.isGone = false
+            cityError!!.visibility = View.VISIBLE
         }
 
-        passwordError!!.isVisible = false
-        passwordError!!.isGone = true
+        passwordError!!.visibility = View.GONE
         password!!.validator()
-                .minLength(8)
                 .nonEmpty()
+                .minLength(8)
                 .addErrorCallback {message ->
                     passwordError!!.text = message
-                    passwordError!!.isVisible = true
-                    passwordError!!.isGone = false
+                    passwordError!!.visibility = View.VISIBLE
                 }.check()
 
         if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && passwordError!!.isGone) {
