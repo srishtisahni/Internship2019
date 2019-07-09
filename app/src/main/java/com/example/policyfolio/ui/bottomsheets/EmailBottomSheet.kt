@@ -62,15 +62,13 @@ class EmailBottomSheet @SuppressLint("ValidFragment") constructor(private val ca
                             next!!.isEnabled = false
                             next!!.background = resources.getDrawable(R.drawable.disabled_button_background_white)
                             next!!.setTextColor(resources.getColor(R.color.Grey))
-                            error!!.isVisible = true
-                            error!!.isGone = false
+                            error!!.visibility = View.VISIBLE
                         }
                         .addSuccessCallback {
                             next!!.isEnabled = true
                             next!!.background = resources.getDrawable(R.drawable.button_background_white)
                             next!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
-                            error!!.isVisible = false
-                            error!!.isGone = true
+                            error!!.visibility = View.GONE
                         }
                         .check()
             }

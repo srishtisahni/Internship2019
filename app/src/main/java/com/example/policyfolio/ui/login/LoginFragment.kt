@@ -4,6 +4,7 @@ package com.example.policyfolio.ui.login
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -73,7 +74,7 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
         }
 
         facebookLogin = rootView!!.findViewById(R.id.facebook_login)
-        facebookLogin!!.setReadPermissions(listOf(Constants.Facebook.BIRTHDAY, Constants.Facebook.EMAIL, Constants.Facebook.GENDER, Constants.Facebook.PROFILE, Constants.Facebook.LOCATION))
+        facebookLogin!!.setPermissions(listOf(Constants.Facebook.BIRTHDAY, Constants.Facebook.EMAIL, Constants.Facebook.GENDER, Constants.Facebook.PROFILE, Constants.Facebook.LOCATION))
         facebookLogin!!.fragment = this
 
         facebookCallback()
@@ -106,26 +107,24 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
 
     private fun setListeners() {
         login!!.setOnClickListener {
-            emailError!!.isVisible = false
-            emailError!!.isGone = true
+            emailError!!.visibility = View.GONE
             emailText!!.validEmail { message ->
                 emailError!!.text = message
-                emailError!!.isVisible = true
-                emailError!!.isGone = false
+                emailError!!.visibility = View.VISIBLE
             }
 
-            passwordError!!.isVisible = false
-            passwordError!!.isGone = true
-            password!!.minLength(8) {
-                passwordError!!.text = it
-                passwordError!!.isVisible = true
-                passwordError!!.isGone = false
+            passwordError!!.visibility = View.GONE
+            password!!.minLength(8) {message ->
+                passwordError!!.text = message
+                passwordError!!.visibility = View.VISIBLE
             }
 
             if( passwordError!!.isGone && emailError!!.isGone){
                 viewModel!!.email = emailText!!.text.toString()
                 viewModel!!.setPassword(password!!.text.toString())
                 callback.Login()
+            } else {
+                callback.showSnackbar("Invalid Information!")
             }
         }
 

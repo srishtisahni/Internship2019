@@ -8,11 +8,7 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 
@@ -123,40 +119,31 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
     private fun save() {
         val phone = ccp!!.formattedFullNumber
         if (phone == "") {
-            phoneError!!.isVisible = true
-            phoneError!!.isGone = false
+            phoneError!!.visibility = View.VISIBLE
             phoneError!!.text = "Can't be empty!"
         } else if (!ccp!!.isValidFullNumber) {
-            phoneError!!.isVisible = true
-            phoneError!!.isGone = false
+            phoneError!!.visibility = View.VISIBLE
             phoneError!!.text = "Invalid Phone Number!"
         } else {
-            phoneError!!.isVisible = false
-            phoneError!!.isGone = true
+            phoneError!!.visibility = View.GONE
         }
 
-        nameError!!.isVisible = false
-        nameError!!.isGone = true
+        nameError!!.visibility = View.GONE
         name!!.nonEmpty { message ->
             nameError!!.text = message
-            nameError!!.isVisible = true
-            nameError!!.isGone = false
+            nameError!!.visibility = View.VISIBLE
         }
 
         if (birthdayEpoch == null) {
-            birthdayError!!.isVisible = true
-            birthdayError!!.isGone = false
+            birthdayError!!.visibility = View.VISIBLE
         } else {
-            birthdayError!!.isVisible = false
-            birthdayError!!.isGone = true
+            birthdayError!!.visibility = View.GONE
         }
 
-        cityError!!.isVisible = false
-        cityError!!.isGone = true
+        cityError!!.visibility = View.GONE
         city!!.nonEmpty { message ->
             cityError!!.text = message
-            cityError!!.isVisible = true
-            cityError!!.isGone = false
+            cityError!!.visibility = View.VISIBLE
         }
 
         if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && phoneError!!.isGone) {
@@ -167,6 +154,8 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
             viewModel.city = city!!.text.toString()
             viewModel.phone = phone
             callback.updateInfo()
+        } else {
+            Toast.makeText(context,"Incomplete Information!",Toast.LENGTH_SHORT).show()
         }
     }
 
