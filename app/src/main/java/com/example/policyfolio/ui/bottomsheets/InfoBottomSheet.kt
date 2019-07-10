@@ -2,9 +2,9 @@ package com.example.policyfolio.ui.bottomsheets
 
 
 import android.annotation.SuppressLint
-import android.app.Dialog
+import android.app.DatePickerDialog
 import android.os.Bundle
-import android.util.Patterns
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +21,6 @@ import com.example.policyfolio.util.Constants
 import com.example.policyfolio.R
 import com.example.policyfolio.viewmodels.HomeViewModel
 import com.hbb20.CountryCodePicker
-import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 import java.util.Calendar
@@ -90,7 +89,7 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
 
         setGenderAdapter()
 
-        birthday!!.setOnClickListener { FetchDate() }
+        birthday!!.setOnClickListener { fetchDate() }
 
         save!!.setOnClickListener { save() }
 
@@ -127,6 +126,7 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
                 .addSuccessCallback {
                     phoneError!!.visibility = View.GONE
                 }.check()
+        Log.e("PHONE ERROR",phoneError!!.isVisible.toString())
 
         name!!.validator()
                 .nonEmpty()
@@ -137,12 +137,14 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
                 .addSuccessCallback {
                     nameError!!.visibility = View.GONE
                 }.check()
+        Log.e("NAME ERROR",nameError!!.isVisible.toString())
 
         if (birthdayEpoch == null) {
             birthdayError!!.visibility = View.VISIBLE
         } else {
             birthdayError!!.visibility = View.GONE
         }
+        Log.e("BIRTHDAY ERROR",birthdayError!!.isVisible.toString())
 
         city!!.validator()
                 .nonEmpty()
@@ -153,6 +155,7 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
                 .addSuccessCallback {
                     cityError!!.visibility = View.GONE
                 }.check()
+        Log.e("CITY ERROR",cityError!!.isVisible.toString())
 
         if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && phoneError!!.isGone) {
             viewModel.complete = true
@@ -167,20 +170,20 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
         }
     }
 
-    private fun FetchDate() {
-        val dialog = Dialog(context!!)
-        dialog.setContentView(R.layout.date_picker)
-        dialog.setTitle("")
-        val datePicker = dialog.findViewById<DatePicker>(R.id.date_picker)
+    private fun fetchDate() {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { view, year, monthOfYear, dayOfMonth ->
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             calendar.set(year, monthOfYear, dayOfMonth)
             birthdayEpoch = calendar.timeInMillis / 1000
             birthday!!.text = Constants.Time.DATE_FORMAT.format(birthdayEpoch!! * 1000)
             birthday!!.setTextColor(resources.getColor(R.color.white))
         }
-        dialog.show()
+
+        DatePickerDialog(context,R.style.MyDatePickerDialogTheme, dateSetListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 
     private fun setGenderAdapter() {

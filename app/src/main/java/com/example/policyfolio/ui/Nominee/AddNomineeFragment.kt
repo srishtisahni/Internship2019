@@ -183,6 +183,7 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
                     .addSuccessCallback {
                         nameError!!.visibility = View.GONE
                     }.check()
+            Log.e("NAME ERROR",nameError!!.isVisible.toString())
 
             emailError!!.validator()
                     .validEmail()
@@ -193,6 +194,7 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
                     .addSuccessCallback {
                         emailError!!.visibility = View.GONE
                     }.check()
+            Log.e("EMAIL ERROR",emailError!!.isVisible.toString())
 
             val phone = ccp!!.formattedFullNumber
             phone.validator()
@@ -204,6 +206,7 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
                     .addSuccessCallback {
                         phoneError!!.visibility = View.GONE
                     }.check()
+            Log.e("PHONE ERROR",phoneError!!.isVisible.toString())
 
             if(viewModel!!.relation == -1){
                 relationError!!.isVisible = true

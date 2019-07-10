@@ -4,6 +4,7 @@ package com.example.policyfolio.ui.login
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.hbb20.CountryCodePicker
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
+import kotlinx.android.synthetic.main.text_white.*
 
 /**
  * A simple [Fragment] subclass.
@@ -93,6 +95,7 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
                             viewModel!!.email = email!!.text.toString()
                             callback.EmailNext()
                         }.check()
+                Log.e("EMAIL ERROR",textError!!.isVisible.toString())
             }
             else if (phone!!.isVisible) {
                 val phone = ccp!!.formattedFullNumber
@@ -107,6 +110,7 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
                             textError!!.visibility = View.GONE
                             callback.PhoneSignUp()
                         }.check()
+                Log.e("PHONE ERROR",textError!!.isVisible.toString())
             }
         }
     }

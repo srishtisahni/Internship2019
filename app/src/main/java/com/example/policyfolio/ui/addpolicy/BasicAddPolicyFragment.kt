@@ -10,8 +10,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +28,6 @@ import com.example.policyfolio.R
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownProviderAdapter
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
 import com.example.policyfolio.viewmodels.AddPolicyViewModel
-import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 import java.util.ArrayList
@@ -55,7 +53,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
     private var providers: ArrayList<InsuranceProvider>? = null
 
     private var policyNumber: EditText? = null
-    private var numberEmpty: TextView? = null
+    private var numberError: TextView? = null
 
     private var next: Button? = null
 
@@ -77,7 +75,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
         providerChoice = rootView!!.findViewById(R.id.insurance_provider)
 
         policyNumber = rootView!!.findViewById(R.id.policy_number)
-        numberEmpty = rootView!!.findViewById(R.id.number_empty)
+        numberError = rootView!!.findViewById(R.id.number_empty)
 
         next = rootView!!.findViewById(R.id.next)
 
@@ -136,18 +134,19 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
         }
 
         next!!.setOnClickListener {
-            numberEmpty!!.visibility = View.GONE
+            numberError!!.visibility = View.GONE
             policyNumber!!.validator()
                     .minLength(10)
                     .addErrorCallback{message ->
-                        numberEmpty!!.text = message
-                        numberEmpty!!.visibility = View.VISIBLE
+                        numberError!!.text = message
+                        numberError!!.visibility = View.VISIBLE
                     }
                     .addSuccessCallback {
-                        numberEmpty!!.visibility = View.GONE
+                        numberError!!.visibility = View.GONE
                     }.check()
+            Log.e("NUMBER ERROR",numberError!!.isVisible.toString())
 
-            if(numberEmpty!!.isGone) {
+            if(numberError!!.isGone) {
                 viewModel!!.policyNumber = policyNumber!!.text.toString().toUpperCase()
                 callback.next()
             } else {

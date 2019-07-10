@@ -2,6 +2,7 @@ package com.example.policyfolio.ui.addpolicy
 
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
@@ -27,6 +28,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 
 import com.example.policyfolio.util.Constants
 import com.example.policyfolio.data.local.classes.Nominee
@@ -193,13 +195,10 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
         })
 
         dueDatePickerLayout!!.setOnClickListener {
-            val dialog = Dialog(context!!, R.style.DialogTheme)
-            dialog.setContentView(R.layout.date_picker)
-            dialog.setTitle("")
-            val datePicker = dialog.findViewById<DatePicker>(R.id.date_picker)
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = premiumDateEpoch!! * 1000
-            datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { view, year, monthOfYear, dayOfMonth ->
+
+            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 calendar.set(year, monthOfYear, dayOfMonth)
                 premiumDateEpoch = calendar.timeInMillis / 1000
                 viewModel!!.premiumDateEpoch = premiumDateEpoch
@@ -209,17 +208,17 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
                 dueDateImage!!.visibility = View.GONE
                 dueDatePickerLayout!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
             }
-            dialog.show()
+
+            DatePickerDialog(context,R.style.MyDatePickerDialogTheme, dateSetListener,
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
         matureDatePickerLayout!!.setOnClickListener {
-            val dialog = Dialog(context!!, R.style.DialogTheme)
-            dialog.setContentView(R.layout.date_picker)
-            dialog.setTitle("")
-            val datePicker = dialog.findViewById<DatePicker>(R.id.date_picker)
             val calendar = Calendar.getInstance()
-            calendar.timeInMillis = matureDateEpoch!! * 1000
-            datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { view, year, monthOfYear, dayOfMonth ->
+            calendar.timeInMillis = premiumDateEpoch!! * 1000
+
+            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 calendar.set(year, monthOfYear, dayOfMonth)
                 matureDateEpoch = calendar.timeInMillis / 1000
                 viewModel!!.matureDateEpoch = matureDateEpoch
@@ -229,7 +228,10 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
                 matureDateImage!!.visibility = View.GONE
                 matureDatePickerLayout!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
             }
-            dialog.show()
+
+            DatePickerDialog(context,R.style.MyDatePickerDialogTheme, dateSetListener,
+                    calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                    calendar.get(Calendar.DAY_OF_MONTH)).show()
         }
 
         nomineeAdapter = BasicDropdownNomineeAdapter(context, nominees, this)
@@ -260,10 +262,14 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
                     .addSuccessCallback {
                         coverError!!.visibility = View.GONE
                     }.check()
+            Log.e("COVER ERROR",coverError!!.isVisible.toString())
 
             if(viewModel!!.premiumFrequency == -1){
                 frequencyError!!.visibility = View.VISIBLE
+            } else{
+                frequencyError!!.visibility = View.GONE
             }
+            Log.e("FREQUENCY ERROR",frequencyError!!.isVisible.toString())
 
             premiumAmount!!.validator()
                     .nonEmpty()
@@ -274,6 +280,7 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
                     .addSuccessCallback {
                         premiumError!!.visibility = View.GONE
                     }.check()
+            Log.e("PREMIUM ERROR",premiumError!!.isVisible.toString())
 
             dueError!!.visibility = dueDateImage!!.visibility
             matureError!!.visibility = matureDateImage!!.visibility
@@ -283,6 +290,7 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
             } else{
                 nomineeError!!.visibility = View.GONE
             }
+            Log.e("NOMINEE ERROR",nomineeError!!.isVisible.toString())
 
             if(coverError!!.isGone && frequencyError!!.isGone && premiumError!!.isGone && dueError!!.isGone && matureError!!.isGone && nomineeError!!.isGone){
                 viewModel!!.coverAmount = coverAmount!!.text.toString()

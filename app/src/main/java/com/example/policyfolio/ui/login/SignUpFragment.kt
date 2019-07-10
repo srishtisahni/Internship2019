@@ -2,8 +2,10 @@ package com.example.policyfolio.ui.login
 
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -90,12 +92,14 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
                 .addSuccessCallback {
                     nameError!!.visibility = View.GONE
                 }.check()
+        Log.e("NAME ERROR",nameError!!.isVisible.toString())
 
         if (birthdayEpoch == null) {
             birthdayError!!.visibility = View.VISIBLE
         } else {
             birthdayError!!.visibility = View.GONE
         }
+        Log.e("BIRTHDAY ERROR",birthdayError!!.isVisible.toString())
 
         city!!.validator()
                 .nonEmpty()
@@ -106,6 +110,7 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
                 .addSuccessCallback {
                     cityError!!.visibility = View.GONE
                 }.check()
+        Log.e("CITY ERROR",cityError!!.isVisible.toString())
 
         password!!.validator()
                 .nonEmpty()
@@ -117,6 +122,7 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
                 .addSuccessCallback {
                     passwordError!!.visibility = View.GONE
                 }.check()
+        Log.e("PASSWORD ERROR",passwordError!!.isVisible.toString())
 
         if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && passwordError!!.isGone) {
             viewModel!!.setName(name!!.text.toString())
@@ -131,19 +137,19 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
     }
 
     private fun fetchDate() {
-        val dialog = Dialog(context!!)
-        dialog.setContentView(R.layout.date_picker)
-        dialog.setTitle("")
-        val datePicker = dialog.findViewById<DatePicker>(R.id.date_picker)
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
-        datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)) { view, year, monthOfYear, dayOfMonth ->
+
+        val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             calendar.set(year, monthOfYear, dayOfMonth)
             birthdayEpoch = calendar.timeInMillis / 1000
             birthday!!.text = Constants.Time.DATE_FORMAT.format(birthdayEpoch!! * 1000)
             birthday!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
         }
-        dialog.show()
+
+        DatePickerDialog(context,R.style.MyDatePickerDialogTheme, dateSetListener,
+                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show()
     }
 
     private fun setGenderAdapter() {
