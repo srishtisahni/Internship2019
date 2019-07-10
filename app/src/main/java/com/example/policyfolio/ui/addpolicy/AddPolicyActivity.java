@@ -239,9 +239,12 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
         }
         else {
             if(addPolicyDetailsFragment == null) {
-                super.onBackPressed();
-            }
-            else {
+                if(basicAddPolicyFragment.isListOpen()){
+                    basicAddPolicyFragment.closeList();
+                } else {
+                    super.onBackPressed();
+                }
+            } else {
                 getSupportFragmentManager().beginTransaction().remove(addPolicyDetailsFragment).commit();
                 addPolicyDetailsFragment = null;
             }
