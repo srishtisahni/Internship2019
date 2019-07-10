@@ -13,7 +13,7 @@ import java.util.List;
 
 public class AddPolicyViewModel extends BaseViewModelNavigation {
 
-    private int type;
+    private int type = -1;
     private InsuranceProvider provider;
     private Nominee nominee;
     private String policyNumber;

@@ -45,12 +45,14 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
     private var typeChoice: RecyclerView? = null
     private var typeAdapter: BasicDropdownTextAdapter? = null
     private var insurances: Array<String>? = null
+    private var typeListOpen: Boolean = false
 
     private var providerChoice: RecyclerView? = null
     private var providerText: TextView? = null
     private var providerFrame: FrameLayout? = null
     private var providerAdapter: BasicDropdownProviderAdapter? = null
     private var providers: ArrayList<InsuranceProvider>? = null
+    private var providerListOpen: Boolean = false
 
     private var policyNumber: EditText? = null
     private var numberError: TextView? = null
@@ -105,6 +107,8 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
         typeChoice!!.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
         typeValue!!.setOnClickListener {
+            closeList()
+            typeListOpen = true
             typeValue!!.visibility = View.GONE
             typeChoice!!.visibility = View.VISIBLE
 
@@ -122,6 +126,8 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
         providerChoice!!.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
         providerFrame!!.setOnClickListener {
+            closeList()
+            providerListOpen = true
             providerText!!.visibility = View.GONE
             providerChoice!!.visibility = View.VISIBLE
             providerFrame!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
@@ -158,34 +164,43 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
     override fun setValue(position: Int, type: Int) {
         when (type) {
             Constants.ListTypes.INSURANCE_TYPE -> {
-                typeValue!!.text = insurances!![position]
-                typeValue!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
-                typeValue!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
-                typeChoice!!.visibility = View.GONE
-                typeValue!!.visibility = View.VISIBLE
+                if(viewModel!!.type != position) {
+                    typeListOpen = false
+                    typeValue!!.text = insurances!![position]
+                    typeValue!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+                    typeValue!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
+                    typeChoice!!.visibility = View.GONE
+                    typeValue!!.visibility = View.VISIBLE
 
-                providerFrame!!.visibility = View.VISIBLE
-                divider!!.visibility = View.VISIBLE
-                buy!!.visibility = View.VISIBLE
+                    providerFrame!!.visibility = View.VISIBLE
+                    divider!!.visibility = View.VISIBLE
+                    buy!!.visibility = View.VISIBLE
 
-                providerText!!.text = "Insurance Provider*"
-                providerText!!.visibility = View.VISIBLE
-                providerChoice!!.visibility = View.GONE
-                providerText!!.setTextColor(resources.getColor(R.color.Grey))
-                providerFrame!!.background = resources.getDrawable(R.drawable.dropdown_item_8dp)
+                    providerText!!.text = "Insurance Provider*"
+                    providerText!!.visibility = View.VISIBLE
+                    providerChoice!!.visibility = View.GONE
+                    providerText!!.setTextColor(resources.getColor(R.color.Grey))
+                    providerFrame!!.background = resources.getDrawable(R.drawable.dropdown_item_8dp)
 
-                policyNumber!!.visibility = View.GONE
-                next!!.visibility = View.GONE
-                policyNumber!!.setText("")
+                    policyNumber!!.visibility = View.GONE
+                    next!!.visibility = View.GONE
+                    policyNumber!!.setText("")
 
-                viewModel!!.setType(position).observe(this, Observer { result ->
-                    providers!!.clear()
-                    providers!!.addAll(result)
-                    providerAdapter!!.notifyDataSetChanged()
-                })
+                    viewModel!!.setType(position).observe(this, Observer { result ->
+                        providers!!.clear()
+                        providers!!.addAll(result)
+                        providerAdapter!!.notifyDataSetChanged()
+                    })
+
+                    viewModel!!.provider = null
+                } else {
+                    closeList()
+                }
             }
 
             Constants.ListTypes.INSURANCE_PROVIDER -> {
+                providerListOpen = false
+
                 providerText!!.text = providers!![position].name
                 providerText!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
                 providerChoice!!.visibility = View.GONE
@@ -198,4 +213,50 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
             }
         }
     }
+
+    fun closeList() {
+        if(typeListOpen){
+            typeListOpen = false
+            typeValue!!.visibility = View.VISIBLE
+            typeChoice!!.visibility = View.GONE
+
+            providerFrame!!.visibility = View.VISIBLE
+
+            if(viewModel!!.provider == null) {
+                divider!!.visibility = View.VISIBLE
+                buy!!.visibility = View.VISIBLE
+                policyNumber!!.visibility = View.GONE
+                next!!.visibility = View.GONE
+            } else {
+                divider!!.visibility = View.GONE
+                buy!!.visibility = View.GONE
+                policyNumber!!.visibility = View.VISIBLE
+                next!!.visibility = View.VISIBLE
+            }
+        }
+        else if(providerListOpen){
+            providerListOpen = false
+            providerText!!.visibility = View.VISIBLE
+            providerChoice!!.visibility = View.GONE
+
+            if(viewModel!!.provider == null) {
+                providerFrame!!.background = resources.getDrawable(R.drawable.dropdown_item_8dp)
+                divider!!.visibility = View.VISIBLE
+                buy!!.visibility = View.VISIBLE
+                policyNumber!!.visibility = View.GONE
+                next!!.visibility = View.GONE
+            } else {
+                providerFrame!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
+                divider!!.visibility = View.GONE
+                buy!!.visibility = View.GONE
+                policyNumber!!.visibility = View.VISIBLE
+                next!!.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    val isListOpen: Boolean
+        get() {
+            return typeListOpen || providerListOpen
+        }
 }
