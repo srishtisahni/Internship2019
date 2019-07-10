@@ -7,12 +7,14 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.policyfolio.data.local.classes.Documents;
+import com.example.policyfolio.data.local.classes.InsuranceProducts;
 import com.example.policyfolio.data.local.classes.InsuranceProvider;
 import com.example.policyfolio.data.local.classes.Nominee;
 import com.example.policyfolio.data.local.classes.Notifications;
 import com.example.policyfolio.data.local.classes.Policy;
 import com.example.policyfolio.data.local.classes.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
@@ -42,6 +44,9 @@ public interface PolicyFolioDao {
 
     @Query("SELECT * from InsuranceProvider where type = :type")
     LiveData<List<InsuranceProvider>> getProvidersFromType(int type);   //Fetch Insurance Providers of a certain type
+
+    @Query("SELECT * from InsuranceProducts where type = :type")
+    LiveData<List<InsuranceProducts>> getProductsFromType(int type);
 
     @Query("SELECT * from Nominee where userId = :id")
     LiveData<List<Nominee>> getNomineesForUser(String id);              //Fetch Nominees for a particular User
@@ -90,4 +95,7 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     void putDocuments(Documents documents);
+
+    @Insert(onConflict = REPLACE)
+    void putInsuranceProducts(List<InsuranceProducts> products);
 }

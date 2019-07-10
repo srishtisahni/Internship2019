@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.policyfolio.data.local.classes.Documents;
 import com.example.policyfolio.data.firebase.classes.Query;
+import com.example.policyfolio.data.local.classes.InsuranceProducts;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.data.local.classes.InsuranceProvider;
 import com.example.policyfolio.data.local.classes.Nominee;
@@ -494,5 +495,30 @@ public class DataManager {
                     }
                 });
         return result;
+    }
+
+    public void fetchProducts(int type, AppDatabase appDatabase) {
+        firebaseFirestore.collectionGroup(Constants.FirebaseDataManager.COLLECTION_PRODUCTS)
+                .whereEqualTo(Constants.InsuranceProviders.TYPE,type)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if(task.isSuccessful()){
+                            List<DocumentSnapshot> documentSnapshots = task.getResult().getDocuments();
+                            final ArrayList<InsuranceProducts> products = new ArrayList<>();
+                            for (int i = 0; i < documentSnapshots.size(); i++) {
+                                products.add(documentSnapshots.get(i).toObject(InsuranceProducts.class));
+                                products.get(i).setLastUpdated(System.currentTimeMillis()/1000);
+                            }
+                            appExecutors.diskIO().execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    appDatabase.policyFolioDao().putInsuranceProducts(products);
+                                }
+                            });
+                        }
+                    }
+                });
     }
 }

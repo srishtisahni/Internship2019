@@ -30,7 +30,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/nominees"
+            android:id="@+id/products"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -51,9 +51,9 @@
             android:text="Add a new Nominee"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/nominees"
-            app:layout_constraintStart_toStartOf="@+id/nominees"
-            app:layout_constraintTop_toBottomOf="@+id/nominees" />
+            app:layout_constraintEnd_toEndOf="@+id/products"
+            app:layout_constraintStart_toStartOf="@+id/products"
+            app:layout_constraintTop_toBottomOf="@+id/products" />
 
         <LinearLayout
             android:visibility="gone"

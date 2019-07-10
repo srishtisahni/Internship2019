@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.policyfolio.data.local.classes.InsuranceProducts;
 import com.example.policyfolio.data.local.classes.InsuranceProvider;
 import com.example.policyfolio.data.local.classes.Nominee;
 import com.example.policyfolio.data.local.classes.Policy;
@@ -19,6 +20,7 @@ public class Cache {
     private HashMap<String,  LiveData<List<Nominee>>> nominees;
     private HashMap<String, LiveData<List<Policy>>> policies;
     private HashMap<Integer, LiveData<List<InsuranceProvider>>> providers;
+    private HashMap<Integer, LiveData<List<InsuranceProducts>>> products;
     private LiveData<List<InsuranceProvider>> allProviders;
     private HashMap<String, LiveData<Documents>> documents;
     private HashMap<String, Bitmap> images;
@@ -38,6 +40,7 @@ public class Cache {
         nominees = new HashMap<>();
         policies = new HashMap<>();
         providers = new HashMap<>();
+        products = new HashMap<>();
         documents = new HashMap<>();
         images = new HashMap<>();
     }
@@ -104,5 +107,13 @@ public class Cache {
 
     public void clearImage(String uId, String filename) {
         images.remove(uId+"_"+filename);
+    }
+
+    public LiveData<List<InsuranceProducts>> getProducts(int type) {
+        return products.get(type);
+    }
+
+    public void setProducts(Integer type, LiveData<List<InsuranceProducts>> products) {
+        this.products.put(type, products);
     }
 }
