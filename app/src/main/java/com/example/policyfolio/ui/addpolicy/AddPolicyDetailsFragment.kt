@@ -35,6 +35,7 @@ import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownNomineeAdap
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
 import com.example.policyfolio.viewmodels.AddPolicyViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 import java.io.ByteArrayOutputStream
 import java.util.ArrayList
@@ -250,29 +251,37 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
         }
 
         done!!.setOnClickListener {
-            coverError!!.visibility = View.GONE
-            coverAmount!!.nonEmpty { message ->
-                coverError!!.text = message
-                coverError!!.visibility = View.VISIBLE
-            }
+            coverAmount!!.validator()
+                    .nonEmpty()
+                    .addErrorCallback { message ->
+                        coverError!!.text = message
+                        coverError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        coverError!!.visibility = View.GONE
+                    }.check()
 
-            frequencyError!!.visibility = View.GONE
             if(viewModel!!.premiumFrequency == -1){
                 frequencyError!!.visibility = View.VISIBLE
             }
 
-            premiumError!!.visibility = View.GONE
-            premiumAmount!!.nonEmpty { message ->
-                premiumError!!.text = message
-                premiumError!!.visibility = View.VISIBLE
-            }
+            premiumAmount!!.validator()
+                    .nonEmpty()
+                    .addErrorCallback { message ->
+                        premiumError!!.text = message
+                        premiumError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        premiumError!!.visibility = View.GONE
+                    }.check()
 
             dueError!!.visibility = dueDateImage!!.visibility
             matureError!!.visibility = matureDateImage!!.visibility
 
-            nomineeError!!.visibility = View.GONE
             if(viewModel!!.nominee == null){
                 nomineeError!!.visibility = View.VISIBLE
+            } else{
+                nomineeError!!.visibility = View.GONE
             }
 
             if(coverError!!.isGone && frequencyError!!.isGone && premiumError!!.isGone && dueError!!.isGone && matureError!!.isGone && nomineeError!!.isGone){

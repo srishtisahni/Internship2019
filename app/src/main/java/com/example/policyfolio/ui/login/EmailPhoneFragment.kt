@@ -23,6 +23,7 @@ import com.example.policyfolio.R
 import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.hbb20.CountryCodePicker
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 /**
  * A simple [Fragment] subclass.
@@ -80,32 +81,32 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
     private fun setOnClick() {
         done!!.setOnClickListener {
             if(email!!.isVisible){
-                textError!!.visibility = View.GONE
-                email!!.validEmail { message ->
-                    textError!!.text = message
-                    textError!!.visibility = View.VISIBLE
-                }
-                if(textError!!.isGone){
-                    viewModel!!.email = email!!.text.toString()
-                    callback.EmailNext()
-                } else {
-                    callback.showSnackbar("Invalid Email!")
-                }
+                email!!.validator()
+                        .validEmail()
+                        .addErrorCallback { message ->
+                            textError!!.text = message
+                            textError!!.visibility = View.VISIBLE
+                            callback.showSnackbar("Invalid Email!")
+                        }
+                        .addSuccessCallback {
+                            textError!!.visibility = View.GONE
+                            viewModel!!.email = email!!.text.toString()
+                            callback.EmailNext()
+                        }.check()
             }
             else if (phone!!.isVisible) {
                 val phone = ccp!!.formattedFullNumber
-                if (phone == "") {
-                    textError!!.visibility = View.VISIBLE
-                    textError!!.text = "Can't be empty!"
-                    callback.showSnackbar("Incomplete Information!")
-                } else if (!ccp!!.isValidFullNumber) {
-                    textError!!.visibility = View.VISIBLE
-                    textError!!.text = "Invalid Phone Number!"
-                    callback.showSnackbar("Invalid Phone Number!")
-                } else {
-                    textError!!.visibility = View.GONE
-                    callback.PhoneSignUp()
-                }
+                phone.validator()
+                        .validNumber()
+                        .addErrorCallback { message ->
+                            textError!!.text = message
+                            textError!!.visibility = View.VISIBLE
+                            callback.showSnackbar("Invalid Phone Number!")
+                        }
+                        .addSuccessCallback {
+                            textError!!.visibility = View.GONE
+                            callback.PhoneSignUp()
+                        }.check()
             }
         }
     }

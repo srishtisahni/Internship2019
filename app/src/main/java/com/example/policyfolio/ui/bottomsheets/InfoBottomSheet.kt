@@ -118,21 +118,25 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
 
     private fun save() {
         val phone = ccp!!.formattedFullNumber
-        if (phone == "") {
-            phoneError!!.visibility = View.VISIBLE
-            phoneError!!.text = "Can't be empty!"
-        } else if (!ccp!!.isValidFullNumber) {
-            phoneError!!.visibility = View.VISIBLE
-            phoneError!!.text = "Invalid Phone Number!"
-        } else {
-            phoneError!!.visibility = View.GONE
-        }
+        phone.validator()
+                .validNumber()
+                .addErrorCallback { message ->
+                    phoneError!!.text = message
+                    phoneError!!.visibility = View.VISIBLE
+                }
+                .addSuccessCallback {
+                    phoneError!!.visibility = View.GONE
+                }.check()
 
-        nameError!!.visibility = View.GONE
-        name!!.nonEmpty { message ->
-            nameError!!.text = message
-            nameError!!.visibility = View.VISIBLE
-        }
+        name!!.validator()
+                .nonEmpty()
+                .addErrorCallback { message ->
+                    nameError!!.text = message
+                    nameError!!.visibility = View.VISIBLE
+                }
+                .addSuccessCallback {
+                    nameError!!.visibility = View.GONE
+                }.check()
 
         if (birthdayEpoch == null) {
             birthdayError!!.visibility = View.VISIBLE
@@ -140,11 +144,15 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
             birthdayError!!.visibility = View.GONE
         }
 
-        cityError!!.visibility = View.GONE
-        city!!.nonEmpty { message ->
-            cityError!!.text = message
-            cityError!!.visibility = View.VISIBLE
-        }
+        city!!.validator()
+                .nonEmpty()
+                .addErrorCallback { message ->
+                    cityError!!.text = message
+                    cityError!!.visibility = View.VISIBLE
+                }
+                .addSuccessCallback {
+                    cityError!!.visibility = View.GONE
+                }.check()
 
         if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && phoneError!!.isGone) {
             viewModel.complete = true

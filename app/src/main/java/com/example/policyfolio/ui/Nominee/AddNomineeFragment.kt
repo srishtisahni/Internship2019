@@ -23,6 +23,7 @@ import com.example.policyfolio.viewmodels.NomineeViewModel
 import com.hbb20.CountryCodePicker
 import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 /**
  * A simple [Fragment] subclass.
@@ -173,35 +174,36 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
         relation!!.setOnClickListener { callback.openListSheet(Constants.ListTypes.RELATIONSHIPS, textAdapter) }
 
         done!!.setOnClickListener {
-            nameError!!.isVisible = false
-            nameError!!.isGone = true
-            name!!.nonEmpty { message ->
-                nameError!!.text = message
-                nameError!!.isVisible = true
-                nameError!!.isGone = false
-            }
+            name!!.validator()
+                    .nonEmpty()
+                    .addErrorCallback { message ->
+                        nameError!!.text = message
+                        nameError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        nameError!!.visibility = View.GONE
+                    }.check()
 
-            emailError!!.isVisible = false
-            emailError!!.isGone = true
-            email!!.validEmail{ message ->
-                emailError!!.text = message
-                emailError!!.isVisible = true
-                emailError!!.isGone = false
-            }
+            emailError!!.validator()
+                    .validEmail()
+                    .addErrorCallback { message ->
+                        emailError!!.text = message
+                        emailError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        emailError!!.visibility = View.GONE
+                    }.check()
 
             val phone = ccp!!.formattedFullNumber
-            if (phone == "") {
-                phoneError!!.isVisible = true
-                phoneError!!.isGone = false
-                phoneError!!.text = "Can't be empty!"
-            } else if (!ccp!!.isValidFullNumber) {
-                phoneError!!.isVisible = true
-                phoneError!!.isGone = false
-                phoneError!!.text = "Invalid Phone Number!"
-            } else {
-                phoneError!!.isVisible = false
-                phoneError!!.isGone = true
-            }
+            phone.validator()
+                    .validNumber()
+                    .addErrorCallback { message ->
+                        phoneError!!.text = message
+                        phoneError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        phoneError!!.visibility = View.GONE
+                    }.check()
 
             if(viewModel!!.relation == -1){
                 relationError!!.isVisible = true

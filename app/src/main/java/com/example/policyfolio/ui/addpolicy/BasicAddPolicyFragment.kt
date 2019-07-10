@@ -30,6 +30,7 @@ import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownProviderAda
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
 import com.example.policyfolio.viewmodels.AddPolicyViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 import java.util.ArrayList
 
@@ -136,10 +137,16 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
 
         next!!.setOnClickListener {
             numberEmpty!!.visibility = View.GONE
-            policyNumber!!.minLength(10){message ->
-                numberEmpty!!.text = message
-                numberEmpty!!.visibility = View.VISIBLE
-            }
+            policyNumber!!.validator()
+                    .minLength(10)
+                    .addErrorCallback{message ->
+                        numberEmpty!!.text = message
+                        numberEmpty!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        numberEmpty!!.visibility = View.GONE
+                    }.check()
+
             if(numberEmpty!!.isGone) {
                 viewModel!!.policyNumber = policyNumber!!.text.toString().toUpperCase()
                 callback.next()

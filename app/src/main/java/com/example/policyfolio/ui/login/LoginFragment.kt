@@ -21,7 +21,9 @@ import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.facebook.login.widget.LoginButton
 import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import de.hdodenhof.circleimageview.CircleImageView
+import java.util.zip.GZIPOutputStream
 
 /**
  * A simple [Fragment] subclass.
@@ -103,17 +105,25 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
 
     private fun setListeners() {
         login!!.setOnClickListener {
-            emailError!!.visibility = View.GONE
-            emailText!!.validEmail { message ->
-                emailError!!.text = message
-                emailError!!.visibility = View.VISIBLE
-            }
+            emailText!!.validator()
+                    .validEmail()
+                    .addErrorCallback { message ->
+                        emailError!!.text = message
+                        emailError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        emailError!!.visibility = View.GONE
+                    }.check()
 
-            passwordError!!.visibility = View.GONE
-            password!!.minLength(8) {message ->
-                passwordError!!.text = message
-                passwordError!!.visibility = View.VISIBLE
-            }
+            passwordError!!.validator()
+                    .minLength(8)
+                    .addErrorCallback { message ->
+                        passwordError!!.text = message
+                        passwordError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        passwordError!!.visibility = View.GONE
+                    }.check()
 
             if( passwordError!!.isGone && emailError!!.isGone){
                 viewModel!!.email = emailText!!.text.toString()
