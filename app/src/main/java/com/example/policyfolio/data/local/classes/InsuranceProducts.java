@@ -15,14 +15,22 @@ public class InsuranceProducts {
     @PrimaryKey @NonNull
     private String id;
     private Long providerId;
+    private int type;
     private String name;
     private Long lastUpdated;
+    private Integer frequency;
+    private String premium;
+    private String sumAssured;
 
     @Ignore
-    public InsuranceProducts(String id, Long providerId, String name){
+    public InsuranceProducts(String id, Long providerId, String name, Integer frequency, String premium, String sumAssured, int type){
         this.id = id;
         this.providerId = providerId;
         this.name = name;
+        this.frequency = frequency;
+        this.premium = premium;
+        this.sumAssured = sumAssured;
+        this.type = type;
         setLastUpdated(System.currentTimeMillis()/1000);
     }
 
@@ -52,6 +60,38 @@ public class InsuranceProducts {
 
     public void setProviderId(Long providerId) {
         this.providerId = providerId;
+    }
+
+    public Integer getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(Integer frequency) {
+        this.frequency = frequency;
+    }
+
+    public String getPremium() {
+        return premium;
+    }
+
+    public void setPremium(String premium) {
+        this.premium = premium;
+    }
+
+    public String getSumAssured() {
+        return sumAssured;
+    }
+
+    public void setSumAssured(String sumAssured) {
+        this.sumAssured = sumAssured;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public Long getLastUpdated() {

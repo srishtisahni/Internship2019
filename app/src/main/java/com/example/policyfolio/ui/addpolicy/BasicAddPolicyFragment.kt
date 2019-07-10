@@ -14,19 +14,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 
 import com.example.policyfolio.util.Constants
 import com.example.policyfolio.data.local.classes.InsuranceProvider
 import com.example.policyfolio.R
+import com.example.policyfolio.data.local.classes.InsuranceProducts
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownProviderAdapter
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
+import com.example.policyfolio.ui.adapters.ListAdapters.BuyPolicyAdapter
 import com.example.policyfolio.viewmodels.AddPolicyViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
@@ -36,7 +34,7 @@ import java.util.ArrayList
 /**
  * A simple [Fragment] subclass.
  */
-class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment(), BasicDropdownTextAdapter.ParentCallback, BasicDropdownProviderAdapter.ParentCallback {
+class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment(), BasicDropdownTextAdapter.ParentCallback, BasicDropdownProviderAdapter.ParentCallback, BuyPolicyAdapter.ParentCallback {
 
     private var rootView: View? = null
     private var viewModel: AddPolicyViewModel? = null
@@ -61,7 +59,9 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
 
     private var divider: LinearLayout? = null
     private var buy: ConstraintLayout? = null
-    private var sellerList: RecyclerView? = null
+    private var productList: RecyclerView? = null
+    private var products: ArrayList<InsuranceProducts>? = null
+    private var productsAdapter: BuyPolicyAdapter? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -84,7 +84,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
         divider = rootView!!.findViewById(R.id.divider)
 
         buy = rootView!!.findViewById(R.id.buy_new)
-        sellerList = rootView!!.findViewById(R.id.policy_sellers)
+        productList = rootView!!.findViewById(R.id.policy_sellers)
 
         setUpViews()
         setDefaultType()
@@ -124,6 +124,11 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
         providerAdapter = BasicDropdownProviderAdapter(context, providers, this)
         providerChoice!!.adapter = providerAdapter
         providerChoice!!.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+
+        products = ArrayList()
+        productsAdapter = BuyPolicyAdapter(context,products,this)
+        productList!!.adapter = productsAdapter
+        productList!!.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
 
         providerFrame!!.setOnClickListener {
             closeList()
@@ -191,6 +196,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                         providers!!.addAll(result)
                         providerAdapter!!.notifyDataSetChanged()
                     })
+                    viewModel!!.getProducts()
 
                     viewModel!!.provider = null
                 } else {
@@ -212,6 +218,10 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                 viewModel!!.provider = providers!![position]
             }
         }
+    }
+
+    override fun setProvider(image: ImageView?, textView: TextView?, providerId: Long?) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun closeList() {

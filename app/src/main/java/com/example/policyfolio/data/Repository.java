@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.data.local.classes.InsuranceProducts;
 import com.example.policyfolio.data.local.classes.Notifications;
 import com.example.policyfolio.data.facebook.dataclasses.FacebookData;
 import com.example.policyfolio.data.local.classes.InsuranceProvider;
@@ -286,5 +287,12 @@ public class Repository {
             }
         });
         return dataManager.addDocuments(documents);
+    }
+
+    public LiveData<List<InsuranceProducts>> getInsuranceProducts(int type) {
+        dataManager.fetchProducts(type,appDatabase);
+        if(cache.getProducts(type) == null)
+            cache.setProducts(type, appDatabase.policyFolioDao().getProductsFromType(type));
+        return cache.getProducts(type);
     }
 }

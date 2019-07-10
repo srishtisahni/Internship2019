@@ -12,8 +12,8 @@ public class InsuranceProvider {
     private Long id;
     private String name;
     private int type;
-    private String photoUrl;
     private Long lastUpdated;
+    private String photoUrl;
 
     public InsuranceProvider(){
         setLastUpdated(System.currentTimeMillis()/1000);
