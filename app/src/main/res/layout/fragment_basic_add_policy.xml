@@ -204,8 +204,8 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="gone"
             android:id="@+id/buy_new"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
@@ -234,7 +234,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/policy_sellers"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="12dp"

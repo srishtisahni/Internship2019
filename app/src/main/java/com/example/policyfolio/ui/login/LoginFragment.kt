@@ -4,6 +4,7 @@ package com.example.policyfolio.ui.login
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -19,8 +21,7 @@ import com.example.policyfolio.R
 import com.example.policyfolio.util.Constants
 import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.facebook.login.widget.LoginButton
-import com.wajahatkarim3.easyvalidation.core.view_ktx.minLength
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
+import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 import de.hdodenhof.circleimageview.CircleImageView
 
 /**
@@ -103,17 +104,27 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
 
     private fun setListeners() {
         login!!.setOnClickListener {
-            emailError!!.visibility = View.GONE
-            emailText!!.validEmail { message ->
-                emailError!!.text = message
-                emailError!!.visibility = View.VISIBLE
-            }
+            emailText!!.validator()
+                    .validEmail()
+                    .addErrorCallback { message ->
+                        emailError!!.text = message
+                        emailError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        emailError!!.visibility = View.GONE
+                    }.check()
+            Log.e("EMAIL ERROR",emailError!!.isVisible.toString())
 
-            passwordError!!.visibility = View.GONE
-            password!!.minLength(8) {message ->
-                passwordError!!.text = message
-                passwordError!!.visibility = View.VISIBLE
-            }
+            password!!.validator()
+                    .minLength(8)
+                    .addErrorCallback { message ->
+                        passwordError!!.text = message
+                        passwordError!!.visibility = View.VISIBLE
+                    }
+                    .addSuccessCallback {
+                        passwordError!!.visibility = View.GONE
+                    }.check()
+            Log.e("PASSWORD ERROR",passwordError!!.isVisible.toString())
 
             if( passwordError!!.isGone && emailError!!.isGone){
                 viewModel!!.email = emailText!!.text.toString()

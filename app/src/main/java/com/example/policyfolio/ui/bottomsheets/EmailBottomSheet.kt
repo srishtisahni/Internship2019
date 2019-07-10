@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,6 +72,7 @@ class EmailBottomSheet @SuppressLint("ValidFragment") constructor(private val ca
                             error!!.visibility = View.GONE
                         }
                         .check()
+                Log.e("EMAIL ERROR",error!!.isVisible.toString())
             }
 
             override fun afterTextChanged(editable: Editable) {
