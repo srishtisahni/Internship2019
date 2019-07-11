@@ -12,6 +12,7 @@ import com.example.policyfolio.data.local.classes.InsuranceProvider;
 import com.example.policyfolio.data.local.classes.Nominee;
 import com.example.policyfolio.data.local.classes.Notifications;
 import com.example.policyfolio.data.local.classes.Policy;
+import com.example.policyfolio.data.local.classes.ProviderTypeRelationship;
 import com.example.policyfolio.data.local.classes.User;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public interface PolicyFolioDao {
     @Query("SELECT * from InsuranceProvider")
     LiveData<List<InsuranceProvider>> getProviders();                         //Fetch All Insurance Providers
 
-    @Query("SELECT * from InsuranceProvider where type = :type")
+    @Query("SELECT * from InsuranceProvider where id in (SELECT providerId from ProviderTypeRelationship where type = :type)")
     LiveData<List<InsuranceProvider>> getProvidersFromType(int type);   //Fetch Insurance Providers of a certain type
 
     @Query("SELECT * from InsuranceProducts where type = :type")
@@ -59,6 +60,9 @@ public interface PolicyFolioDao {
 
     @Query("SELECT * from Notifications")
     LiveData<List<Notifications>> getAllNotifications();
+
+    @Query("SELECT id from ProviderTypeRelationship where providerId = :providerId and type = :type")
+    List<Long> getRelationId(Long providerId, int type);
 
     @Query("DELETE from Notifications where policyNumber = :policyNumber")
     void deleteNotifications(String policyNumber);                      //Deletes Notifications for a policy
@@ -98,4 +102,7 @@ public interface PolicyFolioDao {
 
     @Insert(onConflict = REPLACE)
     void putInsuranceProducts(List<InsuranceProducts> products);
+
+    @Insert(onConflict = REPLACE)
+    void putProviderRelationship(ProviderTypeRelationship relationship);
 }

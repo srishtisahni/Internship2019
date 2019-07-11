@@ -1,9 +1,9 @@
 package com.example.policyfolio.ui.addpolicy
 
 
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -25,6 +25,7 @@ import com.example.policyfolio.data.local.classes.InsuranceProducts
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownProviderAdapter
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
 import com.example.policyfolio.ui.adapters.ListAdapters.BuyPolicyAdapter
+import com.example.policyfolio.util.Glide.GlideApp
 import com.example.policyfolio.viewmodels.AddPolicyViewModel
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
@@ -58,7 +59,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
     private var next: Button? = null
 
     private var divider: LinearLayout? = null
-    private var buy: ConstraintLayout? = null
+    private var buy: LinearLayout? = null
     private var productList: RecyclerView? = null
     private var products: ArrayList<InsuranceProducts>? = null
     private var productsAdapter: BuyPolicyAdapter? = null
@@ -225,7 +226,15 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
     }
 
     override fun setProvider(image: ImageView?, textView: TextView?, providerId: Long?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        for(item in providers!!)
+            if(item.id == providerId) {
+                textView!!.text = item.name
+                GlideApp.with(context!!)
+                        .load(viewModel!!.getReference(item.photoUrl,providerId))
+                        .placeholder(BitmapDrawable(resources,viewModel!!.getProviderImage(providerId)))
+                        .into(image!!)
+                break
+            }
     }
 
     fun closeList() {

@@ -11,7 +11,6 @@ public class InsuranceProvider {
     @NonNull @PrimaryKey(autoGenerate = true)
     private Long id;
     private String name;
-    private int type;
     private Long lastUpdated;
     private String photoUrl;
 
@@ -20,10 +19,9 @@ public class InsuranceProvider {
     }
 
     @Ignore
-    public InsuranceProvider(Long id, String name, int type, String photoUrl){
+    public InsuranceProvider(Long id, String name, String photoUrl){
         this.id = id;
         this.name = name;
-        this.type = type;
         this.photoUrl = photoUrl;
         setLastUpdated(System.currentTimeMillis()/1000);
     }
@@ -43,14 +41,6 @@ public class InsuranceProvider {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public String getPhotoUrl() {

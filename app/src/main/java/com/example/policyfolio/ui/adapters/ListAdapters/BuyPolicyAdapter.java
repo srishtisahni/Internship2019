@@ -45,8 +45,10 @@ public class BuyPolicyAdapter extends RecyclerView.Adapter<BuyPolicyAdapter.View
         NumberFormat formatter = NumberFormat.getCurrencyInstance(new Locale("en", "in"));
 
         holder.name.setText(products.get(position).getName());
-        holder.premium.setText(formatter.format(Double.parseDouble(products.get(position).getPremium())) + frequency[products.get(position).getFrequency()]);
-        holder.cover.setText(formatter.format(Double.parseDouble(products.get(position).getSumAssured())));
+        String moneyString = formatter.format(Double.parseDouble(products.get(position).getPremium()));
+        holder.premium.setText(moneyString.substring(0,moneyString.lastIndexOf(".00")) + " - " + frequency[products.get(position).getFrequency()]);
+        moneyString = formatter.format(Double.parseDouble(products.get(position).getSumAssured()));
+        holder.cover.setText(moneyString.substring(0,moneyString.lastIndexOf(".00")));
 
         callback.setProvider(holder.image,holder.provider,products.get(position).getProviderId());
     }

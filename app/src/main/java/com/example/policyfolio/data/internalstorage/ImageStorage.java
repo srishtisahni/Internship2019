@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 
 import com.example.policyfolio.util.Constants;
 
@@ -57,5 +58,26 @@ public class ImageStorage {
         file=new File(file,uId+"_"+filename+".jpg");
         boolean delete = file.delete();
         return delete;
+    }
+
+    public Bitmap fetchProviderImage(long providerId) {
+        File file=wrapper.getDir(Constants.Documents.PROVIDER_IMAGE_DIRECTORY,Context.MODE_PRIVATE);
+        file=new File(file,providerId+".jpg");
+        String path=file.getAbsolutePath();
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        return bitmap;
+    }
+
+    public void saveProviderImage(long providerId, Bitmap bmp) {
+        File file=wrapper.getDir(Constants.Documents.PROVIDER_IMAGE_DIRECTORY,Context.MODE_PRIVATE);
+        file=new File(file,providerId+".jpg");
+        try {
+            OutputStream stream=new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG,100,stream);
+            stream.flush();
+            stream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
