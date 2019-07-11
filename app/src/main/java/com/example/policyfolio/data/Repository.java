@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -28,6 +29,7 @@ import com.example.policyfolio.util.executors.AppExecutors;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -294,5 +296,13 @@ public class Repository {
         if(cache.getProducts(type) == null)
             cache.setProducts(type, appDatabase.policyFolioDao().getProductsFromType(type));
         return cache.getProducts(type);
+    }
+
+    public StorageReference getPhotoReference(String photoUrl, long providerId) {
+        return storageManager.getPhotoRefrence(photoUrl, providerId, imageStorage);
+    }
+
+    public Bitmap getProviderImage(long providerId) {
+        return imageStorage.fetchProviderImage(providerId);
     }
 }

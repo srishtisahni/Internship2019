@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.data.internalstorage.ImageStorage;
 import com.example.policyfolio.util.Constants;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -89,5 +90,21 @@ public class StorageManager {
                     result.setValue(false);
             }
         });
+    }
+
+    public StorageReference getPhotoRefrence(String photoUrl, long providerId, ImageStorage imageStorage) {
+        StorageReference reference = FirebaseStorage.getInstance().getReferenceFromUrl(photoUrl);
+        reference.getBytes(Constants.Documents.ONE_MEGABYTE).addOnCompleteListener(new OnCompleteListener<byte[]>() {
+            @Override
+            public void onComplete(@NonNull Task<byte[]> task) {
+                if(task.isSuccessful()){
+                    byte[] bytes=task.getResult();
+                    ByteArrayInputStream inputStream= new ByteArrayInputStream(bytes);
+                    Bitmap bmp= BitmapFactory.decodeStream(inputStream);
+                    imageStorage.saveProviderImage(providerId,bmp);
+                }
+            }
+        });
+        return reference;
     }
 }

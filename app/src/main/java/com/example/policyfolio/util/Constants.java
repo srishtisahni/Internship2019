@@ -207,6 +207,7 @@ public class Constants {
         public static final int NUMBER = 6;
 
         public static final String IMAGE_DIRECTORY = "images";
+        public static final String PROVIDER_IMAGE_DIRECTORY = "insurance_providers";
         public static final long ONE_MEGABYTE = 1024*1024;
         public static final String[] NAMES = {"adhaar", "passport", "pan", "voter", "driving", "ration"};
     }

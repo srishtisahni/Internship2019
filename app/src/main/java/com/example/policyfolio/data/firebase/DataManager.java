@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.policyfolio.data.local.classes.Documents;
 import com.example.policyfolio.data.firebase.classes.Query;
 import com.example.policyfolio.data.local.classes.InsuranceProducts;
+import com.example.policyfolio.data.local.classes.ProviderTypeRelationship;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.data.local.classes.InsuranceProvider;
 import com.example.policyfolio.data.local.classes.Nominee;
@@ -218,7 +219,7 @@ public class DataManager {
     public void fetchProviders(int type, final AppDatabase appDatabase) {
         //Updates the local database using the fetched provider information from firestore
         firebaseFirestore.collection(Constants.FirebaseDataManager.COLLECTION_PROVIDERS)
-                .whereEqualTo(Constants.InsuranceProviders.TYPE,type)
+                .whereArrayContains(Constants.InsuranceProviders.TYPE,type)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -234,6 +235,10 @@ public class DataManager {
                                 @Override
                                 public void run() {
                                     appDatabase.policyFolioDao().putProviders(insuranceProviders);
+                                    for(int i=0;i<insuranceProviders.size();i++){
+                                        if(appDatabase.policyFolioDao().getRelationId(insuranceProviders.get(i).getId(),type).size() == 0)
+                                            appDatabase.policyFolioDao().putProviderRelationship(new ProviderTypeRelationship(insuranceProviders.get(i).getId(),type));
+                                    }
                                 }
                             });
                         }

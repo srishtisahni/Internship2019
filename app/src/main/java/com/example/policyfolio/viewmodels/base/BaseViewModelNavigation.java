@@ -10,6 +10,7 @@ import com.example.policyfolio.data.local.classes.User;
 import com.example.policyfolio.data.Repository;
 import com.example.policyfolio.util.Constants;
 import com.facebook.login.LoginManager;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -131,5 +132,9 @@ public class BaseViewModelNavigation extends ViewModel {
 
     public User getLocalUser() {
         return localUser;
+    }
+
+    public StorageReference getReference(String photoUrl, long providerId) {
+        return repository.getPhotoReference(photoUrl,providerId);
     }
 }

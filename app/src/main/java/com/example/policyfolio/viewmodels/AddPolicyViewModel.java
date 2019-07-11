@@ -1,6 +1,7 @@
 package com.example.policyfolio.viewmodels;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 
 import androidx.lifecycle.LiveData;
 
@@ -9,6 +10,8 @@ import com.example.policyfolio.data.local.classes.InsuranceProvider;
 import com.example.policyfolio.data.local.classes.Nominee;
 import com.example.policyfolio.data.local.classes.Policy;
 import com.example.policyfolio.viewmodels.base.BaseViewModelNavigation;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -142,5 +145,10 @@ public class AddPolicyViewModel extends BaseViewModelNavigation {
 
     public LiveData<List<InsuranceProducts>> getProducts() {
         return getRepository().getInsuranceProducts(type);
+    }
+
+    @NotNull
+    public Bitmap getProviderImage(long providerId) {
+        return getRepository().getProviderImage(providerId);
     }
 }
