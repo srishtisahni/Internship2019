@@ -18,6 +18,7 @@
             android:background="@color/colorPrimary"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -213,7 +214,6 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="240dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/list_background"
                 app:layout_constraintBottom_toBottomOf="parent"

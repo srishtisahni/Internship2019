@@ -88,6 +88,16 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
     }
 
     @Override
+    public void setBackgroundToGreen() {
+        super.setFragmentHolderBg(getResources().getColor(R.color.colorPrimaryDark));
+    }
+
+    @Override
+    public void setBackgroundToWhite() {
+        super.setFragmentHolderBg(getResources().getColor(R.color.white));
+    }
+
+    @Override
     public void addPolicy() {
         Intent intent = new Intent(this, AddPolicyActivity.class);
         startActivityForResult(intent,Constants.PermissionAndRequests.ADD_POLICY_REQUEST);

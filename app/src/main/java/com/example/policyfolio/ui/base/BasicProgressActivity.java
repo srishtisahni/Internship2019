@@ -157,4 +157,8 @@ public class BasicProgressActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
+
+    protected void setFragmentHolderBg(int color) {
+        fragmentHolder.setBackgroundColor(color);
+    }
 }

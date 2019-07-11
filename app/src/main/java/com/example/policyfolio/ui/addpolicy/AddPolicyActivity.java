@@ -261,4 +261,14 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
     public void closeListSheet() {
         super.collapseSheet();
     }
+
+    @Override
+    public void setBackgroundToGreen() {
+        super.setFragmentHolderBg(getResources().getColor(R.color.colorPrimaryDark));
+    }
+
+    @Override
+    public void setBackgroundToWhite() {
+        super.setFragmentHolderBg(getResources().getColor(R.color.white));
+    }
 }

@@ -116,6 +116,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
             providerFrame!!.visibility = View.GONE
             divider!!.visibility = View.GONE
             buy!!.visibility = View.GONE
+            callback.setBackgroundToWhite()
 
             policyNumber!!.visibility = View.GONE
             next!!.visibility = View.GONE
@@ -140,6 +141,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
 
             divider!!.visibility = View.GONE
             buy!!.visibility = View.GONE
+            callback.setBackgroundToWhite()
 
             policyNumber!!.visibility = View.GONE
             next!!.visibility = View.GONE
@@ -181,6 +183,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                     providerFrame!!.visibility = View.VISIBLE
                     divider!!.visibility = View.VISIBLE
                     buy!!.visibility = View.VISIBLE
+                    callback.setBackgroundToGreen()
 
                     providerText!!.text = "Insurance Provider*"
                     providerText!!.visibility = View.VISIBLE
@@ -249,11 +252,13 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
             if(viewModel!!.provider == null) {
                 divider!!.visibility = View.VISIBLE
                 buy!!.visibility = View.VISIBLE
+                callback.setBackgroundToGreen()
                 policyNumber!!.visibility = View.GONE
                 next!!.visibility = View.GONE
             } else {
                 divider!!.visibility = View.GONE
                 buy!!.visibility = View.GONE
+                callback.setBackgroundToWhite()
                 policyNumber!!.visibility = View.VISIBLE
                 next!!.visibility = View.VISIBLE
             }
@@ -267,12 +272,14 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                 providerFrame!!.background = resources.getDrawable(R.drawable.dropdown_item_8dp)
                 divider!!.visibility = View.VISIBLE
                 buy!!.visibility = View.VISIBLE
+                callback.setBackgroundToGreen()
                 policyNumber!!.visibility = View.GONE
                 next!!.visibility = View.GONE
             } else {
                 providerFrame!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
                 divider!!.visibility = View.GONE
                 buy!!.visibility = View.GONE
+                callback.setBackgroundToWhite()
                 policyNumber!!.visibility = View.VISIBLE
                 next!!.visibility = View.VISIBLE
             }

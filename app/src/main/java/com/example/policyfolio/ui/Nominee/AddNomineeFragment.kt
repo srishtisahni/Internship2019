@@ -21,8 +21,6 @@ import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
 import com.example.policyfolio.util.Constants
 import com.example.policyfolio.viewmodels.NomineeViewModel
 import com.hbb20.CountryCodePicker
-import com.wajahatkarim3.easyvalidation.core.view_ktx.nonEmpty
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
 
 /**

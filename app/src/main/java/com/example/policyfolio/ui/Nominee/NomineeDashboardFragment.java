@@ -132,10 +132,14 @@ public class NomineeDashboardFragment extends Fragment {
                                                         break;
                                                     }
                                                 meNomineeDisplayAdapter.notifyDataSetChanged();
-                                                if(meNomineeUsers.size()>0)
+                                                if(meNomineeUsers.size()>0) {
                                                     meNomineeLayout.setVisibility(View.VISIBLE);
-                                                else
+                                                    callback.setBackgroundToGreen();
+                                                }
+                                                else {
                                                     meNomineeLayout.setVisibility(View.GONE);
+                                                    callback.setBackgroundToWhite();
+                                                }
                                             }
                                         }
                                     }
