@@ -12,7 +12,7 @@ import com.example.policyfolio.ui.claim.ClaimSupportActivity;
 import com.example.policyfolio.ui.document.DocumentActivity;
 import com.example.policyfolio.ui.help.HelpActivity;
 import com.example.policyfolio.ui.login.LoginSignUpActivity;
-import com.example.policyfolio.ui.Nominee.NomineeSupportActivity;
+import com.example.policyfolio.ui.nominee.NomineeSupportActivity;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.util.receivers.PremiumDuesReceiver;

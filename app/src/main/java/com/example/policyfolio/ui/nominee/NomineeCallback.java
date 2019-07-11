@@ -1,4 +1,4 @@
-package com.example.policyfolio.ui.Nominee;
+package com.example.policyfolio.ui.nominee;
 
 import com.example.policyfolio.ui.base.BaseActivityFragmentCallback;
 

@@ -31,7 +31,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".ui.Nominee.NomineeSupportActivity"
+            android:name=".ui.nominee.NomineeSupportActivity"
             android:label="@string/title_activity_nominee_support"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

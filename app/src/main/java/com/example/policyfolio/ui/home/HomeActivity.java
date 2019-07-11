@@ -12,7 +12,7 @@ import com.example.policyfolio.data.local.classes.Notifications;
 import com.example.policyfolio.ui.bottomsheets.InfoBottomSheet;
 import com.example.policyfolio.ui.bottomsheets.InfoSheetCallback;
 import com.example.policyfolio.ui.login.LoginSignUpActivity;
-import com.example.policyfolio.ui.Nominee.NomineeSupportActivity;
+import com.example.policyfolio.ui.nominee.NomineeSupportActivity;
 import com.example.policyfolio.ui.promotions.PromotionsActivity;
 import com.example.policyfolio.ui.addpolicy.AddPolicyActivity;
 import com.example.policyfolio.ui.base.BaseNavigationActivity;
