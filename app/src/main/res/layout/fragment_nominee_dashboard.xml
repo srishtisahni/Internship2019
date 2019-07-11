@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:background="@color/white"
     tools:context=".ui.Nominee.NomineeDashboardFragment">
@@ -51,15 +50,14 @@
             android:text="Add a new Nominee"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/products"
-            app:layout_constraintStart_toStartOf="@+id/products"
-            app:layout_constraintTop_toBottomOf="@+id/products" />
+            app:layout_constraintEnd_toEndOf="@+id/nominees"
+            app:layout_constraintStart_toStartOf="@+id/nominees"
+            app:layout_constraintTop_toBottomOf="@+id/nominees" />
 
         <LinearLayout
-            android:visibility="gone"
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:background="@drawable/list_background"
             android:orientation="vertical"
