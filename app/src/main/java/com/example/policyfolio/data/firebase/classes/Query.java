@@ -5,12 +5,14 @@ public class Query {
     private String query;
     private boolean resolved;
     private int type;
+    private long epochTime;
 
-    public Query(String userId,String query, int type, boolean resolved){
+    public Query(String userId,String query, int type, boolean resolved, long epochTime){
         this.userId = userId;
         this.query = query;
         this.type = type;
         this.resolved = resolved;
+        this.epochTime = epochTime;
     }
 
     public int getType() {

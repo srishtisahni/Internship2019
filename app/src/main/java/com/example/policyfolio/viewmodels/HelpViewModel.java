@@ -26,6 +26,6 @@ public class HelpViewModel extends BaseViewModelNavigation {
     }
 
     public LiveData<String> saveQuery() {
-        return getRepository().saveQuery(new Query(getUid(),query,type,false));
+        return getRepository().saveQuery(new Query(getUid(),query,type,false,System.currentTimeMillis()/1000));
     }
 }

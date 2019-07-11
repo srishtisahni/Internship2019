@@ -198,6 +198,7 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                         providerAdapter!!.notifyDataSetChanged()
                     })
                     viewModel!!.products.observe(this, Observer { result ->
+                        Log.e("RESULTS PRODUCTS",result.size.toString())
                         products!!.clear()
                         products!!.addAll(result)
                         productsAdapter!!.notifyDataSetChanged()

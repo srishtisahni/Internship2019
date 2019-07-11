@@ -292,9 +292,9 @@ public class Repository {
     }
 
     public LiveData<List<InsuranceProducts>> getInsuranceProducts(int type) {
-        dataManager.fetchProducts(type,appDatabase);
         if(cache.getProducts(type) == null)
             cache.setProducts(type, appDatabase.policyFolioDao().getProductsFromType(type));
+        dataManager.fetchProducts(type,appDatabase);
         return cache.getProducts(type);
     }
 
