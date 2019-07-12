@@ -40,6 +40,7 @@ public class FirebaseAuthManager {
     private GoogleSignInOptions gso;
     private GoogleSignInClient client;
     private FirebaseAuth mAuth;
+    private String verificationId;
 
     private FirebaseAuthManager() {
         mAuth = FirebaseAuth.getInstance();
@@ -150,17 +151,18 @@ public class FirebaseAuthManager {
             }
 
             @Override
-            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                super.onCodeSent(s, forceResendingToken);
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                FirebaseAuthManager.this.verificationId = verificationId;
                 Toast.makeText(activity,"An OTP has been sent to "+phone,Toast.LENGTH_SHORT).show();
+                super.onCodeSent(verificationId, forceResendingToken);
             }
         });
         return  auth;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, String otp) {
+    public LiveData<FirebaseUser> phoneSignUp(String otp) {
         MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
-        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(phone,otp);
+        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(verificationId,otp);
         mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {

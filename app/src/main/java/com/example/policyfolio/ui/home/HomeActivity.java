@@ -132,6 +132,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                     HomeActivity.super.endSheetProgress();
                 }
             },viewModel);
+            super.removeSheetDraggingBehavior();
             expandSheet(infoBottomSheet);
         }
     }

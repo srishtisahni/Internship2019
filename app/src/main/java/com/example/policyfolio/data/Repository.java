@@ -95,9 +95,9 @@ public class Repository {
         return authentication.phoneSignUp(phone,activity);  //SignUp using phone number
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, String string) {
+    public LiveData<FirebaseUser> phoneSignUp(String string) {
         //Activity is passed as a parameter for verification functions
-        return authentication.phoneSignUp(phone,string);  //SignUp using phone number
+        return authentication.phoneSignUp(string);  //SignUp using phone number
     }
 
     public LiveData<FirebaseUser> SignUp(String email, String password) {

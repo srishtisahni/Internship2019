@@ -161,4 +161,37 @@ public class BasicProgressActivity extends AppCompatActivity {
     protected void setFragmentHolderBg(int color) {
         fragmentHolder.setBackgroundColor(color);
     }
+
+    protected void removeSheetDraggingBehavior() {
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        coverFragment.setVisibility(View.GONE);
+                        sheet.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        sheet.setVisibility(View.VISIBLE);
+                        coverFragment.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        coverFragment.setVisibility(View.GONE);
+                        sheet.setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
 }
