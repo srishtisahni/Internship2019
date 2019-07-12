@@ -63,16 +63,15 @@ class EmailBottomSheet @SuppressLint("ValidFragment") constructor(private val ca
                             next!!.isEnabled = false
                             next!!.background = resources.getDrawable(R.drawable.disabled_button_background_white)
                             next!!.setTextColor(resources.getColor(R.color.Grey))
-                            error!!.visibility = View.VISIBLE
+                            error!!.setTextColor(resources!!.getColor(R.color.red))
                         }
                         .addSuccessCallback {
                             next!!.isEnabled = true
                             next!!.background = resources.getDrawable(R.drawable.button_background_white)
                             next!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
-                            error!!.visibility = View.GONE
+                            error!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                         }
                         .check()
-                Log.e("EMAIL ERROR",error!!.isVisible.toString())
             }
 
             override fun afterTextChanged(editable: Editable) {

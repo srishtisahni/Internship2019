@@ -24,7 +24,7 @@ import android.util.Log;
 import com.example.policyfolio.R;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
-import com.example.policyfolio.util.receivers.PremiumDuesReceiver;
+import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
 import com.example.policyfolio.viewmodels.NomineeViewModel;
 
 import java.util.List;
@@ -169,7 +169,7 @@ public class NomineeSupportActivity extends BaseNavigationActivity implements No
                 if(!notifications.isEmpty()) {
                     for (int i = 0; i < notifications.size(); i++) {
                         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent(NomineeSupportActivity.this, PremiumDuesReceiver.class);
+                        Intent intent = new Intent(NomineeSupportActivity.this, PremiumNotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(NomineeSupportActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
                         if (pendingIntent != null) {
                             alarm.cancel(pendingIntent);

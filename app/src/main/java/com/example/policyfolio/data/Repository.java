@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -19,7 +18,7 @@ import com.example.policyfolio.data.local.classes.Policy;
 import com.example.policyfolio.data.local.classes.User;
 import com.example.policyfolio.data.local.AppDatabase;
 import com.example.policyfolio.data.facebook.GraphAPI;
-import com.example.policyfolio.data.firebase.AuthManager;
+import com.example.policyfolio.authentication.FirebaseAuthManager;
 import com.example.policyfolio.data.local.classes.Documents;
 import com.example.policyfolio.data.firebase.classes.Query;
 import com.example.policyfolio.data.firebase.DataManager;
@@ -38,17 +37,18 @@ public class Repository {
     //Fetches and stores data
     private GraphAPI graphAPI;
     public static Repository INSTANCE;
-    private AuthManager authentication;
+    private FirebaseAuthManager authentication;
     private DataManager dataManager;
     private StorageManager storageManager;
     private AppDatabase appDatabase;
     private ImageStorage imageStorage;
     private AppExecutors appExecutors;
     private Cache cache;
+    private MutableLiveData<FirebaseUser> phoneAuth;
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
-        authentication = AuthManager.getInstance();
+        authentication = FirebaseAuthManager.getInstance();
         dataManager = DataManager.getInstance();
         storageManager = StorageManager.getInstance();
         appDatabase = AppDatabase.getInstance(context);
@@ -93,7 +93,14 @@ public class Repository {
 
     public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
         //Activity is passed as a parameter for verification functions
-        return authentication.phoneSignUp(phone,activity);  //SignUp using phone number
+        if(phoneAuth == null)
+            phoneAuth = new MutableLiveData<>();
+        return authentication.phoneSignUp(phone,activity,phoneAuth);  //SignUp using phone number
+    }
+
+    public void phoneSignUp(String phone, String string) {
+        //Activity is passed as a parameter for verification functions
+        authentication.phoneSignUp(phone,string,phoneAuth);  //SignUp using phone number
     }
 
     public LiveData<FirebaseUser> SignUp(String email, String password) {

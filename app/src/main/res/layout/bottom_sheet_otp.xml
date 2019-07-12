@@ -9,20 +9,30 @@
     android:layout_height="wrap_content"
     tools:context=".ui.bottomsheets.EmailBottomSheet">
 
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="Enter the OTP sent to "
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/otp"
+        app:layout_constraintStart_toStartOf="@+id/otp"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
-        android:id="@+id/email"
+        android:id="@+id/otp"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:layout_marginRight="32dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/text_background_green_32dp"
         android:gravity="center"
-        android:hint="Email ID"
-        android:inputType="textEmailAddress"
+        android:hint="OTP"
+        android:inputType="number"
         android:padding="10dp"
         android:textColor="@color/white"
         android:textColorHint="@color/dustyWhite"
@@ -30,8 +40,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintTop_toBottomOf="@+id/text"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/error"
@@ -41,9 +51,9 @@
         android:text="Enter a valid Email"
         android:textColor="@android:color/transparent"
         android:textSize="8sp"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email" />
+        app:layout_constraintEnd_toEndOf="@+id/otp"
+        app:layout_constraintStart_toStartOf="@+id/otp"
+        app:layout_constraintTop_toBottomOf="@+id/otp" />
 
     <Button
         android:id="@+id/next"
@@ -52,14 +62,14 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="32dp"
         android:background="@drawable/button_background_white"
-        android:text="Next"
+        android:text="DONE"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/email"
-        app:layout_constraintStart_toStartOf="@+id/email"
-        app:layout_constraintTop_toBottomOf="@+id/email"
+        app:layout_constraintEnd_toEndOf="@+id/otp"
+        app:layout_constraintStart_toStartOf="@+id/otp"
+        app:layout_constraintTop_toBottomOf="@+id/otp"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

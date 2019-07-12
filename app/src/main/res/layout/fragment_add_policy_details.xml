@@ -75,14 +75,13 @@
             app:layout_constraintTop_toBottomOf="@+id/policy_number" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/cover_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/can_t_be_empty"
-            android:textColor="@color/red"
+            android:textColor="@android:color/transparent"
             android:textSize="9sp"
             app:layout_constraintEnd_toEndOf="@+id/cover_amount"
             app:layout_constraintHorizontal_bias="0.0"
@@ -114,14 +113,13 @@
         </FrameLayout>
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/frequency_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/can_t_be_empty"
-            android:textColor="@color/red"
+            android:textColor="@android:color/transparent"
             android:textSize="9sp"
             app:layout_constraintEnd_toEndOf="@+id/frequency_frame"
             app:layout_constraintHorizontal_bias="0.0"
@@ -149,14 +147,13 @@
             app:layout_constraintTop_toBottomOf="@+id/frequency_frame" />
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/premium_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/can_t_be_empty"
-            android:textColor="@color/red"
+            android:textColor="@android:color/transparent"
             android:textSize="9sp"
             app:layout_constraintEnd_toEndOf="@+id/premium_amount"
             app:layout_constraintHorizontal_bias="0.0"
@@ -197,14 +194,13 @@
         </LinearLayout>
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/due_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/can_t_be_empty"
-            android:textColor="@color/red"
+            android:textColor="@android:color/transparent"
             android:textSize="9sp"
             app:layout_constraintEnd_toEndOf="@+id/date_picker"
             app:layout_constraintHorizontal_bias="0.0"
@@ -245,14 +241,13 @@
         </LinearLayout>
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/mature_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/can_t_be_empty"
-            android:textColor="@color/red"
+            android:textColor="@android:color/transparent"
             android:textSize="9sp"
             app:layout_constraintEnd_toEndOf="@+id/date_picker2"
             app:layout_constraintHorizontal_bias="0.0"
@@ -284,14 +279,13 @@
         </FrameLayout>
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/nominee_empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="@string/can_t_be_empty"
-            android:textColor="@color/red"
+            android:textColor="@android:color/transparent"
             android:textSize="9sp"
             app:layout_constraintEnd_toEndOf="@+id/nominee_frame"
             app:layout_constraintHorizontal_bias="0.0"

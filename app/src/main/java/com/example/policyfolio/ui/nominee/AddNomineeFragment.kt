@@ -8,13 +8,10 @@ import androidx.lifecycle.ViewModelProviders
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 
 import com.example.policyfolio.R
 import com.example.policyfolio.ui.adapters.ListAdapters.BasicDropdownTextAdapter
@@ -172,59 +169,60 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
         relation!!.setOnClickListener { callback.openListSheet(Constants.ListTypes.RELATIONSHIPS, textAdapter) }
 
         done!!.setOnClickListener {
+            var isComplete = true
             name!!.validator()
                     .nonEmpty()
                     .addErrorCallback { message ->
                         nameError!!.text = message
-                        nameError!!.visibility = View.VISIBLE
+                        nameError!!.setTextColor(resources!!.getColor(R.color.red))
+                        isComplete = false
                     }
                     .addSuccessCallback {
-                        nameError!!.visibility = View.GONE
+                        nameError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                     }.check()
-            Log.e("NAME ERROR",nameError!!.isVisible.toString())
-
             emailError!!.validator()
                     .validEmail()
                     .addErrorCallback { message ->
                         emailError!!.text = message
-                        emailError!!.visibility = View.VISIBLE
+                        emailError!!.setTextColor(resources!!.getColor(R.color.red))
+                        isComplete = false
                     }
                     .addSuccessCallback {
-                        emailError!!.visibility = View.GONE
+                        emailError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                     }.check()
-            Log.e("EMAIL ERROR",emailError!!.isVisible.toString())
 
             val phone = ccp!!.formattedFullNumber
-            phone.validator()
-                    .validNumber()
-                    .addErrorCallback { message ->
-                        phoneError!!.text = message
-                        phoneError!!.visibility = View.VISIBLE
-                    }
-                    .addSuccessCallback {
-                        phoneError!!.visibility = View.GONE
-                    }.check()
-            Log.e("PHONE ERROR",phoneError!!.isVisible.toString())
+            if(ccp!!.isValidFullNumber){
+                phoneError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
+                viewModel!!.phone = phone
+            } else{
+                phoneError!!.text = "Invalid Phone Number!"
+                phoneError!!.setTextColor(resources!!.getColor(R.color.red))
+                isComplete = false
+            }
 
             if(viewModel!!.relation == -1){
-                relationError!!.isVisible = true
-                relationError!!.isGone = false
+                relationError!!.setTextColor(resources!!.getColor(R.color.red))
+                isComplete = false
                 relationError!!.text = "Can't be empty!"
             } else {
-                relationError!!.isVisible = false
-                relationError!!.isGone = true
+                relationError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
             }
 
             val altPhone = altCcp!!.formattedFullNumber
+            if(altCcp!!.isValidFullNumber){
+                viewModel!!.alternateNumber = altPhone
+            } else if(altPhoneText!!.length() > 0){
+                callback.showSnackbar("Invalid Alternate Phone Number")
+                isComplete = false
+            }
 
-            if(nameError!!.isGone && emailError!!.isGone && phoneError!!.isGone && relationError!!.isGone){
+            if(isComplete){
                 viewModel!!.name = name!!.text.toString()
-                viewModel!!.phone = phone
                 viewModel!!.email = email!!.text.toString()
-                if(!altPhone.isNullOrEmpty()){
-                    viewModel!!.alternateNumber = altPhone
-                }
                 callback.done()
+            } else{
+                callback.showSnackbar("Invalid Information!")
             }
         }
     }

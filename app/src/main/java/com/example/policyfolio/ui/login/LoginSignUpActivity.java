@@ -1,16 +1,24 @@
 package com.example.policyfolio.ui.login;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.data.facebook.dataclasses.FacebookData;
@@ -19,6 +27,8 @@ import com.example.policyfolio.ui.base.BasicProgressActivity;
 import com.example.policyfolio.ui.bottomsheets.EmailBottomSheet;
 import com.example.policyfolio.ui.bottomsheets.EmailSheetCallback;
 import com.example.policyfolio.ui.bottomsheets.ListBottomSheet;
+import com.example.policyfolio.ui.bottomsheets.OTPBottomSheet;
+import com.example.policyfolio.ui.bottomsheets.OTPSheetCallback;
 import com.example.policyfolio.ui.home.HomeActivity;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.R;
@@ -36,6 +46,8 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
     private EmailPhoneFragment emailPhoneFragment;
+
+    private OTPBottomSheet otpBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -325,7 +337,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     }
 
     @Override
-    public void PhoneSignUp() {
+    public void phoneSignUp() {
         startProgress();
         viewModel.checkIfUserExistsPhone().observe(this, new Observer<Integer>() {
             @Override
@@ -341,25 +353,38 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                             showSnackbar("Account already Exists. Please Sign In using Facebook");
                             break;
                         case Constants.LoginInInfo.Type.PHONE:
-                            viewModel.signUpPhone(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                @Override
-                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                    if(firebaseUser!=null){
-                                        startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                            endProgress();
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginSignUpActivity.this, Manifest.permission.READ_SMS)) {
+                                LocalBroadcastManager.getInstance(LoginSignUpActivity.this).registerReceiver(receiver, new IntentFilter("otp"));
+                                viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        if(firebaseUser!=null){
+                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                        }
+                                        else {
+                                            endProgress();
+                                            showSnackbar("Phone Sign Up Failed");
+                                        }
                                     }
-                                    else {
-                                        endProgress();
-                                        showSnackbar("Phone Sign Up Failed");
+                                });
+                                otpBottomSheet = new OTPBottomSheet(new OTPSheetCallback() {
+                                    @Override
+                                    public void done(String Otp) {
+                                        startProgress();
+                                        viewModel.signUpPhoneWithOTP(Otp);
+                                        LocalBroadcastManager.getInstance(LoginSignUpActivity.this).unregisterReceiver(receiver);
                                     }
-                                }
-                            });
+                                }, viewModel);
+                            }
+                            ActivityCompat.requestPermissions(LoginSignUpActivity.this, new String[]{Manifest.permission.READ_SMS}, Constants.PermissionAndRequests.SMS_PERMISSION_CODE);
                             break;
                         case Constants.LoginInInfo.Type.EMAIL:
                             endProgress();
                             showSnackbar("Account already Exists. Please Sign In using your Email and Password");
                             break;
                         default:
-                            viewModel.signUpPhone(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                            viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
                                 @Override
                                 public void onChanged(@Nullable FirebaseUser firebaseUser) {
                                     if(firebaseUser!=null){
@@ -381,7 +406,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
         });
     }
 
-
     @Override
     public void SignUpEmailAndPassword() {
         startProgress();
@@ -397,6 +421,27 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                 }
             }
         });
+    }
+
+    @Override
+    public void openListSheet(int type, RecyclerView.Adapter adapter) {
+        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
+        super.expandSheet(listBottomSheet);
+    }
+
+    @Override
+    public void closeListSheet() {
+        super.collapseSheet();
+    }
+
+    @Override
+    public void setBackgroundToGreen() {
+        super.setFragmentHolderBg(getResources().getColor(R.color.colorPrimaryDark));
+    }
+
+    @Override
+    public void setBackgroundToWhite() {
+        super.setFragmentHolderBg(getResources().getColor(R.color.white));
     }
 
     private void addUser(final FirebaseUser firebaseUser, final Integer type) {
@@ -415,11 +460,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     private void addFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, fragment).commit();
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
     }
 
     private void removeFragment(Fragment fragment) {
@@ -446,83 +486,88 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Constants.Google.SIGN_IN_RC){
-            startProgress();
-            viewModel.checkIfUserExistsEmail(data).observe(this, new Observer<Integer>() {
-                @Override
-                public void onChanged(Integer integer) {
-                    if(integer!=null){
-                        switch (integer){
-                            case Constants.LoginInInfo.Type.GOOGLE:
-                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        endProgress();
-                                        if(firebaseUser!=null){
-                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+        switch (requestCode){
+            case Constants.Google.SIGN_IN_RC:
+                startProgress();
+                viewModel.checkIfUserExistsEmail(data).observe(this, new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer integer) {
+                        if(integer!=null){
+                            switch (integer){
+                                case Constants.LoginInInfo.Type.GOOGLE:
+                                    viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                        @Override
+                                        public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                            endProgress();
+                                            if(firebaseUser!=null){
+                                                startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                            }
+                                            else {
+                                                showSnackbar("Google Sign Up Failed");
+                                            }
                                         }
-                                        else {
-                                            showSnackbar("Google Sign Up Failed");
+                                    });
+                                    break;
+                                case Constants.LoginInInfo.Type.FACEBOOK:
+                                    endProgress();
+                                    showSnackbar("Account already Exists. Please Sign In using Facebook");
+                                    break;
+                                case Constants.LoginInInfo.Type.PHONE:
+                                    endProgress();
+                                    showSnackbar("Account already Exists. Please Sign In using your Phone Number");
+                                    break;
+                                case Constants.LoginInInfo.Type.EMAIL:
+                                    endProgress();
+                                    showSnackbar("Account already Exists. Please Sign In using your Email and Password");
+                                    break;
+                                default:
+                                    viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                        @Override
+                                        public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                            endProgress();
+                                            if(firebaseUser!=null){
+                                                addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
+                                            }
+                                            else {
+                                                showSnackbar("Google Sign Up Failed");
+                                            }
                                         }
-                                    }
-                                });
-                                break;
-                            case Constants.LoginInInfo.Type.FACEBOOK:
-                                endProgress();
-                                showSnackbar("Account already Exists. Please Sign In using Facebook");
-                                break;
-                            case Constants.LoginInInfo.Type.PHONE:
-                                endProgress();
-                                showSnackbar("Account already Exists. Please Sign In using your Phone Number");
-                                break;
-                            case Constants.LoginInInfo.Type.EMAIL:
-                                endProgress();
-                                showSnackbar("Account already Exists. Please Sign In using your Email and Password");
-                                break;
-                            default:
-                                viewModel.googleAuthentication(data).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        endProgress();
-                                        if(firebaseUser!=null){
-                                            addUser(firebaseUser,Constants.LoginInInfo.Type.GOOGLE);
-                                        }
-                                        else {
-                                            showSnackbar("Google Sign Up Failed");
-                                        }
-                                    }
-                                });
-                                break;
+                                    });
+                                    break;
+                            }
+                        }
+                        else {
+                            endProgress();
+                            showSnackbar("Unable to update Information");
                         }
                     }
-                    else {
-                        endProgress();
-                        showSnackbar("Unable to update Information");
-                    }
-                }
-            });
+                });
+                break;
         }
         loginFragment.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
-    public void openListSheet(int type, RecyclerView.Adapter adapter) {
-        ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
-        super.expandSheet(listBottomSheet);
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case Constants.PermissionAndRequests.SMS_PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    phoneSignUp();
+                }
+                break;
+        }
     }
 
-    @Override
-    public void closeListSheet() {
-        super.collapseSheet();
-    }
-
-    @Override
-    public void setBackgroundToGreen() {
-        super.setFragmentHolderBg(getResources().getColor(R.color.colorPrimaryDark));
-    }
-
-    @Override
-    public void setBackgroundToWhite() {
-        super.setFragmentHolderBg(getResources().getColor(R.color.white));
-    }
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equalsIgnoreCase("otp")) {
+                final String message = intent.getStringExtra("message");
+                if(otpBottomSheet!=null){
+                    otpBottomSheet.setOTP(message);
+                }
+            }
+        }
+    };
 }

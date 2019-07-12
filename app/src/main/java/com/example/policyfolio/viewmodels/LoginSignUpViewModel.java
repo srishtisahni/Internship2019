@@ -104,8 +104,12 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
         return getRepository().updateFirebaseUser(user);
     }
 
-    public LiveData<FirebaseUser> signUpPhone(Activity activity) {
+    public LiveData<FirebaseUser> signUpPhoneWithOTP(Activity activity) {
         return getRepository().phoneSignUp(phone, activity);
+    }
+
+    public void signUpPhoneWithOTP(String otp) {
+        getRepository().phoneSignUp(phone,otp);
     }
 
     public void setEmail(String email) {
@@ -164,8 +168,12 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
         return getRepository().checkIfUserExistsPhone(phone);
     }
 
+    public String getPhone() {
+        return phone;
+    }
 
     public LiveData<Boolean> resetPassword() {
         return getRepository().resetPassword(email);
     }
+
 }

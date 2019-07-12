@@ -2,18 +2,14 @@ package com.example.policyfolio.ui.login
 
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.isGone
 import androidx.core.view.isVisible
 
 import androidx.fragment.app.Fragment
@@ -23,9 +19,7 @@ import com.example.policyfolio.util.Constants
 import com.example.policyfolio.R
 import com.example.policyfolio.viewmodels.LoginSignUpViewModel
 import com.hbb20.CountryCodePicker
-import com.wajahatkarim3.easyvalidation.core.view_ktx.validEmail
 import com.wajahatkarim3.easyvalidation.core.view_ktx.validator
-import kotlinx.android.synthetic.main.text_white.*
 
 /**
  * A simple [Fragment] subclass.
@@ -87,30 +81,26 @@ class EmailPhoneFragment @SuppressLint("ValidFragment") constructor(private val 
                         .validEmail()
                         .addErrorCallback { message ->
                             textError!!.text = message
-                            textError!!.visibility = View.VISIBLE
+                            textError!!.setTextColor(resources!!.getColor(R.color.red))
                             callback.showSnackbar("Invalid Email!")
                         }
                         .addSuccessCallback {
-                            textError!!.visibility = View.GONE
+                            textError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                             viewModel!!.email = email!!.text.toString()
                             callback.EmailNext()
                         }.check()
-                Log.e("EMAIL ERROR",textError!!.isVisible.toString())
             }
             else if (phone!!.isVisible) {
                 val phone = ccp!!.formattedFullNumber
-                phone.validator()
-                        .validNumber()
-                        .addErrorCallback { message ->
-                            textError!!.text = message
-                            textError!!.visibility = View.VISIBLE
-                            callback.showSnackbar("Invalid Phone Number!")
-                        }
-                        .addSuccessCallback {
-                            textError!!.visibility = View.GONE
-                            callback.PhoneSignUp()
-                        }.check()
-                Log.e("PHONE ERROR",textError!!.isVisible.toString())
+                if(ccp!!.isValidFullNumber){
+                    textError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
+                    viewModel!!.setPhone(phone)
+                    callback.phoneSignUp()
+                } else{
+                    textError!!.text = "Invalid Phone Number!"
+                    textError!!.setTextColor(resources!!.getColor(R.color.red))
+                    callback.showSnackbar("Invalid Phone Number!")
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ public interface LoginCallback extends BaseActivityFragmentCallback {
     void Login();
     void forgotPassword();
     void EmailNext();
-    void PhoneSignUp();
+    void phoneSignUp();
     void SignUpEmailAndPassword();
     void showSnackbar(String s);
 }

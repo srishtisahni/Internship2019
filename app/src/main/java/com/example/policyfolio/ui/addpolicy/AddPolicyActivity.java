@@ -29,7 +29,7 @@ import com.example.policyfolio.ui.base.BaseNavigationActivity;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.R;
-import com.example.policyfolio.util.receivers.PremiumDuesReceiver;
+import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
 import com.example.policyfolio.viewmodels.AddPolicyViewModel;
 
 import java.util.List;
@@ -210,7 +210,7 @@ public class AddPolicyActivity extends BaseNavigationActivity implements AddPoli
                 if(!notifications.isEmpty()) {
                     for (int i = 0; i < notifications.size(); i++) {
                         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent(AddPolicyActivity.this, PremiumDuesReceiver.class);
+                        Intent intent = new Intent(AddPolicyActivity.this, PremiumNotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(AddPolicyActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
                         if (pendingIntent != null) {
                             alarm.cancel(pendingIntent);
