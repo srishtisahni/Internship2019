@@ -253,46 +253,58 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
         }
 
         done!!.setOnClickListener {
+            var isComplete:Boolean = true
             coverAmount!!.validator()
                     .nonEmpty()
                     .addErrorCallback { message ->
                         coverError!!.text = message
-                        coverError!!.visibility = View.VISIBLE
+                        coverError!!.setTextColor(resources!!.getColor(R.color.red))
+                        isComplete = false
                     }
                     .addSuccessCallback {
-                        coverError!!.visibility = View.GONE
+                        coverError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                     }.check()
-            Log.e("COVER ERROR",coverError!!.isVisible.toString())
 
             if(viewModel!!.premiumFrequency == -1){
-                frequencyError!!.visibility = View.VISIBLE
+                frequencyError!!.setTextColor(resources!!.getColor(R.color.red))
+                isComplete = false
             } else{
-                frequencyError!!.visibility = View.GONE
+                frequencyError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
             }
-            Log.e("FREQUENCY ERROR",frequencyError!!.isVisible.toString())
 
             premiumAmount!!.validator()
                     .nonEmpty()
                     .addErrorCallback { message ->
                         premiumError!!.text = message
-                        premiumError!!.visibility = View.VISIBLE
+                        premiumError!!.setTextColor(resources!!.getColor(R.color.red))
+                        isComplete = false
                     }
                     .addSuccessCallback {
-                        premiumError!!.visibility = View.GONE
+                        premiumError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                     }.check()
-            Log.e("PREMIUM ERROR",premiumError!!.isVisible.toString())
 
-            dueError!!.visibility = dueDateImage!!.visibility
-            matureError!!.visibility = matureDateImage!!.visibility
+            if(dueDateImage!!.isGone){
+                dueError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
+            } else{
+                dueError!!.setTextColor(resources!!.getColor(R.color.red))
+                isComplete = false
+            }
+
+            if(matureDateImage!!.isGone){
+                matureError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
+            } else{
+                matureError!!.setTextColor(resources!!.getColor(R.color.red))
+                isComplete = false
+            }
 
             if(viewModel!!.nominee == null){
-                nomineeError!!.visibility = View.VISIBLE
+                nomineeError!!.setTextColor(resources!!.getColor(R.color.red))
+                isComplete = false
             } else{
-                nomineeError!!.visibility = View.GONE
+                nomineeError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
             }
-            Log.e("NOMINEE ERROR",nomineeError!!.isVisible.toString())
 
-            if(coverError!!.isGone && frequencyError!!.isGone && premiumError!!.isGone && dueError!!.isGone && matureError!!.isGone && nomineeError!!.isGone){
+            if(isComplete){
                 viewModel!!.coverAmount = coverAmount!!.text.toString()
                 viewModel!!.premiumAmount = premiumAmount!!.text.toString()
                 callback.done()

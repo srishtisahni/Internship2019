@@ -34,11 +34,10 @@
 
     <TextView
         android:id="@+id/name_empty"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
-        android:textColor="@color/red"
+        android:textColor="@android:color/transparent"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="@+id/name"
         app:layout_constraintStart_toStartOf="@+id/name"
@@ -68,11 +67,10 @@
 
     <TextView
         android:id="@+id/relation_empty"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
-        android:textColor="@color/red"
+        android:textColor="@android:color/transparent"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="@+id/relation"
         app:layout_constraintStart_toStartOf="@+id/relation"
@@ -103,11 +101,10 @@
 
     <TextView
         android:id="@+id/email_empty"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
-        android:textColor="@color/red"
+        android:textColor="@android:color/transparent"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="@+id/email"
         app:layout_constraintStart_toStartOf="@+id/email"
@@ -152,11 +149,10 @@
 
     <TextView
         android:id="@+id/phone_empty"
-        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
-        android:textColor="@color/red"
+        android:textColor="@android:color/transparent"
         android:textSize="9sp"
         app:layout_constraintEnd_toEndOf="@+id/phone"
         app:layout_constraintStart_toStartOf="@+id/phone"

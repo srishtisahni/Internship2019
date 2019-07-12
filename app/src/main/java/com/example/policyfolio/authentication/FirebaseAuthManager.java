@@ -1,14 +1,16 @@
-package com.example.policyfolio.data.firebase;
+package com.example.policyfolio.authentication;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.policyfolio.data.firebase.DataManager;
 import com.example.policyfolio.data.local.AppDatabase;
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -32,21 +34,21 @@ import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
 
-public class AuthManager {
+public class FirebaseAuthManager {
 
-    private static AuthManager INSTANCE;
+    private static FirebaseAuthManager INSTANCE;
     private GoogleSignInOptions gso;
     private GoogleSignInClient client;
     private FirebaseAuth mAuth;
 
-    private AuthManager() {
+    private FirebaseAuthManager() {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public static AuthManager getInstance(){
+    public static FirebaseAuthManager getInstance(){
         //Singleton Pattern
         if(INSTANCE == null)
-            INSTANCE = new AuthManager();
+            INSTANCE = new FirebaseAuthManager();
         return INSTANCE;
     }
 
@@ -119,9 +121,8 @@ public class AuthManager {
         return auth;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) { // Activity is passed for verification
+    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity, MutableLiveData<FirebaseUser> auth) { // Activity is passed for verification
         //Signing in  using Phone Number.
-        final MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, activity , new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -146,8 +147,31 @@ public class AuthManager {
                 Log.e("EXCEPTION", e.getMessage());
                 auth.setValue(null);
             }
+
+            @Override
+            public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+                Toast.makeText(activity,"An OTP has been sent to "+phone,Toast.LENGTH_SHORT).show();
+            }
         });
         return  auth;
+    }
+
+    public void phoneSignUp(String phone, String otp, MutableLiveData<FirebaseUser> auth) {
+        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(phone,otp);
+        mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    FirebaseUser user = mAuth.getCurrentUser();         //Returns user if authentication is complete, null otherwise
+                    auth.setValue(user);
+                }
+                else {
+                    Log.e("EXCEPTION",task.getException().getMessage());
+                    auth.setValue(null);
+                }
+            }
+        });
     }
 
     public LiveData<FirebaseUser> SignUpEmailPassword(String email, String password) {

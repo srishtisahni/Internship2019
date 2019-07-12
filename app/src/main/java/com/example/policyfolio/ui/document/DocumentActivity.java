@@ -18,7 +18,7 @@ import com.example.policyfolio.ui.base.BaseNavigationActivity;
 import com.example.policyfolio.ui.claim.ClaimSupportActivity;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
-import com.example.policyfolio.util.receivers.PremiumDuesReceiver;
+import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
 import com.example.policyfolio.viewmodels.DocumentViewModel;
 
 import androidx.annotation.Nullable;
@@ -267,7 +267,7 @@ public class DocumentActivity extends BaseNavigationActivity implements Document
                 if(!notifications.isEmpty()) {
                     for (int i = 0; i < notifications.size(); i++) {
                         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent(DocumentActivity.this, PremiumDuesReceiver.class);
+                        Intent intent = new Intent(DocumentActivity.this, PremiumNotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(DocumentActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
                         if (pendingIntent != null) {
                             alarm.cancel(pendingIntent);

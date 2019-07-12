@@ -83,48 +83,49 @@ class SignUpFragment @SuppressLint("ValidFragment") constructor(private val call
     }
 
     private fun signUp() {
+        var isComplete = true
         name!!.validator()
                 .nonEmpty()
                 .addErrorCallback { message ->
                     nameError!!.text = message
-                    nameError!!.visibility = View.VISIBLE
+                    nameError!!.setTextColor(resources!!.getColor(R.color.red))
+                    isComplete = false
                 }
                 .addSuccessCallback {
-                    nameError!!.visibility = View.GONE
+                    nameError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                 }.check()
-        Log.e("NAME ERROR",nameError!!.isVisible.toString())
 
         if (birthdayEpoch == null) {
-            birthdayError!!.visibility = View.VISIBLE
+            birthdayError!!.setTextColor(resources!!.getColor(R.color.red))
+            isComplete = false
         } else {
-            birthdayError!!.visibility = View.GONE
+            birthdayError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
         }
-        Log.e("BIRTHDAY ERROR",birthdayError!!.isVisible.toString())
 
         city!!.validator()
                 .nonEmpty()
                 .addErrorCallback { message ->
                     cityError!!.text = message
-                    cityError!!.visibility = View.VISIBLE
+                    cityError!!.setTextColor(resources!!.getColor(R.color.red))
+                    isComplete = false
                 }
                 .addSuccessCallback {
-                    cityError!!.visibility = View.GONE
+                    cityError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                 }.check()
-        Log.e("CITY ERROR",cityError!!.isVisible.toString())
 
         password!!.validator()
                 .nonEmpty()
                 .minLength(8)
                 .addErrorCallback {message ->
                     passwordError!!.text = message
-                    passwordError!!.visibility = View.VISIBLE
+                    passwordError!!.setTextColor(resources!!.getColor(R.color.red))
+                    isComplete = false
                 }
                 .addSuccessCallback {
-                    passwordError!!.visibility = View.GONE
+                    passwordError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                 }.check()
-        Log.e("PASSWORD ERROR",passwordError!!.isVisible.toString())
 
-        if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && passwordError!!.isGone) {
+        if (isComplete) {
             viewModel!!.setName(name!!.text.toString())
             viewModel!!.setBirthDay(birthdayEpoch)
             viewModel!!.setGender(genderSelection)

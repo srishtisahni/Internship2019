@@ -116,48 +116,48 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
     }
 
     private fun save() {
+        var isComplete:Boolean = true
+
         val phone = ccp!!.formattedFullNumber
-        phone.validator()
-                .validNumber()
-                .addErrorCallback { message ->
-                    phoneError!!.text = message
-                    phoneError!!.visibility = View.VISIBLE
-                }
-                .addSuccessCallback {
-                    phoneError!!.visibility = View.GONE
-                }.check()
-        Log.e("PHONE ERROR",phoneError!!.isVisible.toString())
+        if(ccp!!.isValidFullNumber){
+            phoneError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
+            viewModel!!.phone = phone
+        } else{
+            phoneError!!.text = "Invalid Phone Number!"
+            phoneError!!.setTextColor(resources!!.getColor(R.color.red))
+            isComplete = false
+        }
 
         name!!.validator()
                 .nonEmpty()
                 .addErrorCallback { message ->
                     nameError!!.text = message
-                    nameError!!.visibility = View.VISIBLE
+                    nameError!!.setTextColor(resources!!.getColor(R.color.red))
+                    isComplete = false
                 }
                 .addSuccessCallback {
-                    nameError!!.visibility = View.GONE
+                    nameError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                 }.check()
-        Log.e("NAME ERROR",nameError!!.isVisible.toString())
 
         if (birthdayEpoch == null) {
-            birthdayError!!.visibility = View.VISIBLE
+            birthdayError!!.setTextColor(resources!!.getColor(R.color.red))
+            isComplete = false
         } else {
-            birthdayError!!.visibility = View.GONE
+            birthdayError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
         }
-        Log.e("BIRTHDAY ERROR",birthdayError!!.isVisible.toString())
 
         city!!.validator()
                 .nonEmpty()
                 .addErrorCallback { message ->
                     cityError!!.text = message
-                    cityError!!.visibility = View.VISIBLE
+                    cityError!!.setTextColor(resources!!.getColor(R.color.red))
+                    isComplete = false
                 }
                 .addSuccessCallback {
-                    cityError!!.visibility = View.GONE
+                    cityError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                 }.check()
-        Log.e("CITY ERROR",cityError!!.isVisible.toString())
 
-        if (nameError!!.isGone && birthdayError!!.isGone && cityError!!.isGone && phoneError!!.isGone) {
+        if (isComplete) {
             viewModel.complete = true
             viewModel.name = name!!.text.toString()
             viewModel.birthday = birthdayEpoch

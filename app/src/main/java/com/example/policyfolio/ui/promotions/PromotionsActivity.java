@@ -15,7 +15,7 @@ import com.example.policyfolio.ui.login.LoginSignUpActivity;
 import com.example.policyfolio.ui.nominee.NomineeSupportActivity;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
-import com.example.policyfolio.util.receivers.PremiumDuesReceiver;
+import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
 import com.example.policyfolio.viewmodels.PromotionViewModel;
 
 import androidx.lifecycle.Observer;
@@ -127,7 +127,7 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
                 if(!notifications.isEmpty()) {
                     for (int i = 0; i < notifications.size(); i++) {
                         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent(PromotionsActivity.this, PremiumDuesReceiver.class);
+                        Intent intent = new Intent(PromotionsActivity.this, PremiumNotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(PromotionsActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
                         if (pendingIntent != null) {
                             alarm.cancel(pendingIntent);

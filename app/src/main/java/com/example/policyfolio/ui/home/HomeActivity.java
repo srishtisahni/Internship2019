@@ -24,7 +24,7 @@ import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.data.local.classes.Policy;
 import com.example.policyfolio.data.local.classes.User;
 import com.example.policyfolio.R;
-import com.example.policyfolio.util.receivers.PremiumDuesReceiver;
+import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
 import com.example.policyfolio.viewmodels.HomeViewModel;
 
 
@@ -219,7 +219,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
         final int frequency = policy.getFrequency();
         final long premium = policy.getNextDueDate();
         final AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        final Intent intent = new Intent(this, PremiumDuesReceiver.class);
+        final Intent intent = new Intent(this, PremiumNotificationReceiver.class);
         intent.putExtra(Constants.Notification.POLICY_NUMBER,policy.getPolicyNumber());
 
         Notifications notifications = new Notifications();
@@ -405,7 +405,7 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                 if(!notifications.isEmpty()) {
                     for (int i = 0; i < notifications.size(); i++) {
                         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent(HomeActivity.this, PremiumDuesReceiver.class);
+                        Intent intent = new Intent(HomeActivity.this, PremiumNotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(HomeActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
                         if (pendingIntent != null) {
                             alarm.cancel(pendingIntent);

@@ -15,7 +15,7 @@ import com.example.policyfolio.ui.claim.ClaimSupportActivity;
 import com.example.policyfolio.ui.document.DocumentActivity;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
-import com.example.policyfolio.util.receivers.PremiumDuesReceiver;
+import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
 import com.example.policyfolio.viewmodels.HelpViewModel;
 
 import androidx.lifecycle.Observer;
@@ -149,7 +149,7 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
                 if(!notifications.isEmpty()) {
                     for (int i = 0; i < notifications.size(); i++) {
                         AlarmManager alarm = (AlarmManager) getSystemService(ALARM_SERVICE);
-                        Intent intent = new Intent(HelpActivity.this, PremiumDuesReceiver.class);
+                        Intent intent = new Intent(HelpActivity.this, PremiumNotificationReceiver.class);
                         PendingIntent pendingIntent = PendingIntent.getBroadcast(HelpActivity.this, (int) notifications.get(i).getId(), intent, PendingIntent.FLAG_NO_CREATE);
                         if (pendingIntent != null) {
                             alarm.cancel(pendingIntent);

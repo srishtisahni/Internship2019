@@ -15,7 +15,7 @@ import com.example.policyfolio.R;
 import com.example.policyfolio.data.Repository;
 import com.example.policyfolio.util.Constants;
 
-public class PremiumDuesReceiver extends BroadcastReceiver {
+public class PremiumNotificationReceiver extends BroadcastReceiver {
 
     private Repository repository;
     @Override
