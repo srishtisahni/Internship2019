@@ -62,6 +62,7 @@ public class OTPBottomSheet extends Fragment {
                 }
                 else {
                     error.setTextColor(getResources().getColor(android.R.color.transparent));
+                    callback.done(otp.getText().toString());
                 }
             }
         });
@@ -72,7 +73,6 @@ public class OTPBottomSheet extends Fragment {
     public void setOTP(String message) {
         if(otp!=null && message!=null){
             otp.setText(message);
-            next.callOnClick();
         }
     }
 }

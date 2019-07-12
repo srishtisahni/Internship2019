@@ -103,9 +103,10 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
             email!!.setText(viewModel.email)
         if (viewModel.name != null)
             name!!.setText(viewModel.name)
-        if (viewModel.phone != null)
-            phoneText!!.setText(viewModel.phone)
-        if (viewModel.birthday != null) {
+        if (viewModel.phone != null){
+            ccp!!.fullNumber = viewModel!!.phone
+        }
+        if (viewModel.birthday != null && viewModel.birthday > 0) {
             birthday!!.text = Constants.Time.DATE_FORMAT.format(viewModel.birthday!! * 1000)
             birthdayEpoch = viewModel.birthday
             birthday!!.setTextColor(resources.getColor(R.color.white))

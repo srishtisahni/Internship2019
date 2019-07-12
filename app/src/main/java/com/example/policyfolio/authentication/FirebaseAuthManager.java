@@ -121,8 +121,9 @@ public class FirebaseAuthManager {
         return auth;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity, MutableLiveData<FirebaseUser> auth) { // Activity is passed for verification
+    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) { // Activity is passed for verification
         //Signing in  using Phone Number.
+        MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, activity , new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -157,7 +158,8 @@ public class FirebaseAuthManager {
         return  auth;
     }
 
-    public void phoneSignUp(String phone, String otp, MutableLiveData<FirebaseUser> auth) {
+    public LiveData<FirebaseUser> phoneSignUp(String phone, String otp) {
+        MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(phone,otp);
         mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -172,6 +174,7 @@ public class FirebaseAuthManager {
                 }
             }
         });
+        return auth;
     }
 
     public LiveData<FirebaseUser> SignUpEmailPassword(String email, String password) {
