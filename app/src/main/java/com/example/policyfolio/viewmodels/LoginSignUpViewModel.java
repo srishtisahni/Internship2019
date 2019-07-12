@@ -109,7 +109,7 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
     }
 
     public LiveData<FirebaseUser> signUpPhoneWithOTP(String otp) {
-        return getRepository().phoneSignUp(phone,otp);
+        return getRepository().phoneSignUp(otp);
     }
 
     public void setEmail(String email) {

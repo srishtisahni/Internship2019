@@ -117,7 +117,7 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
     }
 
     private fun save() {
-        var isComplete:Boolean = true
+        var isComplete = true
 
         val phone = ccp!!.formattedFullNumber
         if(ccp!!.isValidFullNumber){
