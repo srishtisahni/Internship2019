@@ -72,7 +72,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
         viewModel.getUser().observe(this, new Observer<User>() {
             @Override
             public void onChanged(@Nullable User user) {
-                Log.e("USER",user + "");
                 if(user!=null){
                     getTimeToast(user.getLastUpdated());
                     viewModel.updateUser(user);
@@ -91,7 +90,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                                     Log.e("DOCUMENT VAULT","Error!");
                             }
                         });
-                        Log.e("INCOMPLETE",user.toString());
                         createBottomSheetForInfo();
                     }
                     else{
