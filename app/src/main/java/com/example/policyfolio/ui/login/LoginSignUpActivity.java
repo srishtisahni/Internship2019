@@ -11,10 +11,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -354,47 +356,95 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                             break;
                         case Constants.LoginInInfo.Type.PHONE:
                             endProgress();
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(LoginSignUpActivity.this, Manifest.permission.READ_SMS)) {
+                            if (ContextCompat.checkSelfPermission(LoginSignUpActivity.this, Manifest.permission.READ_SMS)== PackageManager.PERMISSION_GRANTED) {
                                 LocalBroadcastManager.getInstance(LoginSignUpActivity.this).registerReceiver(receiver, new IntentFilter("otp"));
-                                viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        if(firebaseUser!=null){
-                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
-                                        }
-                                        else {
-                                            endProgress();
-                                            showSnackbar("Phone Sign Up Failed");
-                                        }
-                                    }
-                                });
                                 otpBottomSheet = new OTPBottomSheet(new OTPSheetCallback() {
                                     @Override
                                     public void done(String Otp) {
                                         startProgress();
-                                        viewModel.signUpPhoneWithOTP(Otp);
+                                        viewModel.signUpPhoneWithOTP(Otp).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                            @Override
+                                            public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                                if(firebaseUser!=null){
+                                                    LoginSignUpActivity.super.collapseSheet();
+                                                    startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                                }
+                                                else {
+                                                    endProgress();
+                                                    LoginSignUpActivity.super.collapseSheet();
+                                                    showSnackbar("Phone Sign Up Failed");
+                                                }
+                                            }
+                                        });
                                         LocalBroadcastManager.getInstance(LoginSignUpActivity.this).unregisterReceiver(receiver);
                                     }
                                 }, viewModel);
+                                LoginSignUpActivity.super.expandSheet(otpBottomSheet);
+                                viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        if(firebaseUser!=null){
+                                            LoginSignUpActivity.super.collapseSheet();
+                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                        }
+                                        else {
+                                            endProgress();
+                                            Log.e("FAILED","Can't Find Number");
+                                        }
+                                    }
+                                });
                             }
-                            ActivityCompat.requestPermissions(LoginSignUpActivity.this, new String[]{Manifest.permission.READ_SMS}, Constants.PermissionAndRequests.SMS_PERMISSION_CODE);
+                            else {
+                                ActivityCompat.requestPermissions(LoginSignUpActivity.this, new String[]{Manifest.permission.READ_SMS}, Constants.PermissionAndRequests.SMS_PERMISSION_CODE);
+                            }
                             break;
                         case Constants.LoginInInfo.Type.EMAIL:
                             endProgress();
                             showSnackbar("Account already Exists. Please Sign In using your Email and Password");
                             break;
                         default:
-                            viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                @Override
-                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                    if(firebaseUser!=null){
-                                        addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                            endProgress();
+                            if (ContextCompat.checkSelfPermission(LoginSignUpActivity.this, Manifest.permission.READ_SMS)== PackageManager.PERMISSION_GRANTED) {
+                                LocalBroadcastManager.getInstance(LoginSignUpActivity.this).registerReceiver(receiver, new IntentFilter("otp"));
+                                otpBottomSheet = new OTPBottomSheet(new OTPSheetCallback() {
+                                    @Override
+                                    public void done(String Otp) {
+                                        startProgress();
+                                        viewModel.signUpPhoneWithOTP(Otp).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                            @Override
+                                            public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                                if(firebaseUser!=null){
+                                                    LoginSignUpActivity.super.collapseSheet();
+                                                    addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                                }
+                                                else {
+                                                    endProgress();
+                                                    LoginSignUpActivity.super.collapseSheet();
+                                                    showSnackbar("Phone Sign Up Failed");
+                                                }
+                                            }
+                                        });;
+                                        LocalBroadcastManager.getInstance(LoginSignUpActivity.this).unregisterReceiver(receiver);
                                     }
-                                    else {
-                                        showSnackbar("Phone Sign Up Failed");
+                                }, viewModel);
+                                LoginSignUpActivity.super.expandSheet(otpBottomSheet);
+                                viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                    @Override
+                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                        if(firebaseUser!=null){
+                                            LoginSignUpActivity.super.collapseSheet();
+                                            addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                                        }
+                                        else {
+                                            endProgress();
+                                            Log.e("FAILED","Can't Find Number");
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
+                            else {
+                                ActivityCompat.requestPermissions(LoginSignUpActivity.this, new String[]{Manifest.permission.READ_SMS}, Constants.PermissionAndRequests.SMS_PERMISSION_CODE);
+                            }
                             break;
                     }
                 }

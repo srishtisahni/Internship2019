@@ -44,7 +44,6 @@ public class Repository {
     private ImageStorage imageStorage;
     private AppExecutors appExecutors;
     private Cache cache;
-    private MutableLiveData<FirebaseUser> phoneAuth;
 
     private Repository(Context context){
         graphAPI = GraphAPI.getInstance();
@@ -93,14 +92,12 @@ public class Repository {
 
     public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
         //Activity is passed as a parameter for verification functions
-        if(phoneAuth == null)
-            phoneAuth = new MutableLiveData<>();
-        return authentication.phoneSignUp(phone,activity,phoneAuth);  //SignUp using phone number
+        return authentication.phoneSignUp(phone,activity);  //SignUp using phone number
     }
 
-    public void phoneSignUp(String phone, String string) {
+    public LiveData<FirebaseUser> phoneSignUp(String phone, String string) {
         //Activity is passed as a parameter for verification functions
-        authentication.phoneSignUp(phone,string,phoneAuth);  //SignUp using phone number
+        return authentication.phoneSignUp(phone,string);  //SignUp using phone number
     }
 
     public LiveData<FirebaseUser> SignUp(String email, String password) {

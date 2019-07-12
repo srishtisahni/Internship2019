@@ -108,8 +108,8 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
         return getRepository().phoneSignUp(phone, activity);
     }
 
-    public void signUpPhoneWithOTP(String otp) {
-        getRepository().phoneSignUp(phone,otp);
+    public LiveData<FirebaseUser> signUpPhoneWithOTP(String otp) {
+        return getRepository().phoneSignUp(phone,otp);
     }
 
     public void setEmail(String email) {
