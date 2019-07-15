@@ -33,6 +33,7 @@
 
     <TextView
         android:id="@+id/name_empty"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
@@ -64,6 +65,7 @@
 
     <TextView
         android:id="@+id/email_empty"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
@@ -109,6 +111,7 @@
 
     <TextView
         android:id="@+id/phone_empty"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
@@ -138,6 +141,7 @@
 
     <TextView
         android:id="@+id/birthday_empty"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
@@ -203,6 +207,7 @@
 
     <TextView
         android:id="@+id/city_empty"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/can_t_be_empty"
