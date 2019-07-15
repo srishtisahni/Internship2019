@@ -143,7 +143,7 @@ public class BasicProgressActivity extends AppCompatActivity {
         appBarLayout.setVisibility(View.VISIBLE);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.colorPrimary));
+            getWindow().setNavigationBarColor(getResources().getColor(android.R.color.transparent));
             getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
         setTheme(R.style.AppTheme_NoActionBar);
