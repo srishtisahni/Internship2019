@@ -149,7 +149,6 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
 
         next!!.setOnClickListener {
             var isComplete:Boolean = true
-            numberError!!.visibility = View.GONE
             policyNumber!!.validator()
                     .minLength(10)
                     .addErrorCallback{message ->
@@ -160,7 +159,6 @@ class BasicAddPolicyFragment(private val callback: AddPolicyCallback) : Fragment
                     .addSuccessCallback {
                         numberError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                     }.check()
-            Log.e("NUMBER ERROR",numberError!!.isVisible.toString())
 
             if(isComplete) {
                 viewModel!!.policyNumber = policyNumber!!.text.toString().toUpperCase()
