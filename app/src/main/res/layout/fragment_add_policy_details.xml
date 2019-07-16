@@ -190,7 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_date_range_black_24dp" />
+                android:src="@drawable/date_picker_icon" />
         </LinearLayout>
 
         <TextView
@@ -237,7 +237,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginRight="16dp"
-                android:src="@drawable/ic_date_range_black_24dp" />
+                android:src="@drawable/date_picker_icon" />
         </LinearLayout>
 
         <TextView
@@ -315,7 +315,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
                 android:paddingLeft="8dp"
-                android:src="@drawable/ic_add_black_24dp" />
+                android:src="@drawable/add_symbol" />
 
             <TextView
                 android:id="@+id/add_document_text"
@@ -363,7 +363,7 @@
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
                 android:paddingLeft="8dp"
-                android:src="@drawable/ic_add_a_photo_black_24dp" />
+                android:src="@drawable/add_image_icon" />
 
             <TextView
                 android:id="@+id/click_document_text"

@@ -29,7 +29,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
-        android:background="@drawable/text_background_green_32dp"
+        android:background="@drawable/text_background_dark"
         android:gravity="center"
         android:hint="OTP"
         android:inputType="number"

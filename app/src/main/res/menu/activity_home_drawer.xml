@@ -7,23 +7,18 @@
         android:id="@+id/main_group">
         <item
             android:id="@+id/add_policy"
-            android:icon="@drawable/ic_note_add_black_24dp"
             android:title="@string/add_policy" />
         <item
             android:id="@+id/renew_policy"
-            android:icon="@drawable/ic_autorenew_black_24dp"
             android:title="@string/renew_policy" />
         <item
             android:id="@+id/claim_support"
-            android:icon="@drawable/ic_assignment_late_black_24dp"
             android:title="@string/claim_support" />
         <item
             android:id="@+id/legal_support"
-            android:icon="@drawable/ic_business_center_black_24dp"
             android:title="@string/legal_support" />
         <item
             android:id="@+id/nominee_support"
-            android:icon="@drawable/ic_group_black_24dp"
             android:title="@string/nominee_support" />
     </group>
 
@@ -31,19 +26,15 @@
         android:id="@+id/support_group">
         <item
             android:id="@+id/promotions"
-            android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:title="@string/promotions_and_offers" />
         <item
             android:id="@+id/documents"
-            android:icon="@drawable/ic_attach_file_black_24dp"
             android:title="@string/document_vault" />
         <item
             android:id="@+id/faq"
-            android:icon="@drawable/ic_speaker_notes_black_24dp"
             android:title="@string/faqs" />
         <item
             android:id="@+id/help"
-            android:icon="@drawable/ic_live_help_black_24dp"
             android:title="@string/need_help" />
     </group>
 
@@ -51,11 +42,9 @@
         android:id="@+id/info_group">
             <item
                 android:id="@+id/about_us"
-                android:icon="@drawable/ic_info_outline_black_24dp"
                 android:title="@string/about_us" />
             <item
                 android:id="@+id/logout"
-                android:icon="@drawable/ic_exit_to_app_black_24dp"
                 android:title="@string/log_out" />
     </group>
 
