@@ -114,7 +114,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/button_background_green"
+        android:background="@drawable/button_background_light"
         android:text="Submit"
         android:textAllCaps="false"
         android:textColor="@color/white"

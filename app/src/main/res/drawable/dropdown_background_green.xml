@@ -6,7 +6,7 @@
         android:top="4dp"
         android:right="4dp"
         android:bottom="4dp" />
-    <solid android:color="@color/colorPrimaryLight"/>
+    <solid android:color="@color/colorPrimary"/>
     <stroke android:color="@color/colorPrimaryDarkest"
         android:width="1dp"/>
 </shape>

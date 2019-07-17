@@ -33,16 +33,16 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
     private var viewModel: LoginSignUpViewModel? = null
 
     private var emailText: EditText? = null
-    private var emailError: TextView? = null
+//    private var emailError: TextView? = null
     private var password: EditText? = null
-    private var passwordError: TextView? = null
+//    private var passwordError: TextView? = null
     private var forgetPassword: TextView? = null
     private var login: Button? = null
 
     private var google: CircleImageView? = null
     private var facebook: CircleImageView? = null
-    private var phone: CircleImageView? = null
-    private var email: CircleImageView? = null
+//    private var phone: CircleImageView? = null
+//    private var email: CircleImageView? = null
     private var facebookLogin: LoginButton? = null
 
 

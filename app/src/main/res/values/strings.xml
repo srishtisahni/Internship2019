@@ -55,5 +55,6 @@
     <string name="can_t_be_empty">Can\'t be empty!</string>
     <string name="email_id_mobile_number">Email ID / Mobile Number</string>
     <string name="password">Password</string>
+    <string name="forgot_password">Forgot Password?</string>
 
 </resources>

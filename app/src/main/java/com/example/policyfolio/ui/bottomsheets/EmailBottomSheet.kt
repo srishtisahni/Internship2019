@@ -5,15 +5,12 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 
 import androidx.fragment.app.Fragment
 
@@ -67,7 +64,7 @@ class EmailBottomSheet @SuppressLint("ValidFragment") constructor(private val ca
                         }
                         .addSuccessCallback {
                             next!!.isEnabled = true
-                            next!!.background = resources.getDrawable(R.drawable.button_background_white)
+                            next!!.background = resources.getDrawable(R.drawable.button_background_dark)
                             next!!.setTextColor(resources.getColor(R.color.colorPrimaryDark))
                             error!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                         }

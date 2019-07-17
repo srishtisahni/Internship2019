@@ -46,7 +46,7 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/button_background_green"
+            android:background="@drawable/button_background_light"
             android:text="Add a new Nominee"
             android:textAllCaps="false"
             android:textColor="@color/white"
