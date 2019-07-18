@@ -44,9 +44,7 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
 
     private void setUpDrawer() {
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerToggle.setDrawerIndicatorEnabled(false);
-        Drawable drawable = ResourcesCompat.getDrawable(getResources(), R.drawable.home_icon, this.getTheme());
-        mDrawerToggle.setHomeAsUpIndicator(drawable);
+        mDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black25));
         mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

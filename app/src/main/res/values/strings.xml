@@ -63,6 +63,6 @@
     <string name="gmail">Google</string>
     <string name="start_by_adding_your_existing_policy">Start by adding your Existing Policy.</string>
     <string name="add_policy_detail">Start Experiencing the Seamless Integration of your Policies Cover, Returns, Claims, Nominee Support and much more by adding your policy data here</string>
-    <string name="add_a_new_policy">Add a New Policy</string>
+    <string name="add_a_new_policy">Add a \n New Policy</string>
 
 </resources>

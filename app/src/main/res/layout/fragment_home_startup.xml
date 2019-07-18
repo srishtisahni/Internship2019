@@ -11,33 +11,64 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/backdrop">
+
         <TextView
             android:id="@+id/text"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:layout_marginTop="8dp"
             android:text="@string/start_by_adding_your_existing_policy"
-            android:textSize="14sp"/>
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/text2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.94" />
+
         <TextView
             android:id="@+id/text2"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/Grey"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
             android:gravity="center"
-            android:paddingHorizontal="32dp"
-            android:text="@string/add_policy_detail"/>
+            android:text="@string/add_policy_detail"
+            android:textColor="@color/Grey"
+            app:layout_constraintBottom_toTopOf="@+id/add_policy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.96" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_policy"
-            android:layout_width="wrap_content"
+            android:layout_width="64dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/add"
-            android:theme="@style/FABstyle" />
+            android:theme="@style/FABstyle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.83" />
 
         <TextView
             android:id="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_a_new_policy"/>
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/add_a_new_policy"
+            android:textColor="@color/white"
+            android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/add_policy"
+            app:layout_constraintStart_toStartOf="@+id/add_policy"
+            app:layout_constraintTop_toBottomOf="@+id/add_policy"
+            app:layout_constraintVertical_bias="0.100000024" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

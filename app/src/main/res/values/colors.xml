@@ -8,6 +8,7 @@
     <color name="borderGrey">#707070</color>
     <color name="Grey">#5d5d5d</color>
     <color name="black">#000000</color>
+    <color name="black25">#40000000</color>
     <color name="yellow">#F8820D</color>
     <color name="lightOrange">#FC8759</color>
     <color name="dustyWhite">#C0C0C0</color>
