@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/gradient_backdrop"
     android:focusableInTouchMode="true"
+    android:focusable="true"
     android:orientation="vertical"
     tools:context=".ui.login.LoginFragment">
 
@@ -16,7 +17,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.25"
         android:gravity="center|bottom"
-        android:text="Log In"
+        android:text="@string/log_in"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,34 +38,39 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="48dp"
-            android:layout_marginTop="32dp"
             android:layout_marginEnd="48dp"
+            android:layout_marginBottom="8dp"
             android:hint="@string/email_id_mobile_number"
             android:textColorHint="@color/colorPrimaryDark"
             app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
+            app:errorTextColor="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.03">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:backgroundTint="@color/colorPrimaryDark"
                 android:gravity="center"
                 android:inputType="textEmailAddress"
-                android:backgroundTint="@color/colorPrimaryDark"
-                android:padding="16dp"
                 android:textColor="@color/Grey"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout"
+            android:id="@+id/password_wrap"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="4dp"
             android:hint="@string/password"
             android:textColorHint="@color/colorPrimaryDark"
+            app:errorEnabled="true"
+            app:errorTextColor="@color/red"
             app:hintAnimationEnabled="true"
             app:layout_constraintEnd_toEndOf="@+id/email_wrap"
             app:layout_constraintStart_toStartOf="@+id/email_wrap"
@@ -76,10 +82,9 @@
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
                 android:backgroundTint="@color/colorPrimaryDark"
+                android:gravity="center"
                 android:inputType="textPassword"
-                android:padding="16dp"
                 android:textColor="@color/Grey"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -88,26 +93,29 @@
             android:id="@+id/forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="2dp"
             android:text="@string/forgot_password"
             android:textColor="@color/Grey"
             android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+            app:layout_constraintEnd_toEndOf="@+id/password_wrap"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+            app:layout_constraintStart_toStartOf="@+id/password_wrap"
+            app:layout_constraintTop_toBottomOf="@+id/password_wrap" />
 
         <LinearLayout
             android:id="@+id/terms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/login"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_wrap"
+            app:layout_constraintVertical_bias="0.19">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -133,7 +141,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Conditions "
+                android:text="Conditions"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="12sp" />
 
@@ -149,28 +157,32 @@
             android:id="@+id/login"
             android:layout_width="136dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
             android:background="@drawable/button_background_light"
-            android:text="Log In"
+            android:text="@string/log_in"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/divider"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/terms"
             app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="@+id/terms" />
+            app:layout_constraintStart_toStartOf="@+id/terms"
+            app:layout_constraintTop_toBottomOf="@+id/terms"
+            app:layout_constraintVertical_bias="0.110000014" />
 
         <LinearLayout
             android:id="@+id/divider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="48dp"
+            android:layout_marginBottom="8dp"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintBottom_toTopOf="@+id/facebook_login"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/login"
+            app:layout_constraintVertical_bias="0.26">
 
             <View
                 android:layout_width="wrap_content"
@@ -186,7 +198,7 @@
                 android:layout_height="match_parent"
                 android:text=" or Continue With"
                 android:textColor="@color/Grey"
-                android:textSize="18sp" />
+                android:textSize="12sp" />
 
             <View
                 android:layout_width="wrap_content"
@@ -204,22 +216,22 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="64dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.36"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/constraintLayout3">
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/google_signUp"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/google_round"
-                app:civ_border_color="@color/borderGrey"
+                app:civ_border_color="@color/colorPrimaryDark"
                 app:civ_border_width="0.5dp"
                 app:layout_constraintBottom_toTopOf="@+id/google_text"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -231,7 +243,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Google"
+                android:text="@string/gmail"
+                android:textColor="@color/Grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/google_signUp"
                 app:layout_constraintStart_toStartOf="@+id/google_signUp"
@@ -239,25 +252,26 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="64dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.64"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider">
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/facebook_signUp"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:src="@mipmap/facebook_round"
-                app:civ_border_color="@color/borderGrey"
+                app:civ_border_color="@color/colorPrimaryDark"
                 app:civ_border_width="0.5dp"
                 app:layout_constraintBottom_toTopOf="@+id/facebook_text"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -269,7 +283,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="Facebook"
+                android:text="@string/facebook"
+                android:textColor="@color/Grey"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="@+id/facebook_signUp"
                 app:layout_constraintStart_toStartOf="@+id/facebook_signUp"

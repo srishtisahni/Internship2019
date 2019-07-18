@@ -30,9 +30,11 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        super.whiteNavigation();
         toolbar = findViewById(R.id.toolbar);
         if(toolbar!=null)
             setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
         drawer = findViewById(R.id.drawer_layout);
         name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
         navigationView = findViewById(R.id.nav_view);

@@ -77,7 +77,7 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
         relationError = rootView!!.findViewById(R.id.relation_empty)
 
         relations = resources.getStringArray(R.array.relationship_array)
-        textAdapter = BasicDropdownTextAdapter(context, relations, this, Constants.ListTypes.RELATIONSHIPS, resources.getColor(R.color.colorPrimaryDarkest))
+        textAdapter = BasicDropdownTextAdapter(context, relations, this, Constants.ListTypes.RELATIONSHIPS, resources.getColor(R.color.colorAccent))
 
         done = rootView!!.findViewById(R.id.done)
 

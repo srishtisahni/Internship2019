@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -47,21 +44,18 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
-    private EmailPhoneFragment emailPhoneFragment;
 
     private OTPBottomSheet otpBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.AppTheme_NoActionBar_fullscreen);
+        setContentView(R.layout.activity_login_signup);
         if(getIntent().getBooleanExtra(Constants.LoginInInfo.POST_LOGOUT,false)) {
-            setTheme(R.style.AppTheme_NoActionBar);
-            setContentView(R.layout.activity_login_signup);
             openLoginSignUp();
         }
         else {
-            setTheme(R.style.AppTheme_NoActionBar_fullscreen);
-            setContentView(R.layout.activity_login_signup);
             setUpWelcome();
         }
 
@@ -70,25 +64,16 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     }
 
     private void setUpWelcome() {
-        super.setUpFullScreen();
+        super.transparentNavigation();
         WelcomeFragment welcomeFragment = new WelcomeFragment(this,getSharedPreferences(Constants.LOGIN_SHARED_PREFERENCE_KEY,MODE_PRIVATE));
-        getSupportFragmentManager().beginTransaction().add(R.id.fragment_holder, welcomeFragment).commit();
+        addFragment(welcomeFragment);
     }
 
     @Override
     public void openLoginSignUp() {
-        Drawable dr = getResources().getDrawable(R.drawable.titlebar_icon);
-        Bitmap bitmap = ((BitmapDrawable) dr).getBitmap();
-        Drawable d = new BitmapDrawable(getResources(),
-                Bitmap.createScaledBitmap(bitmap, 120, 120, true));
-        getSupportActionBar().setIcon(d);
-
-        loginFragment = new LoginFragment(this);
         signUpFragment = new SignUpFragment(this);
-        emailPhoneFragment = new EmailPhoneFragment(this);
-
-        addFragment(loginFragment);
-        super.disableFullscreen();
+        addFragment(signUpFragment);
+        super.whiteNavigation();
     }
 
     @Override
@@ -189,22 +174,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                 }
             }
         });
-    }
-
-    @Override
-    public void enterEmail() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.EMAIL);
-        emailPhoneFragment.setArguments(bundle);
-        addFragment(emailPhoneFragment);
-    }
-
-    @Override
-    public void enterPhone() {
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.LoginInInfo.TYPE, Constants.LoginInInfo.Type.PHONE);
-        emailPhoneFragment.setArguments(bundle);
-        addFragment(emailPhoneFragment);
     }
 
     @Override
@@ -474,6 +443,12 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     }
 
     @Override
+    public void openLoginFragment() {
+        loginFragment = new LoginFragment(this);
+        addFragment(loginFragment);
+    }
+
+    @Override
     public void openListSheet(int type, RecyclerView.Adapter adapter) {
         ListBottomSheet listBottomSheet = new ListBottomSheet(type,adapter);
         super.expandSheet(listBottomSheet);
@@ -524,8 +499,9 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
         else {
             List<Fragment> fragments = getSupportFragmentManager().getFragments();
             Fragment fragment = fragments.get(fragments.size() - 1);
-            if(fragment instanceof SignUpFragment || fragment instanceof EmailPhoneFragment){
+            if(fragment instanceof LoginFragment){
                 removeFragment(fragment);
+                loginFragment = null;
             }
             else {
                 super.onBackPressed();
@@ -594,7 +570,11 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                 });
                 break;
         }
-        loginFragment.onActivityResult(requestCode, resultCode, data);
+        if(loginFragment == null){
+            signUpFragment.onActivityResult(requestCode,resultCode,data);
+        } else {
+            loginFragment.onActivityResult(requestCode,resultCode,data);
+        }
     }
 
     @Override

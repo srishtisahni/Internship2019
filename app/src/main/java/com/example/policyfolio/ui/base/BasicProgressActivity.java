@@ -25,7 +25,6 @@ public class BasicProgressActivity extends AppCompatActivity {
     private FrameLayout snackbar;
     private FrameLayout fragmentHolder;
     private ProgressBar progressBar;
-    private AppBarLayout appBarLayout;
 
     private FrameLayout sheetFragmentHolder;
     private ProgressBar sheetProgressBar;
@@ -38,13 +37,9 @@ public class BasicProgressActivity extends AppCompatActivity {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         fragmentHolder = findViewById(R.id.fragment_holder);
         progressBar = findViewById(R.id.progress_bar);
         snackbar = findViewById(R.id.snackbar_action);
-        appBarLayout = findViewById(R.id.appbar);
 
         setUpBottomSheet();
     }
@@ -133,20 +128,18 @@ public class BasicProgressActivity extends AppCompatActivity {
         return sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
     }
 
-    protected void setUpFullScreen() {
-        setTheme(R.style.AppTheme_NoActionBar_fullscreen);
+    protected void transparentNavigation() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        appBarLayout.setVisibility(View.GONE);
-    }
-
-    protected void disableFullscreen() {
-        appBarLayout.setVisibility(View.VISIBLE);
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().setNavigationBarColor(getResources().getColor(android.R.color.transparent));
-            getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
         }
-        setTheme(R.style.AppTheme_NoActionBar);
+    }
+
+    protected void whiteNavigation() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+        }
     }
 
     @Override

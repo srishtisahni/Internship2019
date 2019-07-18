@@ -190,7 +190,7 @@ class InfoBottomSheet : Fragment, BasicDropdownTextAdapter.ParentCallback {
     private fun setGenderAdapter() {
         genderSelection = 0
         genderArray = resources.getStringArray(R.array.gender_array)
-        genderAdapter = BasicDropdownTextAdapter(context, genderArray, this, Constants.ListTypes.GENDER, resources.getColor(R.color.colorPrimaryDarkest))
+        genderAdapter = BasicDropdownTextAdapter(context, genderArray, this, Constants.ListTypes.GENDER, resources.getColor(R.color.colorAccent))
         genderChoice!!.adapter = genderAdapter
         genderChoice!!.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
 

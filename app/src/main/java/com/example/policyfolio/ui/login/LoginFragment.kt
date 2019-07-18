@@ -33,16 +33,12 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
     private var viewModel: LoginSignUpViewModel? = null
 
     private var emailText: EditText? = null
-//    private var emailError: TextView? = null
     private var password: EditText? = null
-//    private var passwordError: TextView? = null
     private var forgetPassword: TextView? = null
     private var login: Button? = null
 
     private var google: CircleImageView? = null
     private var facebook: CircleImageView? = null
-//    private var phone: CircleImageView? = null
-//    private var email: CircleImageView? = null
     private var facebookLogin: LoginButton? = null
 
 
@@ -57,11 +53,6 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
         login = rootView!!.findViewById(R.id.login)
         google = rootView!!.findViewById(R.id.google_signUp)
         facebook = rootView!!.findViewById(R.id.facebook_signUp)
-        phone = rootView!!.findViewById(R.id.phone_signUp)
-        email = rootView!!.findViewById(R.id.email_signUp)
-
-        emailError = rootView!!.findViewById(R.id.email_error)
-        passwordError = rootView!!.findViewById(R.id.password_error)
         forgetPassword = rootView!!.findViewById(R.id.forgot_password)
 
         forgetPassword!!.setOnClickListener { callback.forgotPassword() }
@@ -105,27 +96,7 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
     private fun setListeners() {
         login!!.setOnClickListener {
             var isComplete = true
-            emailText!!.validator()
-                    .validEmail()
-                    .addErrorCallback { message ->
-                        emailError!!.text = message
-                        isComplete = false
-                        emailError!!.setTextColor(resources!!.getColor(R.color.red))
-                    }
-                    .addSuccessCallback {
-                        emailError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
-                    }.check()
-
-            password!!.validator()
-                    .minLength(8)
-                    .addErrorCallback { message ->
-                        passwordError!!.text = message
-                        passwordError!!.setTextColor(resources!!.getColor(R.color.red))
-                        isComplete = false
-                    }
-                    .addSuccessCallback {
-                        passwordError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
-                    }.check()
+            //TODO Validations
 
             if(isComplete){
                 viewModel!!.email = emailText!!.text.toString()
@@ -144,9 +115,6 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
 
         facebook!!.setOnClickListener { facebookLogin!!.performClick() }
 
-        phone!!.setOnClickListener { callback.enterPhone() }
-
-        email!!.setOnClickListener { callback.enterEmail() }
 
     }
 

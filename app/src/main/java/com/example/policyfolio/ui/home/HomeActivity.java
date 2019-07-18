@@ -51,7 +51,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         super.setCallback(this);
-        getSupportActionBar().setTitle("Policy Folio");
 
         viewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         viewModel.initiateRepo(this);
@@ -76,7 +75,6 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                     getTimeToast(user.getLastUpdated());
                     viewModel.updateUser(user);
                     if(user.getName()!=null){
-                        getSupportActionBar().setTitle(user.getFirstName() + "'s Profile");
                         HomeActivity.super.setNameText(user.getName());
                         HomeActivity.super.updateName();
                     }

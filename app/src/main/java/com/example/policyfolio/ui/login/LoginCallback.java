@@ -6,8 +6,6 @@ import com.example.policyfolio.ui.base.BaseActivityFragmentCallback;
 
 public interface LoginCallback extends BaseActivityFragmentCallback {
     void FacebookSignUp(FacebookData facebookData);
-    void enterEmail();
-    void enterPhone();
     void GoogleSignUp();
     void Login();
     void forgotPassword();
@@ -15,4 +13,5 @@ public interface LoginCallback extends BaseActivityFragmentCallback {
     void phoneSignUp();
     void SignUpEmailAndPassword();
     void showSnackbar(String s);
+    void openLoginFragment();
 }

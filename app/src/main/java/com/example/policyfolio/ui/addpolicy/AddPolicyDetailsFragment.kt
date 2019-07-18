@@ -165,7 +165,7 @@ class AddPolicyDetailsFragment(private val callback: AddPolicyCallback) : Fragme
             }
         })
 
-        premiumAdapter = BasicDropdownTextAdapter(context, premiums, this, Constants.ListTypes.PREMIUM_FREQUENCY, resources.getColor(R.color.colorPrimaryDarkest))
+        premiumAdapter = BasicDropdownTextAdapter(context, premiums, this, Constants.ListTypes.PREMIUM_FREQUENCY, resources.getColor(R.color.colorAccent))
         viewModel!!.premiumFrequency = -1
         premiumFrame!!.setOnClickListener {
             premiumFrame!!.setBackgroundColor(resources.getColor(android.R.color.transparent))
