@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 
 import com.example.policyfolio.R;
 import com.example.policyfolio.viewmodels.HomeViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -22,7 +23,7 @@ public class HomeStartupFragment extends Fragment {
     private View rootView;
     private HomeViewModel viewModel;
 
-    private LinearLayout addPolicy;
+    private FloatingActionButton addPolicy;
 
     private HomeCallback callback;
 
