@@ -109,12 +109,14 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
                         .validNumber()
                         .minLength(10)
                         .addSuccessCallback {
-                            if(s.toString()[0]!='+'){
-                                emailPhone!!.setText("+91$s")
-                            }
+                            emailPhone!!.setText("+91$s")
                             type = Constants.LoginInInfo.Type.PHONE
                             valid = true
                         }.check()
+                if(Patterns.PHONE.matcher(s!!.toString()).matches() && type == Constants.LoginInInfo.Type.PHONE){
+                    type = Constants.LoginInInfo.Type.PHONE
+                    valid = true
+                }
 
                 if(!valid){
                     emailWrap!!.isErrorEnabled = true
@@ -148,12 +150,14 @@ class LoginFragment @SuppressLint("ValidFragment") constructor(private val callb
                         .validNumber()
                         .minLength(10)
                         .addSuccessCallback {
-                            if(s.toString()[0]!='+'){
-                                emailPhone!!.setText("+91$s")
-                            }
+                            emailPhone!!.setText("+91$s")
                             type = Constants.LoginInInfo.Type.PHONE
                             valid = true
                         }.check()
+                if(Patterns.PHONE.matcher(s!!.toString()).matches() && type == Constants.LoginInInfo.Type.PHONE){
+                    type = Constants.LoginInInfo.Type.PHONE
+                    valid = true
+                }
 
                 if(!valid){
                     emailWrap!!.isErrorEnabled = true
