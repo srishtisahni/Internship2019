@@ -9,9 +9,11 @@ public interface LoginCallback extends BaseActivityFragmentCallback {
     void GoogleSignUp();
     void Login();
     void forgotPassword();
-    void EmailNext();
+    void UpdateDatabase();
     void phoneSignUp();
     void SignUpEmailAndPassword();
     void showSnackbar(String s);
     void openLoginFragment();
+
+    void sendOTP(String toString);
 }

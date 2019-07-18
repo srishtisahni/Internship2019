@@ -76,23 +76,29 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
                     viewModel.updateUser(user);
                     if(user.getName()!=null){
                         HomeActivity.super.setNameText(user.getName());
-                        HomeActivity.super.updateName();
                     }
-                    if(!user.isComplete()){
-                        viewModel.addDocumentsVault().observe(HomeActivity.this, new Observer<Boolean>() {
-                            @Override
-                            public void onChanged(Boolean aBoolean) {
-                                if(aBoolean)
-                                    Log.v("DOCUMENT VAULT","Added");
-                                else
-                                    Log.e("DOCUMENT VAULT","Error!");
-                            }
-                        });
-                        createBottomSheetForInfo();
+                    if(user.getEmail()!=null){
+                        HomeActivity.super.setInfoText(user.getEmail());
+                    } else if(user.getPhone()!=null){
+                        HomeActivity.super.setInfoText(user.getPhone());
                     }
-                    else{
-                        policyUpdate();                                       //Render UI based on the user info
-                    }
+                    HomeActivity.super.updateData();
+                    policyUpdate();
+//                    if(!user.isComplete()){
+//                        viewModel.addDocumentsVault().observe(HomeActivity.this, new Observer<Boolean>() {
+//                            @Override
+//                            public void onChanged(Boolean aBoolean) {
+//                                if(aBoolean)
+//                                    Log.v("DOCUMENT VAULT","Added");
+//                                else
+//                                    Log.e("DOCUMENT VAULT","Error!");
+//                            }
+//                        });
+//                        createBottomSheetForInfo();
+//                    }
+//                    else{
+//                        policyUpdate();                                       //Render UI based on the user info
+//                    }
                 }
             }
         });

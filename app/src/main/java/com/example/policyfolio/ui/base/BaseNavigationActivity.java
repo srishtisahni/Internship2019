@@ -23,8 +23,10 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
     private Toolbar toolbar;
     private NavigationView navigationView;
     private TextView name;
+    private TextView info;
 
     private static String nameText;
+    private static String infoText;
     private ParentChildNavigationCallback callback;
 
     @Override
@@ -37,6 +39,7 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
         getSupportActionBar().setTitle("");
         drawer = findViewById(R.id.drawer_layout);
         name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
+        info = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.info);
         navigationView = findViewById(R.id.nav_view);
 
         setUpDrawer();
@@ -44,7 +47,7 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
 
     private void setUpDrawer() {
         ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.black25));
+        mDrawerToggle.getDrawerArrowDrawable().setColor(getResources().getColor(R.color.colorPrimaryDark));
         mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,13 +64,19 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    protected void updateName() {
+    protected void updateData() {
         if(nameText != null)
             name.setText(nameText);
+        if(infoText!=null)
+            info.setText(infoText);
     }
 
     protected static void setNameText(String nameText) {
         BaseNavigationActivity.nameText = nameText;
+    }
+
+    public static void setInfoText(String infoText) {
+        BaseNavigationActivity.infoText = infoText;
     }
 
     @Override

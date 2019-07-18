@@ -90,9 +90,9 @@ public class Repository {
         return authentication.facebookFirebaseUser();       //Perform Facebook Authentication
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) {
+    public LiveData<FirebaseUser> sendOTP(String phone, Activity activity) {
         //Activity is passed as a parameter for verification functions
-        return authentication.phoneSignUp(phone,activity);  //SignUp using phone number
+        return authentication.sendOTP(phone,activity);  //SignUp using phone number
     }
 
     public LiveData<FirebaseUser> phoneSignUp(String string) {

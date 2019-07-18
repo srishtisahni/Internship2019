@@ -35,6 +35,7 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
     private int gender;
     private String city;
     private String password;
+    private String otp;
 
     public LiveData<FacebookData> fetchFacebookData() {
         if (facebookData == null)
@@ -100,15 +101,15 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
             phone = firebaseUser.getPhoneNumber();
         if(name == null)
             name = firebaseUser.getDisplayName();
-        User user = new User(firebaseUser.getUid(),email,phone,name, birthdayEpoch,gender,city,type);
+        User user = new User(firebaseUser.getUid(),email,phone,name, birthdayEpoch, gender, city, type);
         return getRepository().updateFirebaseUser(user);
     }
 
-    public LiveData<FirebaseUser> signUpPhoneWithOTP(Activity activity) {
-        return getRepository().phoneSignUp(phone, activity);
+    public LiveData<FirebaseUser> sendOTP(Activity activity, String phone) {
+        return getRepository().sendOTP(phone, activity);
     }
 
-    public LiveData<FirebaseUser> signUpPhoneWithOTP(String otp) {
+    public LiveData<FirebaseUser> signUpPhone() {
         return getRepository().phoneSignUp(otp);
     }
 
@@ -164,7 +165,7 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
         return getRepository().checkIfUserExistsEmail(email);
     }
 
-    public LiveData<Integer> checkIfUserExistsPhone() {
+    public LiveData<Integer> checkIfUserExistsPhone(String phone) {
         return getRepository().checkIfUserExistsPhone(phone);
     }
 
@@ -176,4 +177,7 @@ public class LoginSignUpViewModel extends BasicLoginViewModel implements Fragmen
         return getRepository().resetPassword(email);
     }
 
+    public void setOTP(String otp) {
+        this.otp = otp;
+    }
 }

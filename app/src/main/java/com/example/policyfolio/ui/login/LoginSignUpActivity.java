@@ -1,23 +1,14 @@
 package com.example.policyfolio.ui.login;
 
-import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.policyfolio.data.facebook.dataclasses.FacebookData;
@@ -26,8 +17,6 @@ import com.example.policyfolio.ui.base.BasicProgressActivity;
 import com.example.policyfolio.ui.bottomsheets.EmailBottomSheet;
 import com.example.policyfolio.ui.bottomsheets.EmailSheetCallback;
 import com.example.policyfolio.ui.bottomsheets.ListBottomSheet;
-import com.example.policyfolio.ui.bottomsheets.OTPBottomSheet;
-import com.example.policyfolio.ui.bottomsheets.OTPSheetCallback;
 import com.example.policyfolio.ui.home.HomeActivity;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.R;
@@ -44,8 +33,6 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
     private LoginFragment loginFragment;
     private SignUpFragment signUpFragment;
-
-    private OTPBottomSheet otpBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -270,7 +257,31 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
 
 
     @Override
-    public void EmailNext() {
+    public void UpdateDatabase() {
+
+    }
+
+    @Override
+    public void phoneSignUp() {
+        startProgress();
+        viewModel.signUpPhone().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+            @Override
+            public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                if(firebaseUser!=null){
+                    startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
+                }
+                else {
+                    endProgress();
+                    LoginSignUpActivity.super.collapseSheet();
+                    showSnackbar("Phone Sign Up Failed");
+                }
+            }
+        });
+//        LocalBroadcastManager.getInstance(LoginSignUpActivity.this).unregisterReceiver(receiver);
+    }
+
+    @Override
+    public void SignUpEmailAndPassword() {
         startProgress();
         viewModel.checkIfUserExistsEmail().observe(this, new Observer<Integer>() {
             @Override
@@ -279,23 +290,33 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
                     switch (integer){
                         case Constants.LoginInInfo.Type.GOOGLE:
                             endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using Google");
+                            showSnackbar("An Account already Exists with this Email Id. Please Sign In using Google");
                             break;
                         case Constants.LoginInInfo.Type.FACEBOOK:
                             endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using Facebook");
+                            showSnackbar("An Account already Exists with this Email Id. Please Sign In using Facebook");
                             break;
                         case Constants.LoginInInfo.Type.PHONE:
                             endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using your Phone Number");
+                            showSnackbar("An Account already Exists with this Email Id. Please Sign In using your Phone Number");
                             break;
                         case Constants.LoginInInfo.Type.EMAIL:
                             endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using your Email and Password");
+                            showSnackbar("An Account already Exists with this Email Id. Please Sign In using your Email and Password");
                             break;
                         default:
-                            endProgress();
-                            addFragment(signUpFragment);
+                            viewModel.SignUp().observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    if(firebaseUser!=null){
+                                        addUser(firebaseUser,Constants.LoginInInfo.Type.EMAIL);
+                                    }
+                                    else {
+                                        endProgress();
+                                        showSnackbar("Email Sign Up Failed");
+                                    }
+                                }
+                            });
                             break;
                     }
                 }
@@ -308,144 +329,56 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     }
 
     @Override
-    public void phoneSignUp() {
-        startProgress();
-        viewModel.checkIfUserExistsPhone().observe(this, new Observer<Integer>() {
+    public void openLoginFragment() {
+        loginFragment = new LoginFragment(this);
+        addFragment(loginFragment);
+    }
+
+    @Override
+    public void sendOTP(String phone) {
+        viewModel.checkIfUserExistsPhone(phone).observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
                 if(integer!=null){
                     switch (integer){
                         case Constants.LoginInInfo.Type.GOOGLE:
-                            endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using Google");
+                            showSnackbar("An Account already Exists with this Phone Number. Please Sign In using Google");
                             break;
                         case Constants.LoginInInfo.Type.FACEBOOK:
-                            endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using Facebook");
+                            showSnackbar("An Account already Exists with this Phone Number. Please Sign In using Facebook");
                             break;
                         case Constants.LoginInInfo.Type.PHONE:
-                            endProgress();
-                            if (ContextCompat.checkSelfPermission(LoginSignUpActivity.this, Manifest.permission.READ_SMS)== PackageManager.PERMISSION_GRANTED) {
-                                LocalBroadcastManager.getInstance(LoginSignUpActivity.this).registerReceiver(receiver, new IntentFilter("otp"));
-                                otpBottomSheet = new OTPBottomSheet(new OTPSheetCallback() {
-                                    @Override
-                                    public void done(String Otp) {
-                                        startProgress();
-                                        viewModel.signUpPhoneWithOTP(Otp).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                            @Override
-                                            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                                if(firebaseUser!=null){
-                                                    LoginSignUpActivity.super.collapseSheet();
-                                                    startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
-                                                }
-                                                else {
-                                                    endProgress();
-                                                    LoginSignUpActivity.super.collapseSheet();
-                                                    showSnackbar("Phone Sign Up Failed");
-                                                }
-                                            }
-                                        });
-                                        LocalBroadcastManager.getInstance(LoginSignUpActivity.this).unregisterReceiver(receiver);
+                            viewModel.sendOTP(LoginSignUpActivity.this,phone).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    if(firebaseUser==null) {
+                                        endProgress();
+                                        Log.e("FAILED","Invalid Number");
                                     }
-                                }, viewModel);
-                                LoginSignUpActivity.super.expandSheet(otpBottomSheet);
-                                viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        if(firebaseUser!=null){
-                                            LoginSignUpActivity.super.collapseSheet();
-                                            startHomeActivity(firebaseUser,Constants.LoginInInfo.Type.PHONE);
-                                        }
-                                        else {
-                                            endProgress();
-                                            Log.e("FAILED","Can't Find Number");
-                                        }
-                                    }
-                                });
-                            }
-                            else {
-                                ActivityCompat.requestPermissions(LoginSignUpActivity.this, new String[]{Manifest.permission.READ_SMS}, Constants.PermissionAndRequests.SMS_PERMISSION_CODE);
-                            }
+                                }
+                            });
                             break;
                         case Constants.LoginInInfo.Type.EMAIL:
-                            endProgress();
-                            showSnackbar("Account already Exists. Please Sign In using your Email and Password");
+                            showSnackbar("An Account already Exists with this Phone Number. Please Sign In using your Email and Password");
                             break;
                         default:
-                            endProgress();
-                            if (ContextCompat.checkSelfPermission(LoginSignUpActivity.this, Manifest.permission.READ_SMS)== PackageManager.PERMISSION_GRANTED) {
-                                LocalBroadcastManager.getInstance(LoginSignUpActivity.this).registerReceiver(receiver, new IntentFilter("otp"));
-                                otpBottomSheet = new OTPBottomSheet(new OTPSheetCallback() {
-                                    @Override
-                                    public void done(String Otp) {
-                                        startProgress();
-                                        viewModel.signUpPhoneWithOTP(Otp).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                            @Override
-                                            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                                if(firebaseUser!=null){
-                                                    LoginSignUpActivity.super.collapseSheet();
-                                                    addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
-                                                }
-                                                else {
-                                                    endProgress();
-                                                    LoginSignUpActivity.super.collapseSheet();
-                                                    showSnackbar("Phone Sign Up Failed");
-                                                }
-                                            }
-                                        });;
-                                        LocalBroadcastManager.getInstance(LoginSignUpActivity.this).unregisterReceiver(receiver);
+                            viewModel.sendOTP(LoginSignUpActivity.this, phone).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
+                                @Override
+                                public void onChanged(@Nullable FirebaseUser firebaseUser) {
+                                    if(firebaseUser==null) {
+                                        endProgress();
+                                        Log.e("FAILED","Invalid Number");
                                     }
-                                }, viewModel);
-                                LoginSignUpActivity.super.expandSheet(otpBottomSheet);
-                                viewModel.signUpPhoneWithOTP(LoginSignUpActivity.this).observe(LoginSignUpActivity.this, new Observer<FirebaseUser>() {
-                                    @Override
-                                    public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                                        if(firebaseUser!=null){
-                                            LoginSignUpActivity.super.collapseSheet();
-                                            addUser(firebaseUser,Constants.LoginInInfo.Type.PHONE);
-                                        }
-                                        else {
-                                            endProgress();
-                                            Log.e("FAILED","Can't Find Number");
-                                        }
-                                    }
-                                });
-                            }
-                            else {
-                                ActivityCompat.requestPermissions(LoginSignUpActivity.this, new String[]{Manifest.permission.READ_SMS}, Constants.PermissionAndRequests.SMS_PERMISSION_CODE);
-                            }
+                                }
+                            });
                             break;
                     }
                 }
                 else {
-                    endProgress();
-                    showSnackbar("SignUp Failed");
+                    showSnackbar("PLease Check Your Internet Connection");
                 }
             }
         });
-    }
-
-    @Override
-    public void SignUpEmailAndPassword() {
-        startProgress();
-        viewModel.SignUp().observe(this, new Observer<FirebaseUser>() {
-            @Override
-            public void onChanged(@Nullable FirebaseUser firebaseUser) {
-                if(firebaseUser!=null){
-                    addUser(firebaseUser,Constants.LoginInInfo.Type.EMAIL);
-                }
-                else {
-                    endProgress();
-                    showSnackbar("Email Sign Up Failed");
-                }
-            }
-        });
-    }
-
-    @Override
-    public void openLoginFragment() {
-        loginFragment = new LoginFragment(this);
-        addFragment(loginFragment);
     }
 
     @Override
@@ -470,6 +403,7 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
     }
 
     private void addUser(final FirebaseUser firebaseUser, final Integer type) {
+        //TODO Modifications
         viewModel.updateUserInfo(firebaseUser,type).observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(@Nullable Boolean aBoolean) {
@@ -577,27 +511,29 @@ public class LoginSignUpActivity extends BasicProgressActivity implements LoginC
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode){
-            case Constants.PermissionAndRequests.SMS_PERMISSION_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    phoneSignUp();
-                }
-                break;
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        switch (requestCode){
+//            case Constants.PermissionAndRequests.SMS_PERMISSION_CODE:
+//                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    sendOTP();
+//                }
+//                break;
+//        }
+//    }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equalsIgnoreCase("otp")) {
-                final String message = intent.getStringExtra("message");
-                if(otpBottomSheet!=null){
-                    otpBottomSheet.setOTP(message);
-                }
-            }
-        }
-    };
+//    private BroadcastReceiver receiver = new BroadcastReceiver() {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (intent.getAction().equalsIgnoreCase("otp")) {
+//                final String message = intent.getStringExtra("message");
+//                if(loginFragment!=null){
+//                    loginFragment.setOTP(message);
+//                } else {
+//                    signUpFragment.setOTP(message);
+//                }
+//            }
+//        }
+//    };
 }

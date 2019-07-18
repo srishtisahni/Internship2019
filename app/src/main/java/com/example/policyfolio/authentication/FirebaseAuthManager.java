@@ -122,25 +122,13 @@ public class FirebaseAuthManager {
         return auth;
     }
 
-    public LiveData<FirebaseUser> phoneSignUp(String phone, Activity activity) { // Activity is passed for verification
+    public LiveData<FirebaseUser> sendOTP(String phone, Activity activity) { // Activity is passed for verification
         //Signing in  using Phone Number.
         MutableLiveData<FirebaseUser> auth = new MutableLiveData<>();
         PhoneAuthProvider.getInstance().verifyPhoneNumber(phone, 60, TimeUnit.SECONDS, activity , new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                mAuth.signInWithCredential(phoneAuthCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            FirebaseUser user = mAuth.getCurrentUser();         //Returns user if authentication is complete, null otherwise
-                            auth.setValue(user);
-                        }
-                        else {
-                            Log.e("EXCEPTION",task.getException().getMessage());
-                            auth.setValue(null);
-                        }
-                    }
-                });
+
             }
 
             @Override
