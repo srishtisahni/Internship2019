@@ -180,7 +180,7 @@ class AddNomineeFragment(private val callback: NomineeCallback) : Fragment(), Ba
                     .addSuccessCallback {
                         nameError!!.setTextColor(resources!!.getColor(android.R.color.transparent))
                     }.check()
-            emailError!!.validator()
+            email!!.validator()
                     .validEmail()
                     .addErrorCallback { message ->
                         emailError!!.text = message
