@@ -10,12 +10,14 @@ import com.example.policyfolio.ui.addpolicy.AddPolicyActivity;
 import com.example.policyfolio.ui.base.BaseNavigationActivity;
 import com.example.policyfolio.ui.claim.ClaimSupportActivity;
 import com.example.policyfolio.ui.document.DocumentActivity;
+import com.example.policyfolio.ui.empty.EmptyActivity;
 import com.example.policyfolio.ui.help.HelpActivity;
 import com.example.policyfolio.ui.login.LoginSignUpActivity;
 import com.example.policyfolio.ui.nominee.NomineeSupportActivity;
 import com.example.policyfolio.ui.base.ParentChildNavigationCallback;
 import com.example.policyfolio.util.Constants;
 import com.example.policyfolio.util.receivers.PremiumNotificationReceiver;
+import com.example.policyfolio.viewmodels.EmptyViewModel;
 import com.example.policyfolio.viewmodels.PromotionViewModel;
 
 import androidx.lifecycle.Observer;
@@ -66,6 +68,18 @@ public class PromotionsActivity extends BaseNavigationActivity implements Naviga
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
+        finish();
+    }
+
+    @Override
+    public void home() {
+        finish();
+    }
+
+    @Override
+    public void optionUnavailable() {
+        Intent intent = new Intent(this, EmptyActivity.class);
+        startActivityForResult(intent,Constants.PermissionAndRequests.EMPTY_REQUEST);
         finish();
     }
 

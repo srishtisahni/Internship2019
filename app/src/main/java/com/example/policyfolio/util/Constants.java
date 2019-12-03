@@ -161,6 +161,7 @@ public class Constants {
         public static final int CLAIMS_REQUEST = 203;
         public static final int DOCUMENTS_REQUEST = 204;
         public static final int SMS_PERMISSION_CODE = 205;
+        public static final int EMPTY_REQUEST = 206;
     }
 
     public static class Notification {

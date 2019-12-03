@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
     private Toolbar toolbar;
     private NavigationView navigationView;
     private TextView name;
+    private ImageView logoHome;
 
     private static String nameText;
     private ParentChildNavigationCallback callback;
@@ -36,8 +38,16 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
         drawer = findViewById(R.id.drawer_layout);
         name = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.nav_name);
         navigationView = findViewById(R.id.nav_view);
+        logoHome = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.logo_home);
 
         setUpDrawer();
+        updateName();
+        logoHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callback.home();
+            }
+        });
     }
 
     private void setUpDrawer() {
@@ -96,6 +106,8 @@ public class BaseNavigationActivity extends BasicProgressActivity implements Nav
             case R.id.documents:
                 callback.documentVault();
                 break;
+            default:
+                callback.optionUnavailable();
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;

@@ -8,4 +8,6 @@ public interface ParentChildNavigationCallback {
     void promotions();
     void claimSupport();
     void documentVault();
+    void home();
+    void optionUnavailable();
 }

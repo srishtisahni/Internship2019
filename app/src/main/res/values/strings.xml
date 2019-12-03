@@ -53,5 +53,6 @@
     <string name="driving_license">Driving License</string>
     <string name="ration_card">Ration Card</string>
     <string name="can_t_be_empty">Can\'t be empty!</string>
+    <string name="title_activity_empty">Empty Activity</string>
 
 </resources>

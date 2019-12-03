@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.example.policyfolio.data.local.classes.Notifications;
 import com.example.policyfolio.ui.bottomsheets.InfoBottomSheet;
 import com.example.policyfolio.ui.bottomsheets.InfoSheetCallback;
+import com.example.policyfolio.ui.empty.EmptyActivity;
 import com.example.policyfolio.ui.login.LoginSignUpActivity;
 import com.example.policyfolio.ui.nominee.NomineeSupportActivity;
 import com.example.policyfolio.ui.promotions.PromotionsActivity;
@@ -354,6 +355,17 @@ public class HomeActivity extends BaseNavigationActivity implements HomeCallback
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
+    }
+
+    @Override
+    public void home() {
+        super.closeDrawer();
+    }
+
+    @Override
+    public void optionUnavailable() {
+        Intent intent = new Intent(this, EmptyActivity.class);
+        startActivityForResult(intent,Constants.PermissionAndRequests.EMPTY_REQUEST);
     }
 
     @Override

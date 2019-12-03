@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.policyfolio.data.local.classes.Notifications;
+import com.example.policyfolio.ui.empty.EmptyActivity;
 import com.example.policyfolio.ui.login.LoginSignUpActivity;
 import com.example.policyfolio.ui.nominee.NomineeSupportActivity;
 import com.example.policyfolio.ui.promotions.PromotionsActivity;
@@ -88,6 +89,18 @@ public class HelpActivity extends BaseNavigationActivity implements NeedHelpCall
     public void documentVault() {
         Intent intent = new Intent(this, DocumentActivity.class);
         startActivityForResult(intent,Constants.PermissionAndRequests.DOCUMENTS_REQUEST);
+        finish();
+    }
+
+    @Override
+    public void home() {
+        finish();
+    }
+
+    @Override
+    public void optionUnavailable() {
+        Intent intent = new Intent(this, EmptyActivity.class);
+        startActivityForResult(intent,Constants.PermissionAndRequests.EMPTY_REQUEST);
         finish();
     }
 
